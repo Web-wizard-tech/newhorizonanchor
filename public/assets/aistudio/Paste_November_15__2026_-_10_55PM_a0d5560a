@@ -1,0 +1,1423 @@
+
+
+
+
+
+
+
+
+
+
+FIELD SHIFT — ADVANCED FARM WORKSPACE
+Implementation prompt for the AI website builder
+Document type: Page-level frontend, backend, scientific-data and interaction contract
+Target location: My Farms → [Selected Farm] → Advanced in the farm's left-hand navigation
+Scope: Implement the Advanced workspace for the selected farm with exactly three areas: Deep Analysis, Reports & Analysis History, and Automation & Monitoring. Do not create separate Field Analysis or Trends & Comparisons pages.
+Design source: Field Shift Master Product, UX, Intelligence and Engineering Plan v8, especially the Farm Detail workspace, Farm Intelligence / Deep Analysis, Automation, scientific variable catalogue, data-source registry, canonical analysis pipeline and report-history requirements.
+Important: This is a proposed implementation plan. It does not claim that every listed API is already connected or that every scientific metric can be calculated for every farm.
+
+0. BUILDER INSTRUCTIONS — READ BEFORE CODING
+You are implementing a farm-specific Advanced workspace, not creating a new global dashboard and not redesigning the rest of Field Shift.
+
+The user opens My Farms, selects a farm, and is taken to that farm's workspace. Its existing local sidebar contains options such as Overview, Fields & Map, Crop Rotation Plan, Soil & Land, Water Intelligence, Weather & Climate, History & Reports, Advanced and Farm Settings. Selecting Advanced must open the feature described in this document.
+
+The Advanced workspace must use the selected farm's real records and selected field context. It must never show data from a different farm, a different user, a demo farm or a previous selection.
+
+0.1 Core purpose
+Advanced contains exactly three areas:
+
+How is this farm doing, what needs attention, and why? — Deep Analysis.
+What did previous assessments find, and what changed between reports? — Reports & Analysis History.
+Can Field Shift reassess the farm automatically and notify the owner about important changes? — Automation & Monitoring.
+Do not create standalone Field Analysis or Trends & Comparisons areas. Deep Analysis must still include results for each field selected for a farm-wide run; those results belong inside the Deep Analysis report, not on a separate page. Historical observations and comparison with the previous report may support a Deep Analysis finding, but they must not become a separate trends dashboard, tab, or API.
+
+The experience must feel like a professional agricultural intelligence workspace. It should translate complex environmental and farming data into a clear assessment, then allow the user to inspect the underlying numbers, evidence, formulas and limitations.
+
+0.2 Non-negotiable scientific and product rules
+The deterministic scientific calculation engine is the source of truth for numeric measurements, indices, risk rules, scores and recommendations.
+AI may parse farmer-written information and explain validated results. AI must not invent measurements, calculate an unsupported score, diagnose a disease from a single signal, change a deterministic result or create an unverified alert.
+Missing information is Unknown or Unavailable, not zero and not an assumed ideal value.
+A source that is planned, unconfigured, unavailable or unverified must never be shown as connected or live.
+Distinguish measured, farmer-reported, remotely sensed, modelled, reanalysis, forecast, estimated and calculated information.
+Preserve source observation time separately from API retrieval time.
+Every important number must have a unit, time period, source and evidence record. Add depth and spatial resolution where relevant.
+A coarse grid value must not be described as a precise measurement of a small field.
+A saved irrigation routine is not proof that irrigation actually happened. Store routines separately from confirmed irrigation events.
+Observed rainfall, forecast rainfall and modelled effective rainfall are different inputs. Never merge them silently.
+Each completed report is immutable. A new assessment creates a new report; it never rewrites a previous report.
+Farm-level summaries must not hide a serious problem in one individual field.
+A health status, a crop suitability score, data coverage and evidence confidence are four separate concepts. Never combine them into one unexplained number.
+If a metric or model is not scientifically defensible with the available inputs, show an honest unavailable/insufficient-data state and explain what is missing.
+0.3 Existing product architecture and deployment reality
+Before coding, inspect the actual current repository and identify its framework, routes, existing farm/field schema, local persistence, existing API services and component library. Reuse valid existing services and data models. Do not create a second farm store or a second analysis engine.
+
+The v8 code audit described a Vite/React client, an Express server and browser-local persistence, with only NASA POWER monthly climate and Open-Meteo current-weather requests visibly implemented in the inspected source snapshot. It also identified several provider names listed in the interface without matching retrieval/processing connectors, a simulated API test, and timer-driven fake analysis progress. Treat these as audit findings to verify against the current repository; do not assume they have already been fixed.
+
+Do not claim that a listed API is integrated until a real request, response validation, data transformation and test have succeeded. Create a provider registry with the states planned, configured, available, degraded, unavailable and disabled.
+
+For manual analysis, use the existing local-first persistence approach where that remains the approved deployment mode. For recurring automatic analysis while the browser is closed, a durable backend scheduler and worker are required. A browser timer, setInterval, service-worker timer or open-tab task is not a substitute for a durable scheduled job.
+
+Do not silently add a hosted database, authentication product, cloud storage, remote farm-data processing or background job service to a local-only release. If the project owner explicitly enables connected scheduling, implement the server-side architecture described in Section 12, with explicit user consent and a visible data-transfer explanation. Otherwise build the full UI and service contracts, but show Automation as unavailable with a precise reason rather than pretending it works.
+
+1. LOCATION IN THE WEBSITE AND ROUTING
+1.1 Navigation hierarchy
+The page must be nested under the farm selected in My Farms:
+
+My Farms
+└── [Farm Name]
+    ├── Overview
+    ├── Fields & Map
+    ├── Crop Rotation Plan
+    ├── Soil & Land
+    ├── Water Intelligence
+    ├── Weather & Climate
+    ├── History & Reports
+    ├── Advanced                 ← IMPLEMENT THIS
+    │   ├── Deep Analysis
+    │   ├── Reports & Analysis History
+    │   └── Automation & Monitoring
+    └── Farm Settings
+Do not add Advanced as a new global top-level navigation item. Do not build a second application shell. Preserve the existing header, farm identity, global navigation, selected farm and selected field.
+
+1.2 Suggested routes
+Adapt syntax to the router already present, but preserve the route semantics and stable IDs:
+
+/farms/:farmId/advanced                 # opens Deep Analysis by default
+/farms/:farmId/advanced/analysis
+/farms/:farmId/advanced/reports
+/farms/:farmId/advanced/reports/:reportId
+/farms/:farmId/advanced/automation
+/farms/:farmId/advanced/automation/:scheduleId
+Every route must validate that the selected farmId exists and is accessible to the current user. A field-specific route must validate that fieldId belongs to that farm. Do not rely on display names as identifiers.
+
+1.3 Farm and field context
+At the top of Advanced, display:
+
+Farm name and general location.
+A farm selector if the existing app supports switching farms without returning to the portfolio.
+A scope selector: Whole farm, All fields, Selected fields, or one named field.
+A date/time context when a historical report or date range is selected.
+Latest successful analysis date/time.
+Data freshness state: Current, Stale, Partial or Not analysed.
+Maintain one canonical context object:
+
+interface AdvancedContext {
+  farmId: string;
+  scope: "whole_farm" | "all_fields" | "selected_fields" | "single_field";
+  fieldIds: string[];
+  activeFieldId?: string;
+  reportId?: string;
+  dateRange?: { from: string; to: string; timezone: string };
+  mode: "simple" | "advanced";
+}
+When the user changes farm or field, invalidate only queries that depend on the changed context. Cancel or ignore late responses from the previously selected farm. Never briefly display the old farm's graph under the new farm's title.
+
+2. ADVANCED LANDING PAGE — OVERVIEW
+The Advanced item should open a landing workspace, not immediately start a costly analysis.
+
+2.1 Desktop composition
+Use the existing Field Shift forest-night design system. At a 1440px viewport:
+
+Existing application header: preserve the shared 64px header.
+Farm-local sidebar: preserve its existing width and behaviour.
+Advanced main content: use the remaining width with a 12-column responsive grid.
+Page header row: Advanced title, short description, selected farm/scope and a prominent Run Deep Analysis action.
+Main assessment panel: latest report status, overall farm condition if a validated status is available, coverage/confidence separately, number of fields assessed and the last successful report time.
+Findings panel: the most important current findings, ranked by severity and evidence freshness.
+Automation panel: next scheduled run, last run result and schedule status, only when a real schedule service exists.
+Data coverage strip: key source categories and whether data is available, stale, missing or not configured.
+Secondary navigation: Deep Analysis, Reports & Analysis History, Automation & Monitoring.
+Do not show every measurement on the landing page. It is an index into the detailed sections.
+
+2.2 Landing-page components
+<AdvancedWorkspace farmId={farmId}>
+  <AdvancedHeader
+    farm={farm}
+    scope={scope}
+    latestReport={latestReport}
+    onRunAnalysis={openAnalysisPreflight}
+  />
+  <AdvancedSubNavigation activeTab={activeTab} />
+  <LatestAssessmentSummary report={latestReport} />
+  <PriorityFindings findings={currentFindings} />
+  <AutomationStatus schedules={schedules} />
+  <DataCoverageSummary coverage={latestReport?.coverage} />
+</AdvancedWorkspace>
+If there is no analysis yet, show No assessment has been run for this farm with Run first analysis. If there is no valid health score model, show condition categories and their evidence instead of inventing a numerical score. If there are no fields, link to My Farms → Manage fields.
+
+2.3 Landing-page actions
+Run Deep Analysis opens the preflight panel described in Section 3.
+View full report opens the exact latest report ID.
+View history opens Reports & History.
+Manage schedule opens Automation & Monitoring.
+Clicking any finding opens its evidence and affected field, not a generic dashboard.
+3. DEEP ANALYSIS — COMPLETE FARM ASSESSMENT
+This is the main feature inside Advanced.
+
+3.1 Purpose
+Deep Analysis answers:
+
+How are the selected farm and its fields doing, what has changed, what potential risks exist, what evidence supports those findings, and what should the farmer consider doing next?
+
+It combines the farm/field profiles, confirmed farming routines and events, current and historical weather, soil information, water calculations, valid satellite observations and documented agricultural rules.
+
+The language model is not the source of truth for the assessment. The deterministic calculation engine must produce the metrics, status rules, findings and evidence references first. AI may then explain those validated results in simpler language.
+
+3.2 Analysis scope selector
+Support the following scopes:
+
+type AnalysisScope =
+  | { type: "whole_farm"; farmId: string }
+  | { type: "all_fields"; farmId: string; fieldIds: string[] }
+  | { type: "selected_fields"; farmId: string; fieldIds: string[] }
+  | { type: "single_field"; farmId: string; fieldId: string };
+Rules:
+
+Whole farm includes farm-wide context and all eligible fields, but it must still calculate and display field-level results.
+A field-only run must be labelled Field assessment, not Full farm assessment.
+If a farm has multiple fields with different soil profiles, crops or irrigation systems, calculate them independently.
+Never average raw values from fields that have incompatible units, crops, depths, time windows or source semantics.
+The farm summary must show assessed field count and must not hide an Alert-level field behind a positive farm average.
+The user must be able to include/exclude fields before starting.
+3.3 Pre-analysis confirmation flow
+Before starting a run, display a preflight drawer or page with:
+
+Selected farm and fields.
+Analysis date/window.
+Data sources that will be queried and their current integration state.
+Existing farmer routines that will be used.
+Recent confirmed management events.
+Missing information that could materially reduce coverage.
+Whether data will be sent to an external provider or remote backend.
+Estimated run type: local/manual, remote/manual or scheduled job.
+Ask a short update question when relevant:
+
+Has your watering routine changed?
+Have you recorded any recent irrigation?
+Have you planted, harvested or changed the crop?
+Have you applied fertiliser or made another relevant management change?
+Have you noticed a new issue in this field?
+Do not force users to repeat the entire farm setup questionnaire. Prefill known values with their source and last-confirmed date. Make the user review changes before they affect analysis.
+
+Natural-language practice entry
+Allow the farmer to type something like:
+
+I usually water every three days for around two hours.
+AI may parse this into a draft object:
+
+interface ParsedPracticeDraft {
+  activity: "irrigation" | "planting" | "fertiliser" | "tillage" | "other";
+  recurrence?: string;
+  durationMinutes?: number;
+  amount?: number;
+  amountUnit?: string;
+  method?: string;
+  fieldIds: string[];
+  effectiveFrom?: string;
+  originalText: string;
+  parsedFields: Record<string, unknown>;
+  ambiguityFlags: string[];
+  parserConfidence?: number;
+  userConfirmed: false;
+}
+Important rules:
+
+Keep the original user sentence.
+Show the parsed fields in an editable review card.
+Do not infer a water volume from duration alone without flow rate, emitter output, irrigated area or another valid conversion input.
+Do not treat a recurring routine as proof of a completed irrigation event.
+Unconfirmed ambiguous values cannot silently enter a calculation.
+Record whether an entry is a routine, a planned action or an event that actually happened.
+3.4 Analysis pipeline
+Implement an actual job pipeline. Do not animate a list of stages on a timer.
+
+REQUESTED
+  → VALIDATING_SCOPE
+  → SNAPSHOTTING_INPUTS
+  → FETCHING_DATA
+  → VALIDATING_AND_NORMALISING
+  → SPATIAL_AGGREGATION
+  → CALCULATING_INDICATORS
+  → EVALUATING_FIELD_RULES
+  → BUILDING_FIELD_ASSESSMENTS
+  → BUILDING_FARM_SUMMARY
+  → COMPARING_PREVIOUS_REPORT
+  → GENERATING_EXPLANATIONS
+  → VALIDATING_REPORT
+  → PERSISTING_REPORT
+  → COMPLETE | PARTIAL | FAILED | CANCELLED
+Each stage must have a real status:
+
+type StageStatus =
+  | "queued"
+  | "running"
+  | "complete"
+  | "partial"
+  | "skipped"
+  | "failed"
+  | "cancelled";
+The UI must display actual provider/job events. A provider is not marked complete until its response is validated and persisted. Optional source failure may lead to a partial report only if the remaining evidence is sufficient. A required input failure must block the affected calculation and explain why.
+
+Pipeline steps
+Validate the farm, field, geometry and profile IDs.
+Capture immutable versions of farm, field, geometry, soil/crop profiles, farming practices and selected scope.
+Resolve explicit user consent and which external requests are allowed.
+Refresh supported providers in parallel with bounded timeouts and retry rules.
+Parse and validate dates, units, ranges, fill values, quality flags and response schemas.
+Normalise units while preserving original values and metadata.
+Determine whether each source's pixel/grid resolution is appropriate for the selected field.
+Perform polygon-weighted aggregation only where the geometry and raster resolution support it.
+Calculate only indicators whose required inputs exist.
+Run documented, versioned field risk rules.
+Create each field's assessment.
+Create the farm-wide summary without hiding severe field-level issues.
+Compare with the previous compatible report.
+Generate evidence-linked recommendations.
+Ask AI to explain the validated findings, if AI is enabled.
+Validate the final report schema, ranges, IDs, references and contradictions.
+Persist an immutable report and update the farm's latest-report pointer only after successful persistence.
+3.5 Deep Analysis report content
+The report must contain the following sections. Each section starts with a short plain-language explanation and expands into technical details when requested.
+
+A. Overall farm picture
+Farm condition label, if valid.
+Health score only if a defined and validated health model exists.
+Data coverage and evidence confidence shown separately.
+Number of fields assessed, needing attention, unavailable or not assessed.
+Main strengths.
+Main concerns.
+Highest-priority next action.
+Analysis date, selected scope and report version.
+B. Field-by-field assessment
+For each field show:
+
+Field name and area.
+Current crop and stage only if confirmed/supported.
+Condition label.
+Evidence coverage/confidence.
+Leading finding.
+Recommended next action.
+Last observation/update date.
+Link to the corresponding field in the existing farm workspace (for example, its field overview or map location). Do not create or link to a separate Field Analysis page.
+C. Water conditions
+Include only supported values:
+
+Reference evapotranspiration (ET₀), with source/method.
+Crop coefficient (Kc), crop stage and coefficient source where known.
+Estimated crop evapotranspiration/demand (ETc), mm/day and selected-period total.
+Precipitation, with source and period.
+Effective rainfall, separately labelled as calculated/modelled.
+Confirmed farmer-recorded irrigation events and amounts.
+Saved irrigation routine as an assumption, not actual event history.
+Surface and root-zone moisture, with separate depth/product labels.
+Plant-available water (PAW), total available water (TAW), readily available water (RAW) and depletion only when soil hydraulic inputs and crop/rooting assumptions support these calculations.
+Net water balance with explicit sign convention.
+Potential unmet demand/stress interval only if the water-balance model is valid.
+A daily calculation table with date, ET₀, Kc, ETc, precipitation, effective rainfall, irrigation, drainage/runoff terms if modelled, estimated storage/depletion and source status.
+Never call a temperature-only estimate FAO-56 Penman–Monteith. Never infer actual irrigation from a routine. Never say rainfall automatically means irrigation did not happen.
+
+D. Soil and land
+Potential properties, only where a real dataset or farmer/lab measurement supplies them:
+
+Sand, silt and clay percentages and textural class.
+pH and measurement depth.
+Soil organic carbon or organic matter, with conversion method stated if converted.
+Bulk density.
+Coarse fragments.
+Cation exchange capacity (CEC).
+Total nitrogen where available.
+Available water capacity or water-retention values where available.
+Electrical conductivity/salinity only from an appropriate source/measurement.
+Drainage class only if sourced or clearly identified as an inference.
+Elevation/slope from a suitable terrain dataset.
+Lab test date, method, sample depth and lab/source.
+Mapped/modelled estimate uncertainty.
+If a mapped estimate differs from a newer field/lab test, show both. Do not overwrite the measured value. Mark the depth and evidence type prominently.
+
+E. Vegetation and crop information
+Only display satellite vegetation indicators if a real optical product has been retrieved and processed:
+
+NDVI/EVI or another explicitly calculated index.
+Product/sensor and band information.
+Scene/composite date.
+Spatial pixel size.
+Cloud/quality mask result.
+Valid pixel count and percentage of field area represented.
+Field polygon aggregation method (mean, median, weighted statistic).
+Historical baseline method and observation dates, where relevant to the finding.
+Comparison with crop stage only where crop/date information is reliable.
+Use careful wording such as Vegetation index is below this field's recent baseline. Do not claim disease detected, pest detected or crop is dying from NDVI alone.
+
+F. Weather and climate exposure
+Current conditions and forecast shown separately.
+Historical daily/minimum/maximum/mean temperature.
+Daily, weekly, monthly and seasonal precipitation totals.
+Solar radiation, wind and relative humidity where supplied.
+Reference ET₀ where the calculation inputs exist.
+Growing Degree Days (GDD) only with crop-specific base/upper temperature rules and a declared method.
+Heat/cold stress days only when crop, stage, thresholds and dates support the result.
+Dry-spell length and rainfall anomaly against a defined local/seasonal baseline.
+Historical dry/typical/wet seasons only if there are enough comparable historical years.
+A forecast is not an observation. Reanalysis is not an exact weather-station observation. NASA POWER history is not a forward forecast.
+
+G. Risks and potential issues
+Every finding needs:
+
+Risk title and severity.
+Affected farm/field/crop/stage.
+Trigger rule and version.
+Evidence IDs, values, units and time window.
+Source and quality status.
+Historical baseline or threshold.
+Possible explanation/mechanism.
+Alternative explanations.
+Confidence and missing evidence.
+What could confirm or disprove the finding.
+Mitigation options or practical next checks.
+Only create a formal risk when a documented rule/threshold is satisfied. If evidence merely suggests something worth looking at, label it Observation or Watch point, not a confirmed risk.
+
+H. Recommended actions
+Every action must be linked to a finding or a documented agronomic rule and include:
+
+Action title and clear verb.
+Why it is suggested.
+Affected field and crop.
+Priority.
+Suggested due window.
+Required tools/information if known.
+Evidence references.
+Status: Suggested, Accepted, Scheduled, In progress, Completed, Deferred or Dismissed.
+Completing a task does not prove the underlying risk is resolved. The next assessment must check the condition again.
+
+I. Compare with previous report
+Classify changes as:
+
+New finding.
+Continuing finding.
+Resolved/clear under the current rule.
+Improved since the previous comparable report.
+Worsened since the previous comparable report.
+Not comparable.
+Change caused by new input, source availability, source version, geometry/profile edit or calculation-model version.
+Never attribute an improvement to a farmer action unless the evidence supports that interpretation. If inputs, methods or source products differ materially, show a comparability warning instead of presenting raw score deltas as a real-world change.
+
+J. Evidence and calculation explorer
+Every important report value should open a shared evidence drawer displaying:
+
+Metric name, value and unit.
+Farm/field and geometry version.
+Observation period and retrieval time.
+Provider/product and source link.
+Source type: measured, farmer-reported, satellite-derived, modelled, reanalysis, forecast, estimate or calculated.
+Spatial resolution, pixel count/coverage and aggregation method.
+Quality flags and missing-value handling.
+Formula and input values.
+Model/crop database/calculation version.
+Confidence and known limitations.
+4. DATA COLLECTION — SOURCES, APIS AND FALLBACK STRATEGY
+The system must use provider adapters. Do not scatter raw HTTP requests through React components. All API secrets and authenticated data access stay server-side.
+
+4.1 Provider adapter interface
+Use a typed interface similar to:
+
+interface ProviderRequest {
+  farmId: string;
+  fieldId?: string;
+  geometry?: GeoJSON.Polygon | GeoJSON.MultiPolygon;
+  centroid: { lat: number; lon: number };
+  from?: string;
+  to?: string;
+  variables: string[];
+  purpose: "analysis" | "refresh";
+}
+
+interface ObservationEnvelope<TValue = number> {
+  observationId: string;
+  providerId: string;
+  productId: string;
+  variable: string;
+  value: TValue;
+  unit: string;
+  evidenceType:
+    | "station_measurement"
+    | "farmer_reported"
+    | "satellite_derived"
+    | "modelled"
+    | "reanalysis"
+    | "forecast"
+    | "estimated"
+    | "calculated";
+  observedAt?: string;
+  validFrom?: string;
+  validTo?: string;
+  retrievedAt: string;
+  spatialResolution?: number;
+  temporalResolution?: string;
+  geometryId?: string;
+  pixelCount?: number;
+  validCoveragePct?: number;
+  qualityFlags: string[];
+  uncertainty?: { lower?: number; upper?: number; method?: string };
+  sourceUrl: string;
+  sourceVersion?: string;
+  rawRecordRef: string;
+  status: "valid" | "suspect" | "missing" | "stale";
+}
+
+interface DataProvider {
+  id: string;
+  getStatus(): Promise<ProviderHealth>;
+  fetch(request: ProviderRequest): Promise<ObservationEnvelope[]>;
+}
+Each adapter must validate its response against a runtime schema (for example Zod), convert units at the ingestion boundary, preserve the raw provider response or a durable source reference, and return structured errors rather than swallowing failures.
+
+4.2 Provider registry and recommended integrations
+Treat this as the recommended acquisition plan. Verify current endpoints, variables, access restrictions, quotas, licensing and product versions during implementation. A provider name in this document is not evidence that it is already connected.
+
+A. Weather forecast — Open-Meteo Forecast API
+Primary candidate: https://api.open-meteo.com/v1/forecast
+
+Use it for short-range forecast data, not historical records. Request only the required variables, for example:
+
+temperature_2m
+relative_humidity_2m
+precipitation
+precipitation_probability
+wind_speed_10m
+wind_direction_10m
+shortwave_radiation
+et0_fao_evapotranspiration where available and verified in the current documentation
+relevant daily min/max/sum variables
+The current API documentation describes forecasts up to 16 days, depending on the selected model/product. Store model/provider, issue/retrieval time, timezone and valid time. Never store a forecast value as observed rainfall.
+
+Commercial-use rule: Open-Meteo's free endpoint is restricted to non-commercial use and has published request limits. If Field Shift becomes a commercial product or needs guaranteed service/volume, obtain the appropriate paid licence/API plan or replace the provider with a licensed alternative. Include attribution where required.
+
+Fallback: use an official national meteorological service for the farm's country when a supported API is available. A configurable global model adapter such as NOAA/ECMWF data may be considered after access method, licensing and processing are verified. Do not silently splice two different forecast models into one continuous series. Show a provider/model change marker.
+
+Official references:
+
+https://open-meteo.com/en/docs
+https://open-meteo.com/en/terms
+https://open-meteo.com/en/pricing
+B. Historical weather and climate — NASA POWER Daily API
+Primary candidate: NASA POWER Daily point API.
+
+Base path:
+
+https://power.larc.nasa.gov/api/temporal/daily/point
+Use the official parameter catalogue to select and verify exact parameter IDs, community, supported date range, units and temporal definitions. Candidate variable groups include:
+
+Daily minimum/maximum/mean air temperature.
+Precipitation.
+Solar radiation.
+Wind.
+Relative humidity.
+Other supported agroclimatology variables required by the calculation.
+Do not assume a parameter is available simply because its name sounds familiar. Confirm the ID and units against the current POWER API parameter catalogue before implementation.
+
+NASA POWER Daily provides daily solar/meteorological time series, but its spatial resolution is source-dependent; the documentation warns about a 0.5° × 0.5° global grid for its catalog context. This is climate-grid information, not a field weather station. Preserve its native spatial resolution and time standard. Do not claim exact field-scale conditions from a grid that is much larger than the farm.
+
+Use the Daily endpoint for day-level historical data where available. Use the Monthly or Climatology endpoints only for monthly/climatological results and label them accordingly. Do not expand monthly values into fabricated daily measurements.
+
+Historical alternative/cross-check: Open-Meteo Historical Weather API using ERA5/ERA5-Land reanalysis. Its documentation describes ERA5 at approximately 0.25° and ERA5-Land at approximately 0.1° (~9 km), with historical coverage extending back decades. Reanalysis is model-assisted historical context, not a station measurement. Preserve which dataset was used; do not blend NASA POWER and ERA5 values without a documented source-selection rule.
+
+Official references:
+
+https://power.larc.nasa.gov/docs/services/api/temporal/daily/
+https://power.larc.nasa.gov/docs/services/api/temporal/
+https://open-meteo.com/en/docs/historical-weather-api
+C. Soil properties — SoilGrids, with an essential access fallback
+Preferred dataset: ISRIC SoilGrids global soil property maps. Use its mapped estimates for properties actually provided by the product, such as texture fractions, pH, soil organic carbon, bulk density and other documented soil layers/properties. Respect its depth intervals, map resolution and prediction uncertainty. It is a mapped prediction, not a lab test from the user's field.
+
+Critical current status: ISRIC currently reports that the SoilGrids REST API has been temporarily paused. Do not build the production implementation so it depends on rest.isric.org being available.
+
+Preferred access alternative: use the documented SoilGrids Web Coverage Service (WCS) for spatial subsets or WebDAV/global raster downloads, then store/cache the licensed source rasters on the backend and perform polygon sampling internally. Check current WCS/WebDAV availability and terms before deployment.
+
+Secondary global fallback: FAO/IIASA Harmonized World Soil Database (HWSD) v2.0. It offers global soil information at approximately 1 km and multiple soil layers. This is coarser and not interchangeable with SoilGrids. Label the product, version and resolution, and reduce confidence accordingly.
+
+Best field-specific source: user-provided soil-laboratory tests or a verified national/regional soil survey. Store sample date, sampling depth, method, lab, units and location/field association. A lab result should not be overwritten by a global map estimate. If a mapped estimate and lab value differ, show both and explain which one is used for which calculation.
+
+If all sources fail: retain existing valid soil records with their dates and stale label. Do not invent pH, salinity, texture, nutrient deficiency or water-holding capacity.
+
+Official references:
+
+https://isric.org/explore/soilgrids
+https://docs.isric.org/globaldata/soilgrids/
+https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html
+https://www.fao.org/land-water/resources/tools/databases/hwsd/en
+D. Surface/root-zone soil moisture — NASA SMAP L4
+Primary candidate: NASA SMAP Level-4 Global 3-hourly 9 km EASE-Grid Surface and Root Zone Soil Moisture, current version to be checked at implementation time.
+
+The documented product assimilates SMAP radiometer observations into a land-surface model. It provides surface and root-zone soil-moisture estimates at roughly 9 km and a 3-hour time step. It is model-assisted gridded data, not a direct sensor reading from the exact field.
+
+Use NASA Earthdata/NSIDC DAAC data services and authentication for programmatic retrieval. Store product version, science version, surface-vs-root-zone variable, grid cell, observation time, latency, quality flags and retrieval date. Confirm the correct access/subsetting service before coding.
+
+Fallback: Open-Meteo historical ERA5-Land soil-water/soil-moisture variables or a correctly identified NASA POWER modelled root-zone moisture variable such as GWETROOT, if the chosen parameter and units are available and verified. These are alternatives with different model semantics. Never call them SMAP observed. Label the actual fallback product and lower confidence/coverage.
+
+Field-scale rule: at 9 km, one cell may cover many small farms. If different fields fall in the same grid cell, the value cannot distinguish those fields. Display it as regional/root-zone context, not a precise field-level contrast.
+
+Official references:
+
+https://nsidc.org/data/spl4smgp/versions/8
+https://nsidc.org/data/user-resources/data-announcements/data-set-updates-smap-level-4
+https://nsidc.org/data/user-resources/help-center/what-data-subsetting-reformatting-and-reprojection-services-are-available-smap-data
+E. Satellite vegetation — Sentinel-2 Level-2A first
+Primary candidate: Copernicus Sentinel-2 Level-2A surface reflectance.
+
+Use the Copernicus Data Space Ecosystem (CDSE) STAC catalogue to search by:
+
+Farm/field polygon (intersects).
+Acquisition date/time range (datetime).
+Collection sentinel-2-l2a where present in the current STAC catalogue.
+Cloud cover metadata where available.
+Current STAC endpoint:
+
+https://stac.dataspace.copernicus.eu/v1/
+Use CDSE openEO, Sentinel Hub processing APIs or a tested internal raster-processing pipeline to retrieve only the required assets and compute polygon statistics. Authenticate as required by CDSE. Avoid downloading whole scenes when an appropriate processing API can return a field subset/statistic.
+
+Sentinel-2 Level-2A supplies bottom-of-atmosphere surface reflectance and a Scene Classification Layer. Red band B04 and NIR band B08 are 10 m; the Scene Classification Layer is 20 m. Use quality layers to mask clouds, cloud shadows, snow and invalid pixels. Do not use a simple cloud-cover percentage for the whole scene as a substitute for pixel-level masking over the selected field.
+
+Core calculation:
+
+NDVI = (NIR - RED) / (NIR + RED);
+// Sentinel-2: NIR = B08, RED = B04
+// Guard against NoData and denominator ≈ 0.
+Optional EVI must be calculated only from the appropriate verified bands and exact published formula. Preserve source reflectance scale factors and processing metadata.
+
+For each field/date, return NDVI/EVI distribution, median/mean as appropriate, valid pixel count, valid polygon coverage percentage, cloud/quality exclusions, date and product. The field's area and available valid pixels determine whether the statistic is usable.
+
+Alternative 1: NASA Harmonized Landsat Sentinel-2 (HLS v2.0) 30 m Cloud Optimized GeoTIFFs. NASA states that the data are distributed in Earthdata Cloud, require an Earthdata login and commonly have around 2–3 days latency depending on inputs. HLS can provide a consistent Landsat/Sentinel time series but has coarser pixels than Sentinel-2 native 10 m products.
+
+Alternative 2: MODIS MOD13Q1 NDVI/EVI at 250 m with a 16-day composite. Use for larger areas and longer-term regional vegetation context only when field size and valid pixel count support it. Do not use 250 m MODIS to distinguish tiny adjacent fields.
+
+No usable imagery: show No suitable cloud-free observation for this period or Field is too small for this product's resolution. Do not create NDVI from rainfall, weather, crop type or a placeholder value.
+
+Official references:
+
+https://documentation.dataspace.copernicus.eu/APIs/STAC.html
+https://documentation.dataspace.copernicus.eu/Data/SentinelMissions/Sentinel2.html
+https://sentinels.copernicus.eu/documents/d/sentinel/sentinel-2-products-specification-document-15_1
+https://hls.gsfc.nasa.gov/data-access-and-tools/
+https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD13Q1/
+F. Precipitation cross-check — NASA GPM IMERG
+Use NASA GPM IMERG where the analysis needs a satellite precipitation cross-check. Choose the correct Early, Late or Final product for the use case and show latency/quality differences. IMERG offers different accumulation products, including half-hourly, three-hourly and daily products. Common grid spacing is approximately 0.1°; it is not a rain gauge at the field.
+
+Do not blindly average IMERG rainfall with POWER/ERA5/Open-Meteo precipitation. Choose a documented primary series for each calculation. Use other sources as independent checks; if they disagree materially, surface the disagreement and reduce confidence.
+
+Access through the current NASA GPM data distribution/approved NASA Earthdata service. Confirm the product version, file/API access, authentication, latency and units. If unavailable, use the configured historical weather/precipitation source as a clearly labelled alternative, not as the same product.
+
+Official reference:
+
+https://gpm.nasa.gov/data/imerg
+https://gpm.nasa.gov/data/directory
+G. Terrain — NASADEM or a documented DEM alternative
+Primary candidate: NASADEM_HGT v001, approximately 30 m global DEM, with coverage limitations (approximately 60°N to 56°S). Use Earthdata/LP DAAC data access and verify tiles/coverage.
+
+Derive elevation summaries and slope only after applying proper projection and vertical/horizontal unit handling. Use terrain to contextualise elevation, slope and possible runoff/erosion susceptibility. Terrain alone does not prove waterlogging, erosion or drainage failure.
+
+Fallback: Copernicus DEM GLO-30 or an appropriate documented SRTM/other DEM product for areas where NASADEM is unavailable. Preserve the chosen DEM name/version/vertical datum and do not blend elevation rasters with different datums without transformation.
+
+Official reference:
+
+https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001
+https://dataspace.copernicus.eu/analyse/apis
+H. Evapotranspiration support — FAO-56 and MODIS ET
+Preferred agronomic calculation: implement FAO-56 reference evapotranspiration ET₀ using the Penman–Monteith method only when the required meteorological inputs and units are present and compatible.
+
+Reference equation:
+
+ET0 = [0.408 × Δ × (Rn − G) + γ × (900 / (T + 273)) × u2 × (es − ea)]
+      / [Δ + γ × (1 + 0.34 × u2)]
+Where the implementation must define and correctly derive:
+
+Δ: slope of saturation vapour pressure curve.
+Rn: net radiation.
+G: soil heat flux.
+γ: psychrometric constant.
+T: mean air temperature at 2 m.
+u2: wind speed at 2 m, converted from measurement height where needed.
+es - ea: vapour-pressure deficit term.
+Use the exact FAO-56 conventions, day/time units, pressure/elevation corrections and input requirements. Validate against reference examples. If required inputs are missing, use a separately named approximate method or return unavailable. Never claim a temperature-only method is FAO-56.
+
+Crop evapotranspiration:
+
+ETc = Kc × ET0
+Use a sourced crop coefficient (Kc) for the relevant crop and growth stage. Use locally suitable crop data where available; FAO-56 crop tables are a starting reference, not a universal replacement for locally validated coefficients. Store crop, variety if known, stage, initial/mid/late stage lengths, source and any climate adjustment. If the coefficient or stage cannot be supported, mark ETc unavailable/approximate with the reason.
+
+Independent satellite context: NASA MOD16A2GF is an 8-day, 500 m gap-filled MODIS ET product. It can be used as broader actual-ET context or a cross-check for sufficiently large fields; it is far too coarse to pretend it is a precise measurement for every small field. Its product algorithm uses a Penman–Monteith approach with meteorological and MODIS inputs. Preserve product and quality metadata.
+
+Official references:
+
+https://www.fao.org/4/X0490E/X0490E00.htm
+https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD16A2GF
+4.3 Source priority and fallback ladder
+Apply a variable-specific source order. Do not define one global fallback provider for every metric.
+
+Example:
+
+const sourcePriority = {
+  measuredSoilTest: ["user_confirmed_lab_result", "national_soil_survey", "soilgrids_raster", "fao_hwsd"],
+  weatherForecast: ["open_meteo_forecast_or_licensed_provider", "official_national_meteorological_api", "other_verified_nwp_provider"],
+  historicalClimate: ["nasa_power_daily", "era5_land_reanalysis", "other_verified_reanalysis"],
+  soilMoisture: ["smap_l4", "era5_land_soil_water", "nasa_power_modelled_moisture"],
+  vegetation: ["sentinel2_l2a", "nasa_hls", "modis_mod13q1_if_resolution_supports_field"],
+  rainfallCrossCheck: ["gpm_imerg", "verified_precipitation_reanalysis_or_power"]
+} as const;
+This is an order of preference, not a rule to mix all values. The selected source must be suitable for the metric, geography, time interval, licensing and required resolution.
+
+When a provider fails:
+
+Record the provider error and request time.
+Retry only retryable errors with bounded exponential backoff.
+Check whether an allowed, semantically appropriate alternative exists.
+If it does, retrieve and label the alternative with its actual source/product semantics.
+Lower coverage/confidence where the alternative is coarser, less current or otherwise weaker.
+If no suitable alternative exists, preserve the last valid observation as stale or show unavailable.
+Never fill missing data with a synthetic number, zero, previous value without a stale label, rainfall-derived NDVI or a fictional status.
+5. SPATIAL PROCESSING — HOW DATA IS APPLIED TO A FARM OR FIELD
+A large share of the data sources return rasters/grids. Field Shift must process them against the saved farm/field geometry correctly.
+
+5.1 Geometry prerequisites
+Use the saved validated farm/field polygon, not the draggable map centre pin.
+Use GeoJSON with a declared CRS at API boundaries (WGS84 / EPSG:4326).
+Validate polygon closure, at least three unique vertices, self-intersection, duplicate vertices, plausible extent and non-zero area.
+Reproject to a suitable projected/equal-area CRS for area/intersection calculations.
+Preserve a geometryVersionId and use it in every raster-sampling result/report.
+A changed geometry invalidates the spatial summaries derived from the old polygon, but does not alter old reports.
+5.2 Raster polygon statistics
+For each data product:
+
+Load its native grid and metadata.
+Intersect it with the selected field polygon.
+Apply provider quality flags and NoData masks before calculating statistics.
+Calculate pixel-field overlap weights where applicable.
+Compute valid pixel count and valid field-area coverage.
+Calculate a documented statistic (mean, median, percentile or distribution) appropriate to the metric.
+Preserve pixel size, grid cell IDs, acquisition dates and quality flags.
+Store the sampling method and geometry version.
+Return data-quality fields such as:
+
+interface SpatialCoverage {
+  fieldAreaM2: number;
+  sourcePixelSizeM?: number;
+  intersectingPixelCount: number;
+  validPixelCount: number;
+  validAreaM2: number;
+  validCoveragePct: number;
+  aggregation: "area_weighted_mean" | "median" | "percentile" | "nearest_cell" | "not_applicable";
+  spatialFit: "field_scale" | "coarse_context" | "insufficient";
+  geometryVersionId: string;
+}
+5.3 Resolution gate
+Before displaying a result as field-specific, compare the data's native pixel/grid size with the field area and shape.
+
+If a product pixel is much larger than the field, mark it Regional context or Coarse grid estimate.
+If several fields share one coarse cell, do not imply that they have independently measured different soil-moisture values.
+If the raster contains too few valid pixels or too little valid field coverage, suppress the field-level metric or lower its status to Insufficient coverage according to a tested product-specific threshold.
+Thresholds for valid pixels/coverage must be stored in product configuration and validated; do not pick a threshold ad hoc inside a component.
+A visually detailed map does not make a coarse dataset more accurate.
+6. SCIENTIFIC CALCULATION ENGINE
+Create a separate typed engine package. Do not place agricultural formulas inside React components or AI prompts.
+
+Suggested module layout:
+
+src/
+  domain/
+    farms/
+    fields/
+    analysis/
+    observations/
+    reports/
+    schedules/
+  providers/
+    weather/
+    soil/
+    soilMoisture/
+    vegetation/
+    precipitation/
+    terrain/
+  engine/
+    weather/
+    waterBalance/
+    soil/
+    vegetation/
+    gdd/
+    riskRules/
+    confidence/
+    farmAssessment/
+  services/
+    analysisOrchestrator.ts
+    reportService.ts
+    scheduleService.ts
+  components/
+    Advanced/
+      DeepAnalysis/
+      Reports/
+      Automation/
+      EvidenceDrawer/
+6.1 Weather calculations
+Where daily input values exist and are valid, calculate:
+
+Minimum, maximum and mean temperature.
+Daily/weekly/monthly/seasonal precipitation totals.
+Solar radiation totals/averages.
+Wind/humidity statistics where supplied.
+ET₀ where the required inputs/method are available.
+Hot/cold day counts only with documented crop-specific thresholds and relevant crop-stage dates.
+Dry spell duration from a declared precipitation threshold and time step.
+Historical anomalies against a defined local/seasonal baseline.
+Growing Degree Days using the crop's documented base/upper thresholds and chosen method.
+Example GDD structure:
+
+interface GddConfig {
+  baseTempC: number;
+  upperTempC?: number;
+  method: "single_sine" | "capped_mean" | "other_documented";
+  sourceId: string;
+  version: string;
+}
+Do not apply a universal GDD threshold to all crops. Record whether the calculation used daily observed-like/reanalysis data or a coarser monthly approximation. If only monthly climate means are available, do not present the output as exact daily accumulated GDD.
+
+6.2 Water balance and crop water demand
+Implement water calculations only when relevant inputs are present. The engine must support the following concepts, but it must not fabricate missing parameters:
+
+ET₀ — reference crop evapotranspiration.
+Kc — crop coefficient by growth stage.
+ETc — crop evapotranspiration/demand.
+P — precipitation.
+Peff — effective precipitation, which is calculated using a named method and is not equal to raw rainfall.
+I — confirmed irrigation depth/amount converted to a field-area basis.
+RO — runoff, only if modelled.
+DP — deep percolation/drainage, only if modelled.
+CR — capillary rise, only if modelled.
+Rooting depth Zr and allowable depletion fraction p where supported.
+Soil water at field capacity and wilting point (or a valid alternative soil hydraulic representation).
+A daily root-zone depletion equation may follow the FAO-56 convention:
+
+Dr(i) = Dr(i-1) - (P(i) - RO(i)) - I(i) - CR(i) + ETc(i) + DP(i)
+Use a sign convention documented in code and the Evidence Drawer. The implementation must reconcile the exact FAO-56 definitions, initial storage and boundary conditions before calling the model FAO-56 compliant.
+
+Plant-available water calculations, where inputs are supported:
+
+TAW = 1000 × (θFC − θWP) × Zr
+RAW = p × TAW
+Where volumetric water content is dimensionless and Zr is in metres, yielding millimetres. Do not calculate TAW/RAW if field capacity, wilting point, root depth or units are unknown/unsupported.
+
+Output:
+
+Demand versus supply chart.
+Water balance by day/time step.
+Confirmed irrigation events separately from saved routine.
+Observed/modelled precipitation separately from forecast.
+Surface and root-zone moisture in separate series.
+Assumptions, missing terms and confidence.
+Stress intervals only if the crop/soil model supports them.
+Do not convert hours watered into mm unless the flow and irrigated area are known. Do not claim the model knows what physically happened on the farm if the farmer did not record it and no suitable sensor exists.
+
+6.3 Soil calculations
+Parse source property, depth interval, unit, date and quality.
+Convert units explicitly and store original values.
+Derive texture class only from valid sand/silt/clay fractions that satisfy the selected classification's requirements.
+Name the classification system (e.g. USDA texture triangle).
+pH interpretation must be crop/context-specific and sourced.
+Soil organic carbon must not silently become organic matter; if conversion is used, record the conversion factor and its basis.
+Salinity/EC must come from an appropriate source or direct measurement; do not infer it from texture or pH alone.
+Drainage and erosion findings must be sourced or explicitly marked as cautious inference.
+A coarse soil grid must not be presented as a laboratory result.
+6.4 Vegetation time series
+Calculate each index from the correct reflectance bands and scale factors.
+Apply cloud, cloud-shadow, snow and invalid-data masks before aggregation.
+Use a consistent field polygon version.
+Store raw observation date, composite interval, valid-pixel fraction and source.
+Compare only compatible index products/time windows or explicitly normalise/mark a source change.
+For seasonal baselines, align crop stage/season where possible.
+No reliable historical baseline and Insufficient valid imagery are valid outputs.
+6.5 Risk and status engine
+Create versioned rule definitions such as:
+
+interface RiskRule {
+  id: string;
+  version: string;
+  name: string;
+  metricDependencies: string[];
+  cropContextRequired: boolean;
+  stageContextRequired: boolean;
+  thresholdConfig: Record<string, number | string>;
+  minimumCoverage: number;
+  minimumConfidence: number;
+  severity: "info" | "low" | "moderate" | "high" | "critical";
+  evidenceRequirements: string[];
+  actionTemplateIds: string[];
+}
+Risk classes may include heat exposure, cold/frost exposure, water deficit/drought, heavy precipitation/flooding/waterlogging indicators, soil limitations and unusual vegetation-index readings relative to a valid baseline. Pest/disease risks must not be generated solely from NDVI or a generic AI interpretation; they require a validated model or a clearly labelled farmer report/watch point.
+
+Thresholds must be crop-, location-, stage- and metric-specific where the evidence supports this. Store rule version and trigger evidence. If no defensible threshold exists, display an observation, not a formal alert.
+
+6.6 Farm and field status aggregation
+Preferred field status labels:
+
+Good — enough current evidence is available and no configured material concern is triggered.
+Monitor — a meaningful signal deserves observation, but evidence does not justify an urgent risk label.
+Needs Attention — one or more validated concerns require investigation/action.
+Alert — a high-priority validated rule has triggered.
+Insufficient Data — required evidence is missing, too coarse, stale or incompatible.
+Not Analysed — no report exists.
+A numeric composite health score is optional and must not ship until its components, weights, scale, missing-data policy, calibration and validation are scientifically reviewed. If implemented, store its model version and component breakdown. Show Health, Evidence Coverage and Confidence separately.
+
+At farm level, report counts and a carefully defined aggregate. Do not allow many healthy fields to cancel out one severe field. The top farm label must respect the highest material field-level alert under the documented aggregation rules.
+
+7. REPORTS & ANALYSIS HISTORY
+7.1 Purpose
+Keep a permanent, inspectable record of every analysis run for the selected farm. Old reports are never edited in place.
+
+7.2 Report list
+Each row/card includes:
+
+Report date/time.
+Scope (whole farm, all fields, selected fields or individual field).
+Run type (manual or scheduled).
+Status (complete, partial, failed, cancelled).
+Farm condition summary, if available.
+Number of findings and highest severity.
+Data coverage/confidence.
+Data/model version indicator if changed.
+Actions: Open, Compare, Export, Delete only where policy permits.
+Filters:
+
+Date range.
+Field/scope.
+Run type.
+Completed/partial/failed.
+Status/severity.
+7.3 Immutable report schema
+interface DeepAnalysisReport {
+  id: string;
+  farmId: string;
+  fieldIds: string[];
+  scope: AnalysisScope;
+  createdAt: string;
+  completedAt?: string;
+  status: "complete" | "partial" | "failed" | "cancelled";
+  inputSnapshotId: string;
+  geometryVersionIds: Record<string, string>;
+  profileVersionIds: Record<string, string>;
+  dataObservationIds: string[];
+  derivedMetricIds: string[];
+  fieldAssessmentIds: string[];
+  farmAssessmentId?: string;
+  findingIds: string[];
+  actionRecommendationIds: string[];
+  engineVersion: string;
+  cropKnowledgeVersion?: string;
+  ruleSetVersion: string;
+  coverage: CoverageSummary;
+  confidence: ConfidenceSummary;
+  sourceOutcomes: SourceOutcome[];
+  warnings: string[];
+  previousComparableReportId?: string;
+  reportHash: string;
+}
+The report hash/input snapshot ensures the same report can be reopened with the same values and explanations. Editing current farm inputs must not mutate old reports.
+
+7.4 Compare two reports
+Provide a side-by-side comparison view:
+
+Overall farm summary and field summaries.
+New, resolved, continuing and changed findings.
+Metric deltas where comparable.
+Changed farm/field inputs.
+Changed geometry/profile versions.
+Changed data providers or source resolution.
+Changed calculation/rule/model versions.
+Coverage/confidence changes.
+Actions accepted/completed/deferred since the earlier report.
+Classify each apparent change as:
+
+type ChangeCause =
+  | "environmental_observation_change"
+  | "farmer_input_change"
+  | "management_event_change"
+  | "geometry_change"
+  | "source_or_coverage_change"
+  | "calculation_version_change"
+  | "unknown_or_not_attributable";
+If two reports are not comparable, still allow opening each report but block misleading numeric delta charts and explain why.
+
+7.5 Export
+Where implemented:
+
+PDF: human-readable report with summary, findings, actions, per-field sections, sources and limitations.
+CSV: tabular observations/metrics with units, timestamps, source IDs and field IDs.
+JSON: structured report snapshot with schema version and provenance.
+Exports must use the saved report snapshot, not run a new analysis while downloading. Clearly show Preparing, Ready, Failed and retry states. Do not expose private coordinates in a general report unless the export explicitly includes geometry and the owner confirms the privacy implications.
+
+8. AUTOMATION & MONITORING
+8.1 Purpose
+Allow a farm owner to schedule recurring Deep Analysis so they do not have to manually request every reassessment.
+
+8.2 Important architecture requirement
+A browser-only website cannot reliably run analysis while closed. Real automation requires:
+
+A durable schedule record.
+A server-side scheduler/cron trigger.
+A durable job queue.
+A worker that executes the same analysis pipeline as a manual run.
+Durable report storage.
+Notification delivery or an in-app notification record.
+Consent and deletion controls.
+Do not simulate this with setInterval, a browser timer or an open-tab requirement while claiming the analysis runs automatically.
+
+8.3 Schedule creation flow
+The Create schedule flow must collect:
+
+Farm ID.
+Scope: whole farm, all fields, selected fields or one field.
+Selected field IDs where relevant.
+Frequency: daily, every 3 days, weekly; custom interval only if implemented safely.
+Preferred run time.
+Farm timezone (not merely browser timezone).
+Whether to refresh all supported data or a selected subset.
+Whether to use saved farming routines and when to ask for reconfirmation.
+Notification preferences.
+Explicit consent for any farm data/geometry/input snapshot sent to a remote backend or external API.
+Before activation, show exactly what will be sent remotely, why it is needed, where it is processed and how the user can pause/revoke it. Remote/background processing must be opt-in, not silently enabled.
+
+8.4 Schedule list/dashboard
+Display:
+
+Schedule name/farm.
+Scope and included fields.
+Frequency/timezone.
+Next run time.
+Last run time/result.
+Current state.
+Consent state.
+Actions: Pause, Resume, Run now, Edit, History, Delete.
+Run now must reuse an already running/queued job for the same scope/input snapshot where appropriate, rather than creating duplicate costly runs.
+
+8.5 Job lifecycle
+type JobStatus =
+  | "queued"
+  | "running"
+  | "complete"
+  | "partial"
+  | "failed"
+  | "retrying"
+  | "cancelled"
+  | "skipped";
+
+interface AnalysisJob {
+  id: string;
+  scheduleId?: string;
+  farmId: string;
+  scope: AnalysisScope;
+  requestedAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+  status: JobStatus;
+  currentStage?: string;
+  attempt: number;
+  idempotencyKey: string;
+  reportId?: string;
+  errorCode?: string;
+  errorMessage?: string;
+}
+Use idempotency keys to prevent duplicate reports/notifications after retry. Use bounded retries with exponential backoff for transient provider/server errors. Do not endlessly retry invalid farm profiles or unsupported inputs.
+
+8.6 Monitoring and notification rules
+Notify the user only when the job reaches a meaningful final state or a new important finding is produced.
+
+Potential notifications:
+
+Scheduled analysis completed.
+Scheduled analysis partial/failed.
+New high-priority finding.
+Existing finding materially worsened or improved.
+A source has been unavailable for a sustained period and materially affects the assessment.
+Farming routine needs reconfirmation.
+Avoid notification spam:
+
+Deduplicate repeated alerts for the same unresolved risk.
+Do not send alerts for ordinary score fluctuations within expected variability.
+A source failure normally creates a data-quality notice, not a crop-risk alert.
+Respect notification preferences and quiet hours for non-critical messages.
+Pause stops future runs but retains report history. Delete removes the schedule. Revoking background-processing consent must stop future remote jobs and delete or queue deletion of any remote analysis snapshot according to the disclosed retention policy. Do not say deletion is complete until the server confirms it.
+
+9. AI AGRONOMIST — HOW AI MAY BE USED INSIDE ADVANCED
+AI is a supporting explanation layer, not the scientific engine.
+
+Permitted uses:
+
+Explain a validated finding in simple or advanced language.
+Explain why a metric changed, using report comparison metadata.
+Summarise the evidence behind a risk.
+Explain a calculation using the actual formula and substituted values.
+Parse natural-language farming routines/observations into a draft for user confirmation.
+Answer questions about the selected farm/field/report.
+Guide the user to the relevant section or evidence drawer.
+Forbidden behaviours:
+
+Invent measurements, dates, source responses or scores.
+Claim disease, pest or crop failure without a validated supporting model.
+Override a deterministic crop/water/soil calculation.
+Change farm records, schedules, irrigation history, crop plans or report contents without explicit user action.
+Treat a farmer's routine as a completed event.
+Treat community statements as verified facts.
+Claim an external API is available without its real connector state.
+9.1 AI request context
+Send only the minimum required context, such as:
+
+interface AgronomistContext {
+  farmId: string;
+  fieldId?: string;
+  reportId?: string;
+  rotationPlanId?: string;
+  evidenceRefs: string[];
+  findings: ValidatedFindingSummary[];
+  userMode: "simple" | "advanced";
+  locale: string;
+}
+Do not send the entire farm archive, unrelated journal notes or all farm coordinates by default. Quantitative AI claims must reference report/evidence IDs. Validate structured output and render text safely. If AI is unavailable, the deterministic report remains usable and says Explanation unavailable; the measured/calculated results are still available.
+
+10. UI STATES, DESIGN AND INTERACTION CONTRACT
+10.1 Visual direction
+Inherit Field Shift v8 design tokens:
+
+Canvas: forest-night green-black.
+Solid panels: deep pine.
+Primary action/selected state: restrained leaf green.
+Water/weather data accent: muted cyan.
+Caution: warm amber.
+Critical: coral/red.
+Primary text: warm white; secondary text: readable sage.
+Normal cards: approximately 16px radius.
+Feature panels: approximately 22px radius where suitable.
+Normal glass panels: 78% opaque dark fill with approximately 14px backdrop blur.
+Dense data tables/inspectors: 88% opaque or solid surfaces.
+Dialogs: approximately 96% opaque.
+Do not apply glass to every panel. Use solid, high-contrast surfaces for tables, evidence lists and configuration forms. Do not place tiny text over busy farm photography. Use one or two relevant images at most in an Advanced viewport; the page is a scientific workspace, not a marketing landing page.
+
+10.2 Recommended main Advanced screen structure
+┌─────────────────────────────────────────────────────────────────────────┐
+│ Farm Shift header / active farm / global controls                        │
+├───────────────┬─────────────────────────────────────────────────────────┤
+│ Farm sidebar  │ Advanced                                                 │
+│               │ Farm: [Selected Farm]   Scope: [Whole Farm ▼]             │
+│ Overview      │ Last analysed: [timestamp]     [Run Deep Analysis]       │
+│ Fields & Map  ├─────────────────────────────────────────────────────────┤
+│ Rotation      │ Deep Analysis | Reports & History | Automation         │
+│ Soil & Land   ├─────────────────────────────────────────────────────────┤
+│ Water         │ Latest assessment / coverage / findings / field status   │
+│ Weather       │                                                         │
+│ History       │ Findings / field results / recent reports / schedule     │
+│ Advanced  ◀   │                                                         │
+│ Settings      │                                                         │
+└───────────────┴─────────────────────────────────────────────────────────┘
+10.3 Responsive behaviour
+Desktop: retain the farm sidebar and Advanced secondary navigation.
+Tablet: allow the farm sidebar to collapse into a drawer; keep Advanced tabs usable without clipping.
+Mobile: use a compact farm selector and a horizontally scrollable or menu-based Advanced subnavigation; stack charts and tables. Do not force page-wide horizontal scrolling.
+All primary controls: minimum 44×44 CSS px touch target.
+Honour keyboard focus and prefers-reduced-motion.
+10.4 Required interface states
+Every major component needs the applicable states:
+
+First use / no report.
+No farm fields.
+No field selected.
+Loading.
+Queued/running job.
+Complete.
+Partial source data.
+Stale observation.
+Insufficient resolution/coverage.
+Provider unavailable.
+Failed job/retryable error.
+Permission denied.
+Offline.
+Not comparable.
+Schedule disabled/paused.
+Pending deletion/revocation.
+Use content-shaped skeletons and real job progress. Do not show fake percentage progress or timers. Preserve the last successful report while a refresh is running or fails, with its original timestamp and stale indicator.
+
+11. FRONTEND COMPONENT CONTRACT
+Build reusable components and do not duplicate provider/calculation logic across views.
+
+<AdvancedLayout farmId={farmId}>
+  <AdvancedHeader />
+  <AdvancedNavigation />
+  <AdvancedRouteOutlet>
+    <DeepAnalysisPage />
+    <ReportsHistoryPage />
+    <AutomationMonitoringPage />
+  </AdvancedRouteOutlet>
+  <EvidenceDrawerProvider>
+    <EvidenceDrawer />
+  </EvidenceDrawerProvider>
+  <AgronomistDrawer />
+</AdvancedLayout>
+Suggested components:
+
+FarmScopeSelector
+FieldMultiSelect
+LatestAssessmentCard
+AssessmentCoverageBar
+ConditionStatusBadge
+DeepAnalysisFieldResultsTable
+FindingList
+FindingDetailDrawer
+RecommendedActionList
+AnalysisPreflightDrawer
+AnalysisJobProgress
+SourceOutcomeList
+MetricCard
+ReportHistoryTable
+ReportComparisonView
+EvidenceDrawer
+CalculationExplorer
+ScheduleList
+ScheduleEditor
+JobRunHistory
+AutomationConsentDialog
+Each component receives typed records/IDs and emits actions upward. It must not perform its own hidden fetch to an external provider or calculate a new farm score from display values.
+
+12. BACKEND, STORAGE AND API CONTRACTS
+12.1 Data model
+Implement equivalent entities if existing names differ:
+
+Farm
+Field
+GeometryVersion
+FarmProfileVersion
+FieldProfileVersion
+FarmPracticeRoutine
+ManagementEvent
+CropHistoryEvent
+DataProvider
+DataObservation
+RawProviderRecord
+DerivedMetric
+MetricDefinitionVersion
+AnalysisInputSnapshot
+AnalysisRun
+AnalysisJob
+FieldAssessment
+FarmAssessment
+Finding
+ActionRecommendation
+ActionTask
+DeepAnalysisReport
+AutomationSchedule
+ScheduleConsent
+Notification
+AuditEvent
+All derived metrics must carry formula/model version and the IDs of their source observations. Old reports must reference the exact profile, geometry, source and calculation versions used at the time.
+
+12.2 API endpoints — proposed contract
+Adapt to the current Express/API route conventions, but preserve the operations and response semantics.
+
+GET    /api/farms/:farmId/advanced/summary
+POST   /api/farms/:farmId/analysis-runs
+GET    /api/analysis-runs/:runId
+POST   /api/analysis-runs/:runId/cancel
+
+GET    /api/farms/:farmId/reports
+GET    /api/reports/:reportId
+POST   /api/reports/compare
+POST   /api/reports/:reportId/export
+
+GET    /api/farms/:farmId/schedules
+POST   /api/farms/:farmId/schedules
+GET    /api/schedules/:scheduleId
+PATCH  /api/schedules/:scheduleId
+POST   /api/schedules/:scheduleId/pause
+POST   /api/schedules/:scheduleId/resume
+POST   /api/schedules/:scheduleId/run-now
+DELETE /api/schedules/:scheduleId
+
+GET    /api/providers/status
+POST   /api/providers/:providerId/test
+Analysis request example:
+
+{
+  "scope": { "type": "all_fields", "farmId": "farm_123", "fieldIds": ["field_1", "field_2"] },
+  "refreshSources": true,
+  "dateRange": { "from": "2026-10-01", "to": "2026-11-15", "timezone": "Asia/Dubai" },
+  "practiceConfirmations": ["practice_1"],
+  "includeVegetation": true,
+  "includeTerrain": true,
+  "consent": { "allowRemoteProviderRequests": true, "allowRemoteJobProcessing": false }
+}
+Response:
+
+{
+  "runId": "run_123",
+  "status": "queued",
+  "farmId": "farm_123",
+  "scope": "all_fields",
+  "createdAt": "2026-11-15T10:00:00Z"
+}
+Use schema validation for all incoming/outgoing DTOs. Use an idempotency key for POST requests that create expensive runs/jobs. All endpoints must enforce ownership/authorization server-side. Do not accept a client-supplied userId as proof of ownership.
+
+12.3 Provider infrastructure
+Implement a provider registry and shared network client with:
+
+Per-provider timeout.
+Bounded retry with exponential backoff and jitter.
+Rate limiting and provider-specific request budgets.
+Circuit breaker/degraded state.
+Response schema validation.
+Request correlation ID.
+Cache keyed by product/variable/grid/time range/version, with private farm results separated from public/shared cache.
+Raw response/reference preservation.
+Unit normalization.
+Provider attribution and licensing metadata.
+Per-variable fallback rules.
+Never expose API credentials in frontend bundles, client-side environment variables, source maps or logs. Never send private farm geometry to a provider unless necessary for the requested processing and allowed by the user's consent.
+
+12.4 Suggested connected backend when scheduled analysis is enabled
+For durable automation, use an architecture equivalent to:
+
+React/Vite frontend
+   → Express/TypeScript API
+      → PostgreSQL + PostGIS (farm, field, geometry, reports, schedules)
+      → Redis + durable job queue (e.g. BullMQ) OR managed cloud task queue
+      → Analysis worker(s)
+          → provider adapters
+          → deterministic calculation engine
+          → report persistence
+          → notification service
+      → object storage for raw/processed raster assets and report exports
+Use the existing stack where feasible; do not migrate the entire product solely to adopt a library. If a different queue/database/storage service is chosen, document equivalent durability, authorization, retry, retention and observability guarantees.
+
+12.5 Caching and freshness
+Cache key must include:
+
+providerId + productId + variable + gridCell/geometry + timeWindow
++ units/aggregationVersion + productVersion
+Use shorter TTL for current forecasts and frequently updated conditions; longer TTL for static terrain/soil products and immutable historical observations. A newer retrieval may still contain an old observation; display both dates. A failed refresh must not overwrite the last successful record with zero/null or a false recent timestamp.
+
+13. ACCEPTANCE TESTS — DEFINITION OF DONE
+Do not mark Advanced complete merely because the interface renders.
+
+13.1 Deep Analysis tests
+Whole-farm run includes every selected field and retains per-field results.
+Single-field run is clearly labelled as a field-only assessment.
+A farm with one critical field and several healthy fields still surfaces the critical field prominently.
+Identical inputs and engine versions produce reproducible deterministic results.
+Unknown soil/water values remain unknown; no default ideal values appear.
+Manual analysis progress reflects actual job/provider events.
+Failed optional source produces an explainable partial report only if remaining evidence is sufficient.
+Failed required input blocks the affected metric with a useful explanation.
+Previous successful report remains available after a failed newer run.
+AI failure does not erase deterministic findings.
+13.2 Provider/API tests
+Test:
+
+Successful request.
+Timeout.
+HTTP 429/rate limit.
+HTTP 5xx.
+Invalid JSON/schema.
+Missing fields.
+Fill values/NoData.
+Unit mismatch.
+Unknown parameter.
+Stale result.
+Provider product/version change.
+Token/authentication failure.
+Spatial coverage outside product bounds.
+Raster with no valid pixels in the farm polygon.
+Polygon smaller than source pixels.
+Fallback provider with different resolution/semantics.
+Assert that the UI shows the real status and source provenance. Never report a source as connected because it appears in a static list.
+
+13.3 Scientific tests
+FAO-56 ET₀ known examples pass within documented tolerances.
+ETc uses sourced Kc and correct crop stage.
+Rainfall, effective rainfall, forecast rainfall and irrigation remain separate.
+Water balance uses correct units, sign convention and initial storage.
+TAW/RAW unavailable if field capacity/wilting point/root depth inputs are missing.
+GDD tests use crop-specific thresholds and documented cap method.
+NDVI uses correct reflectance bands, scale factors and masks.
+No NDVI is calculated from rainfall or precipitation.
+Pixel/field coverage is computed after quality masking.
+Soil texture classification only runs on valid compatible fractions.
+Lab results remain distinct from gridded soil predictions.
+Risk triggers use versioned thresholds and record their evidence IDs.
+Confidence is separate from health/suitability scores.
+13.4 Report-history tests
+Old reports remain immutable after farm inputs change.
+Report comparison distinguishes environmental change from input, source, geometry or model-version change.
+Incompatible values are not compared as though they were equivalent.
+Export uses the saved report snapshot and includes units/provenance.
+13.5 Automation tests
+A scheduled run executes with the browser closed when durable backend scheduling is configured.
+Browser-only mode never claims that it can run in the background while closed.
+Duplicate job submissions do not create duplicate reports.
+Pause prevents future runs.
+Resume restores future runs.
+Delete and consent revocation have accurate pending/complete states.
+Retry does not duplicate a successful report.
+Timezone/daylight-saving behaviour is tested.
+Old irrigation routine becomes Needs confirmation when policy requires it.
+Observed rain never silently deletes or edits an irrigation event.
+13.6 Cross-page tests
+Farm Overview → Advanced → report → field → Map opens the exact farm/field.
+Changing the selected farm changes every chart/table/assessment context coherently.
+Crop names in findings/actions link to the correct field/rotation/crop occurrence where such references exist.
+Accepted recommendations create/update Calendar actions without falsely resolving their source risk.
+Farm Settings rename/delete/field edits follow existing farm data cascade policies.
+13.7 Visual/accessibility tests
+Validate at 1440px, 1280px, 1024px, 768px, 430px, 390px and 360px widths. Test keyboard-only operation, screen-reader names, visible focus, contrast, reduced motion, browser zoom, long farm names, many fields, long time ranges, empty data, source errors and large report tables. No chart labels may overlap; no page-wide horizontal overflow; every chart needs a textual/table alternative.
+
+14. REQUIRED BUILDER DELIVERABLES
+When implementation is complete, provide:
+
+List of files/components changed.
+Advanced route/subnavigation structure.
+Data model and API contract changes.
+Provider registry with actual states: configured, integrated, tested, planned, degraded or unavailable.
+For each provider: endpoint/product/version, parameters, units, native resolution/cadence, authentication/licensing, tests and fallback.
+Scientific calculation list with formula/method/version and reference tests.
+UI screenshots of Advanced at desktop/tablet/mobile widths.
+Test results: typecheck, lint, unit, provider integration, security and end-to-end.
+Explicit list of metrics not available and why.
+Explicit list of backend/cloud dependencies not implemented or awaiting approval.
+Do not claim the feature is fully functional if the build has not been tested, provider integrations are not real, or the background scheduler is only a visual mock.
+
+15. FINAL BUILD DIRECTIVE
+Implement Advanced inside the selected farm's left sidebar as a farm-specific workspace with exactly three main areas:
+
+Deep Analysis.
+Reports & Analysis History.
+Automation & Monitoring.
+Do not create standalone Field Analysis or Trends & Comparisons pages, tabs, routes, APIs, components or dashboards. Deep Analysis must still show results for each field included in a farm-wide run, inside that report. Reports & Analysis History must still allow users to open and compare saved reports. These are capabilities within the three retained areas, not additional sections.
+
+Open Advanced on Deep Analysis by default. Keep all three areas connected to the same canonical farm, field, observation, calculation, report, finding and action records. Use the APIs and fallback strategy in this document, but verify official product documentation and terms before implementation. Use exact scientific meanings and preserve uncertainty. A missing API must lead to an accurate alternative or an explicit unavailable result—not fabricated data.
+
+Do not redesign the rest of Field Shift. Do not move the Advanced feature into a separate top-level page. Do not duplicate the crop-rotation engine. Do not let AI invent the science. Build the feature in the existing farm workspace and prove it works through the acceptance tests above.
+
+OFFICIAL DATA / METHOD REFERENCES
+NASA POWER Daily API: https://power.larc.nasa.gov/docs/services/api/temporal/daily/
+NASA POWER Temporal APIs: https://power.larc.nasa.gov/docs/services/api/temporal/
+Open-Meteo Forecast API: https://open-meteo.com/en/docs
+Open-Meteo historical weather: https://open-meteo.com/en/docs/historical-weather-api
+Open-Meteo terms: https://open-meteo.com/en/terms
+NSIDC SMAP L4 Version 8: https://nsidc.org/data/spl4smgp/versions/8
+NSIDC SMAP update notes: https://nsidc.org/data/user-resources/data-announcements/data-set-updates-smap-level-4
+SoilGrids current access notice: https://isric.org/explore/soilgrids
+SoilGrids alternative WCS/WebDAV access: https://docs.isric.org/globaldata/soilgrids/
+FAO Harmonized World Soil Database v2: https://www.fao.org/land-water/resources/tools/databases/hwsd/en
+Copernicus Data Space STAC API: https://documentation.dataspace.copernicus.eu/APIs/STAC.html
+Sentinel-2 Level-2A data: https://documentation.dataspace.copernicus.eu/Data/SentinelMissions/Sentinel2.html
+NASA HLS data access: https://hls.gsfc.nasa.gov/data-access-and-tools/
+MODIS MOD13Q1 vegetation index: https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD13Q1/
+NASA GPM IMERG: https://gpm.nasa.gov/data/imerg
+NASADEM: https://doi.org/10.5067/MEaSUREs/NASADEM/NASADEM_HGT.001
+FAO Irrigation and Drainage Paper 56: https://www.fao.org/4/X0490E/X0490E00.htm
+MODIS MOD16A2GF evapotranspiration: https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD16A2GF
+
+
+
+

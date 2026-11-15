@@ -1,0 +1,1297 @@
+Full extreme-detail breakdown of the Deep Analysis report dashboard
+This image shows a complete Deep Analysis report page for Field Shift, designed as a long, vertically scrolling agricultural intelligence report. It is not a conventional dashboard made up of unrelated statistics cards. It is a structured farm diagnostic report that brings together the farm's overall condition, individual field assessments, risks, strengths, water data, soil information, weather exposure, vegetation, crop rotations, recommendations, historical changes, data quality, methodology, and analysis audit.
+
+The entire interface uses a dark agricultural visual identity: deep forest-green backgrounds, translucent green-black panels, thin green borders, bright emerald indicators, cyan-blue data accents, and amber/red warning indicators.
+
+The screenshot is approximately 694 × 1478 pixels and has a narrow desktop-style layout. It contains a main report column on the left and a persistent-looking utility sidebar on the right. The report continues almost to the bottom of the screenshot.
+
+1. Overall page structure
+
+
+
+
+
+
+
+
+
+
+The page is divided into four major visual areas:
+1. Top report control bar – assessment period, last run, report status, export, print, and run-new-analysis actions.
+2. Main report content – the actual analysis, beginning with summary metrics and continuing through numbered diagnostic sections.
+3. Right-hand utility sidebar – key insights, report actions, quick links, and a promotional agricultural visual.
+4. Bottom report information panels – run summary and audit, field evidence timeline, and seasonal review.
+The main report content occupies approximately 83–85% of the available width, while the right sidebar occupies approximately 15–17%.
+
+The layout is dense in information but uses consistent spacing, alignment, borders, and section grouping to prevent the report from feeling like one enormous block of text.
+Background and overall appearance
+- The page background is an almost-black forest green.
+- Main cards use a slightly lighter dark green.
+- Cards have subtle translucent surfaces.
+- Borders are thin, muted green lines.
+- Corners are rounded, generally around 10–14px.
+- Shadows are subtle and dark.
+- Bright green is used for positive conditions and completion states.
+- Cyan-blue is used for data-oriented indicators.
+- Yellow and amber communicate caution.
+- Red is reserved for priority risks and warnings.
+- White and pale green are used for primary text.
+- Muted gray-green is used for secondary text and metadata.
+The background has a faint green atmospheric glow, particularly toward the lower-right side.
+
+The interface should feel like a premium agricultural monitoring and intelligence platform, not a spreadsheet or a conventional admin dashboard.
+
+2. Top report control bar
+Top-level report controls
+The first element is a horizontal toolbar positioned at the very top of the page.
+
+It extends across the full width of the report, including the right sidebar.
+
+The toolbar is approximately 64–72px high and has a dark green transparent background with a thin lower border.
+
+It contains five main information/action areas.
+A. Assessment Period
+At the far left is a small calendar-style icon.
+
+Beside it:
+
+Assessment Period
+
+Nov 1 – Nov 15, 2025
+
+Design:
+- Small icon on the left.
+- Label in muted pale-green text.
+- Date underneath in slightly brighter text.
+- A thin vertical divider separates this block from the next.
+This tells the farmer which time period the report covers.
+B. Last Run
+The second block contains a clock icon.
+
+Text:
+
+Last Run
+
+Nov 15, 2025 · 14:32
+
+The date and time are displayed beneath the heading.
+
+The distinction between Assessment Period and Last Run is important:
+- Assessment Period = the period of farm data being assessed.
+- Last Run = when the analysis was actually generated.
+These should never be treated as the same date.
+C. Report status
+The third block contains an amber-bordered status badge.
+PARTIAL REPORT
+Below the badge:
+
+Freshness: 2h ago
+
+The badge communicates that the report was generated but not every expected data source or analysis component was necessarily available.
+
+It should visually distinguish:
+- Complete reports.
+- Partial reports.
+- Failed reports.
+- Reports currently processing.
+The freshness text communicates how recently the supporting data was updated.
+D. Export Report
+A bordered button with:
+- Download/export icon.
+- Text: Export Report.
+The button has a dark transparent background, thin pale-green outline, rounded corners, and white text.
+
+It should export the currently displayed report, not initiate another analysis.
+E. Print
+A second outlined button with:
+- Printer icon.
+- Text: Print.
+This should open a print-friendly version of the report.
+F. Run New Analysis
+At the far right is the most prominent button.
+Primary action
+Text:
+
+Run New Analysis →
+
+Design:
+- Bright green gradient background.
+- White bold text.
+- Rounded rectangular shape.
+- Arrow icon on the right.
+- More visual emphasis than the other toolbar buttons.
+This action starts a new report generation process.
+G. Scope and snapshot information
+At the lower-right edge of the toolbar, beneath the action buttons:
+
+Scope: Whole Farm | Input Snapshot: v1.8.3
+
+This is small metadata text.
+
+It tells the farmer:
+- The analysis covers the whole farm.
+- The report uses a particular snapshot/version of the farm inputs.
+This information is important for reproducibility and report comparisons.
+
+3. Four summary metric cards
+Immediately below the toolbar is a single row of four cards.
+
+These cards are approximately equal in width and aligned horizontally.
+
+Each card has:
+- Dark translucent green surface.
+- Thin green border.
+- Rounded corners.
+- Icon and heading at the top.
+- Large central value.
+- Smaller explanatory information.
+- A visual indicator at the bottom.
+They provide the farmer with a quick understanding of the report before reading the detailed sections.
+Farm Condition
+
+Good
+Overall health is strong
+
+
+
+Evidence Coverage
+
+92%
+Available evidence
+
+
+
+
+Confidence
+
+High
+Analysis confidence
+
+
+
+Fields Assessed
+
+5 / 5
+All fields assessed
+
+
+
+
+
+
+
+
+
+
+
+
+
+The following describes the exact contents and intended meaning of each card.
+Card 1 – Farm Condition
+Icon: green leaf.
+
+Heading:
+
+Farm Condition
+
+Main result:
+
+Good
+
+Supporting text:
+
+Overall health is strong
+
+At the bottom is a horizontal green progress indicator.
+
+The bar is approximately 85–90% filled.
+
+This card communicates the overall farm condition classification.
+
+The word Good is the primary information. The bar is a supporting visual, not necessarily a numerical farm-health score.
+Card 2 – Evidence Coverage
+Icon: green outlined heart.
+
+Heading:
+
+Evidence Coverage
+
+Main value:
+
+92%
+
+At the bottom is a green progress bar filled to approximately 92%.
+
+This represents how much of the expected assessment evidence was available.
+
+The percentage should be based on actual data availability and assessment requirements, not a decorative or arbitrary number.
+Card 3 – Confidence
+Icon: blue shield.
+
+Heading:
+
+Confidence
+
+Main value:
+
+High
+
+The bottom indicator is blue rather than green.
+
+This communicates confidence in the conclusions, based on the quality, relevance, and completeness of supporting evidence.
+
+Confidence and evidence coverage are separate concepts:
+- Coverage tells the farmer how much expected information is available.
+- Confidence tells the farmer how strongly the available information supports the conclusions.
+Card 4 – Fields Assessed
+Icon: yellow field/grid symbol.
+
+Heading:
+
+Fields Assessed
+
+Main value:
+
+5 / 5
+
+At the bottom is a small isometric illustration of green agricultural plots.
+
+This indicates that all five fields included in the farm scope were assessed.
+
+The illustration adds a visual agricultural identity to the otherwise statistical summary row.
+
+4. Main section – Overall Farm Picture
+Section 1
+This is the first large report section beneath the four metric cards.
+
+It spans almost the entire width of the main report column.
+
+The heading begins with a circular green number indicator containing 1.
+
+Beside it:
+
+Overall Farm Picture
+
+The section is a horizontal layout containing three main elements.
+
+
+
+
+
+
+
+
+yourfarmstand.com
+
+
+A. Farm photograph
+On the left is a rectangular photograph showing an agricultural field.
+
+The image depicts:
+- Parallel green crop rows.
+- A distant tree line.
+- A warm sunrise or sunset.
+- A softly illuminated sky.
+- A natural agricultural landscape.
+The photograph has rounded corners and occupies approximately 25–27% of the section's width.
+
+It is a visual introduction to the report, not a data chart.
+B. Overall farm assessment text
+To the right of the photograph is the report's main summary.
+
+Text:
+Green Valley Farm is in good condition with healthy crop development across most fields. Mild water stress detected in Field 3.
+
+The paragraph is small, pale green-white text.
+
+It is approximately two lines in the screenshot.
+
+The key purpose is to translate the analysis into understandable language.
+
+The summary should mention:
+- General farm condition.
+- Main positive observations.
+- Important exceptions.
+- Any significant issues requiring attention.
+The summary must not hide individual field problems just because the overall farm condition is good.
+C. Three supporting indicators
+Below the summary paragraph is a horizontal row of three indicators.
+
+A thin horizontal divider separates the paragraph from these values.
+Indicator	Displayed value
+Evidence Coverage	92%
+Confidence	High
+Data Readiness	Complete
+
+Each indicator has:
+- Small muted label.
+- Larger bright green value.
+The values are evenly distributed across the available width.
+D. Top Next Action card
+On the far right inside the same section is a smaller bordered card.
+
+Heading:
+
+Top Next Action
+
+An amber flame icon appears beside the recommendation.
+
+Text:
+
+Monitor Field 3 for increasing water stress.
+
+At the bottom is a green outlined button:
+
+View Details →
+
+This card highlights the single most important action the farmer should consider first.
+
+It should link to the corresponding recommendation or finding in the report.
+Layout proportions
+- Photograph: approximately 26%.
+- Summary and indicators: approximately 48%.
+- Next Action card: approximately 26%.
+The three areas are aligned vertically and vertically centered within the overall section.
+
+5. Section 2 – Field-by-Field Assessment
+Section 2
+This section is one of the most information-dense elements of the report.
+
+Heading:
+
+Field-by-Field Assessment
+
+A green circular number badge containing 2 appears before the heading.
+
+Below it is a wide data table.
+
+The table has a slightly lighter green header background and subtly differentiated rows.
+
+It is almost the full width of the main report column.
+Table columns
+There are nine columns:
+1. Field
+2. Area
+3. Crop / Stage
+4. Condition
+5. Coverage
+6. Key Finding
+7. Next Action
+8. Last Observation
+9. Details
+The column headings are small, pale gray-green text.
+
+The table uses compact row heights, but each value remains readable.
+Exact visible rows
+Field	Area	Crop / Stage	Condition	Coverage	Key finding	Next action	Last observation
+Field 1	12.5 ha	Wheat – Tillering	Good	98%	Healthy growth	Continue monitoring	Nov 15, 2025
+Field 2	10.0 ha	Wheat – Tillering	Good	95%	Optimal conditions	Keep current plan	Nov 14, 2025
+Field 3	8.0 ha	Corn – Early Veg.	Watch	87%	Rising water stress	Check irrigation	Nov 14, 2025
+Field 4	15.0 ha	Corn – Vegetative	Good	93%	Strong growth	Monitor	Nov 13, 2025
+Field 5	11.0 ha	Barley – Emergence	Good	96%	Healthy emergence	Continue monitoring	Nov 15, 2025
+
+The condition column uses small pill badges:
+- Good: green.
+- Watch: amber.
+The table has a final Details column.
+
+Each row has a small blue button:
+
+View
+
+Clicking it should open the individual field assessment.
+Important visual details
+- Field names are left-aligned.
+- Area values are right-aligned or consistently centered.
+- Crop/stage text is left-aligned.
+- Condition badges are compact.
+- Coverage percentages are centered.
+- Findings and actions use smaller text.
+- Dates are kept on one line where possible.
+- View buttons are aligned vertically in the final column.
+This section should not become a collection of five separate cards. Its purpose is to make it possible to compare all fields quickly.
+
+6. Side-by-side sections – Priority Findings and Strengths
+Immediately beneath the field assessment table, the report divides into two adjacent cards.
+
+The left card is slightly wider than the right.
+Section 3 – Priority Findings and Risks
+Risk assessment
+The heading begins with a red warning triangle.
+
+Text:
+
+Priority Findings and Risks
+
+This section contains a compact findings table.
+Columns
+-
+- Severity
+- Finding
+- Affected Field
+- Evidence
+- Confidence
+Visible findings
+#	Severity	Finding	Affected field	Evidence	Confidence
+1	High	Water stress risk	Field 3	Nov 14–15	85%
+2	Medium	Below baseline NDVI	Field 3	Nov 12–15	72%
+3	Low	Soil moisture low	Field 5	Nov 13–15	90%
+
+Severity is communicated using colored pills:
+- High: orange-red.
+- Medium: amber/yellow.
+- Low: green.
+Affected field names are highlighted in cyan-blue.
+
+At the bottom is a link:
+
+View All Findings →
+
+This should open the complete findings list.
+What this section communicates
+It identifies:
+- What the system detected.
+- How serious the issue is.
+- Which field is affected.
+- Which evidence supports the finding.
+- How confident the system is in the finding.
+The layout deliberately prioritizes risks rather than presenting all observations with equal importance.
+Section 4 – Strengths and Favourable Conditions
+Positive findings
+The right card has a green circular number badge containing 4.
+
+Heading:
+
+Strengths and Favourable Conditions
+
+Three positive observations are displayed vertically.
+
+Each starts with a green circular check icon.
+
+Visible text:
+1. Good crop establishment across 4 fields
+2. Adequate rainfall in last 7 days (26 mm)
+3. Healthy vegetation index in Field 1 & 4
+Each observation has a green check icon at its left.
+
+There are no complicated charts or tables here.
+
+The purpose is to balance the report by making positive conditions visible alongside the risks.
+
+The card should use the same background, border, and corner radius as the Priority Findings card.
+
+7. Section 5 – Water Conditions
+Water intelligence
+This is a wide, visually prominent card.
+
+It occupies nearly the entire width of the main report column.
+
+Heading:
+
+Water Conditions
+
+A blue water-drop icon appears before the title.
+
+Inside the section are two side-by-side components:
+1. Water trends chart on the left.
+2. Water observation table on the right.
+A subtle vertical divider separates the two components.
+A. Soil Moisture & Rainfall Trend chart
+Subtitle:
+
+Soil Moisture & Rainfall Trend
+
+The chart uses a dark transparent plotting area.
+Chart axes
+The vertical axis shows percentage values:
+- 0%
+- 25%
+- 50%
+- 75%
+- 100%
+The horizontal axis shows dates:
+- Nov 1
+- Nov 5
+- Nov 9
+- Nov 13
+- Nov 15
+Thin horizontal grid lines are visible across the chart.
+Data visualization
+There are three types of visual information.
+
+Soil Moisture
+- Cyan/blue line.
+- Runs across the chart.
+- Shows a relatively steady trend.
+- Begins around 65–70%.
+- Has small fluctuations.
+- Ends around 75%.
+Rainfall
+- Blue vertical bars.
+- Appear at selected dates.
+- Their heights vary according to rainfall.
+Irrigation
+- Green vertical bars.
+- Appear at selected dates.
+- Generally shorter than the rainfall bars.
+Legend
+The legend is positioned to the right of the chart.
+
+It includes:
+- Cyan line: Soil Moisture (0–30cm).
+- Blue square: Rainfall.
+- Green square: Irrigation.
+The legend should remain visible without covering the plotted data.
+Important chart behaviour
+The chart should allow the farmer to distinguish:
+- Soil moisture conditions.
+- Rainfall events.
+- Recorded irrigation events.
+The three data series should not be confused with each other.
+
+The chart's units and observation period should always be clear.
+B. Water data table
+The right side contains a compact data table.
+
+Visible headings:
+Column	Meaning
+Date	Observation date
+ET₀	Reference evapotranspiration
+ET₁	Actual/field evapotranspiration label shown in the design
+Kc	Crop coefficient
+ETc (mm)	Crop evapotranspiration
+Rain (mm)	Rainfall
+Eff. Rain (mm)	Effective rainfall
+Irrigation (mm)	Irrigation amount
+
+Visible data
+Date	ET₀	ET₁	Kc	ETc	Rain	Effective rain	Irrigation
+Nov 13	3.1	0.95	0.95	2.9	0.0	0.0	12.0
+Nov 14	3.2	0.95	0.95	3.0	5.0	4.2	0.0
+Nov 15	3.0	0.95	0.95	2.9	3.0	2.1	0.0
+
+The table uses very small but consistent typography.
+
+Column headers are centered.
+
+Values are aligned vertically so that each date can be compared easily.
+
+The table should be horizontally scrollable on small screens rather than compressing its columns until they become unreadable.
+
+8. Collapsible diagnostic sections
+Below the water card is a vertically stacked list of compact expandable report sections.
+
+These sections have a consistent visual design:
+- Full-width dark green panel.
+- Thin green border.
+- Rounded corners.
+- Number and icon at the left.
+- Section name next to it.
+- Short information preview toward the right.
+- Chevron arrow at the far right.
+Each row is approximately 36–42px tall in the screenshot.
+
+The number and title occupy the left half.
+
+A short result summary occupies the center/right.
+
+The chevron communicates that more information is available.
+
+These sections are intended to expand when clicked, revealing detailed analysis without forcing the farmer to scroll through every diagnostic section at once.
+Section 6 – Soil and Land
+Icon: orange/red warning symbol.
+
+Heading:
+
+6 Soil and Land
+
+Right-side preview:
+
+Key: Loam soil, pH 6.8, Organic Matter 2.1%
+
+The preview communicates the most important soil properties at a glance.
+
+When expanded, this section should contain the soil and land assessment, including available soil observations, soil characteristics, land conditions, and any relevant limitations.
+
+The screenshot only establishes the visible summary above; it does not show the expanded contents.
+Section 7 – Weather and Climate Exposure
+Icon: yellow weather symbol.
+
+Heading:
+
+7 Weather and Climate Exposure
+
+Preview:
+
+Temp: 18–26°C, Rain: 28 mm (7d), Anomaly: +12%
+
+The summary includes:
+- Temperature range.
+- Rainfall over seven days.
+- Weather anomaly.
+The expanded section should make it possible to understand how current and recent weather conditions may affect the farm and its fields.
+Section 8 – Vegetation and Field Change
+Icon: green vegetation/leaf symbol.
+
+Heading:
+
+8 Vegetation and Field Change
+
+Preview:
+
+NDVI: 0.74 (↑ +0.03 vs last period)
+
+The right-side summary displays:
+- Current NDVI value.
+- Direction of change.
+- Difference compared with the previous period.
+The upward arrow communicates an increase.
+
+When expanded, this section should provide more detail about vegetation observations and changes over time.
+Section 9 – Crop and Rotation Implications
+Icon: green crop/plant symbol.
+
+Heading:
+
+9 Crop and Rotation Implications
+
+Preview:
+
+Wheat → Corn rotation: Healthy sequence
+
+The summary indicates that the current rotation sequence is considered healthy.
+
+The expanded section should explain relevant crop-stage observations and rotation implications.
+Section 10 – Management Practices Used
+Icon: amber agricultural/management symbol.
+
+Heading:
+
+10 Management Practices Used
+
+Preview:
+
+Irrigation routine detected (confidence: 92%)
+
+This section communicates the management practices available to the analysis.
+
+The expanded section should distinguish farmer-provided routines and confirmed events from actual measured or independently observed activities.
+
+For example, an irrigation routine reported by the farmer should not automatically be presented as proof that irrigation actually occurred.
+Section 11 – Recommended Actions
+Icon: yellow lightbulb/action symbol.
+
+Heading:
+
+11 Recommended Actions
+
+The preview is a yellow-outlined badge:
+3 Actions
+This is a count rather than a textual summary.
+
+The section should expand into the report's recommended action list.
+
+Each action should clearly communicate:
+- What the farmer should consider doing.
+- Which field it relates to.
+- Why it is being suggested.
+- What evidence supports it.
+- Its priority.
+- Any uncertainty or condition attached to it.
+The screenshot indicates three actions are available.
+Section 12 – What Changed Since Previous Report
+Icon: light cyan comparison symbol.
+
+Heading:
+
+12 What Changed Since Previous Report
+
+Preview:
+
++12% NDVI in Field 1, new water stress in Field 3
+
+This section compares the current report against an earlier compatible report.
+
+It identifies:
+- Vegetation improvement in Field 1.
+- A newly detected water-stress issue in Field 3.
+It should clearly distinguish newly detected issues from issues that existed in the previous report.
+Section 13 – Data Gaps and Data Gap Coach
+Icon: blue circular information/data symbol.
+
+Heading:
+
+13 Data Gaps and Data Gap Coach
+
+Preview:
+
+Soil texture, pH, irrigation amounts
+
+This section highlights information that is missing or insufficient.
+
+The purpose is to help the farmer understand what additional information would improve the accuracy and completeness of future reports.
+
+It should identify the missing data, explain why it matters, and indicate how the farmer might provide or obtain it.
+Section 14 – Data Coverage and Source Register
+Icon: blue data/database symbol.
+
+Heading:
+
+14 Data Coverage and Source Register
+
+Preview:
+
+8 sources, 92% coverage
+
+This section describes the sources used in the report.
+
+It should communicate:
+- Which sources were used.
+- Which sources provided data.
+- Which sources were unavailable.
+- How current the information is.
+- How much of the expected information was successfully obtained.
+The screenshot indicates eight sources and 92% coverage.
+Section 15 – Methods, Formulas and Provenance
+Icon: blue technical/settings symbol.
+
+Heading:
+
+15 Methods, Formulas and Provenance
+
+Right-side link:
+
+See technical details →
+
+This is the technical transparency section.
+
+It should explain how the analysis was produced.
+
+The expanded view should contain relevant calculation methods, formulas, input data, source information, model/rule versions, and explanations of derived results.
+
+The goal is to allow the farmer to understand where important conclusions came from.
+
+9. Bottom report information panels
+The bottom of the screenshot contains three adjacent cards.
+
+These are not additional major diagnostic categories. They are supporting report-management and historical-context components.
+
+They provide information about the analysis process, evidence timeline, and seasonal performance.
+Section 16 – Run Summary and Audit
+16 Run Summary and Audit
+
+Analysis completed successfully
+
+Run ID: FA-DA-2025-001
+
+Duration: 2m 18s
+
+Model Version: v1.0.0
+
+View Full Log →
+
+This card contains:
+- Green audit/check icon.
+- Section title.
+- Successful completion indicator.
+- Run ID.
+- Duration.
+- Model version.
+- Link to the full execution log.
+Purpose
+It establishes that the report was generated successfully and provides traceable information about the analysis run.
+
+The run ID identifies the specific execution.
+
+The duration indicates how long processing took.
+
+The model version identifies the analysis version.
+
+The View Full Log → link should open the detailed execution record, including available stage results, source outcomes, warnings, and errors.
+Section 17 – Field Evidence Timeline
+17 Field Evidence Timeline
+
+- Nov 15, 14:28
+  
+  Satellite image (Sentinel-2)
+- Nov 15, 14:25
+  
+  Weather update
+- Nov 15, 14:20
+  
+  Analysis started
+- Nov 15, 14:18
+  
+  New irrigation event (F1)
+
+This card presents a vertical timeline.
+
+A thin vertical line connects circular event markers.
+
+Each event has:
+- A timestamp.
+- An event description.
+- A small colored marker.
+Visible events:
+1. Nov 15, 14:28 – Satellite image (Sentinel-2).
+2. Nov 15, 14:25 – Weather update.
+3. Nov 15, 14:20 – Analysis started.
+4. Nov 15, 14:18 – New irrigation event (F1).
+The card is designed to explain the sequence of evidence and processing events associated with the report.
+
+The timeline should be chronological, with the newest event at the top as shown.
+Section 18 – Seasonal Review
+18 Seasonal Review
+
+Planting (Plan vs Actual)
+
+Planned
+
+
+Actual
+
+
+
+
+
+Field 1
+
+
+
+
+Field 2
+
+
+
+
+Field 3
+
+
+
+
+Field 4
+
+
+
+
+Field 5
+
+
+View Seasonal Trends →
+
+The card contains a small grouped bar chart.
+
+Subtitle:
+
+Planting (Plan vs Actual)
+
+Legend:
+- Green = Planned.
+- Blue = Actual.
+The horizontal axis contains five field categories:
+- Field 1
+- Field 2
+- Field 3
+- Field 4
+- Field 5
+Each field has two adjacent bars:
+- Planned planting.
+- Actual planting.
+The bars allow the farmer to compare intended activity with recorded activity.
+
+At the bottom:
+
+View Seasonal Trends →
+
+This opens a more detailed seasonal trends view.
+
+10. Right-hand utility sidebar
+The right sidebar is a persistent-looking narrow column aligned with the main report.
+
+It contains four distinct components:
+1. Key Insights.
+2. Report Actions.
+3. Quick Links.
+4. An agricultural promotional image panel.
+The sidebar should be treated as a separate utility area, not as part of the main report's numbered sequence.
+A. Key Insights
+At the top is a bordered card.
+
+Heading:
+
+Key Insights
+
+There are three vertically stacked observations.
+Insight 1
+Green check icon.
+
+Good overall farm health
+
+This is a positive summary.
+Insight 2
+Red/orange warning icon.
+
+Monitor water stress in Field 3
+
+This highlights the main risk.
+Insight 3
+Green check icon.
+
+Conditions ideal for next rotation
+
+This highlights a favourable rotation condition.
+
+Each insight has:
+- Small icon on the left.
+- Compact text on the right.
+- Consistent vertical spacing.
+The card uses a dark green background and rounded border.
+B. Report Actions
+Below Key Insights is another compact card.
+
+Heading:
+
+Report Actions
+
+It contains three vertically arranged action links.
+
+1. Export Report
+
+Icon: download.
+
+2. Print Report
+
+Icon: printer.
+
+3. Schedule Automation
+
+Icon: blue clock/calendar-style symbol.
+
+These are quick access points to the same report functions available in the top toolbar or automation area.
+
+The third action should open the scheduling interface for future analyses.
+C. Quick Links
+The next card is titled:
+
+Quick Links
+
+It contains three links:
+1. View Farm Map.
+2. Crop Rotation Plan.
+3. Weather Forecast.
+Each link has a small icon and a short label.
+
+The links provide navigation to other parts of Field Shift that are relevant to the report.
+
+These should open the appropriate pages or views while preserving the user's farm context.
+D. Agricultural promotional visual
+The lower part of the sidebar contains a tall decorative image panel.
+
+The image is surrounded by a thin green border with rounded corners.
+
+The upper portion contains dark green botanical illustrations:
+- Outlined leaves.
+- Fine plant veins.
+- Subtle glowing green foliage.
+- A dark forest-green background.
+The central text reads:
+
+Smarter Decisions. Healthier Farms.
+
+Below the text is a photograph of a green farm field at sunset.
+
+The image has:
+- Bright green crop rows.
+- A warm golden horizon.
+- Darker vegetation in the foreground.
+- A dramatic agricultural landscape.
+This visual reinforces the identity and purpose of Field Shift.
+
+It is decorative and brand-oriented. It should not be confused with the actual evidence or data used in the report.
+
+11. Exact layout and alignment hierarchy
+This is especially important when recreating the interface from scratch.
+
+The screenshot uses a compact two-column desktop layout.
+Approximate page proportions
+
+
+
+Main report · 83–85%
+
+Sidebar · 15–17%
+
+
+Main report vertical sequence
+1
+
+Top report controls
+
+2
+
+Four summary cards
+
+3
+
+1. Overall Farm Picture
+
+4
+
+2. Field-by-Field Assessment
+
+5
+
+3. Priority Findings + 4. Strengths
+
+6
+
+5. Water Conditions
+
+7
+
+6–15. Expandable diagnostic sections
+
+8
+
+16. Run Summary + 17. Evidence Timeline + 18. Seasonal Review
+
+
+Main content column
+The left/main column begins with a small margin from the edge of the viewport.
+
+It uses:
+- A consistent left alignment.
+- Full-width sections wherever possible.
+- Small gaps between related sections.
+- Slightly larger gaps between major report groups.
+The cards are not randomly sized.
+
+Their widths are based on their information density.
+
+For example:
+- The four summary cards have equal widths.
+- Overall Farm Picture uses a three-part horizontal arrangement.
+- Field-by-Field Assessment uses the full content width.
+- Priority Findings and Strengths split into two columns.
+- Water Conditions splits into two approximately equal sections.
+- Collapsible sections span the entire main column.
+- The final three cards use equal or near-equal widths.
+Sidebar
+The right sidebar has a fixed-looking narrow width.
+
+Its cards are stacked vertically.
+
+Each card is independent and has its own border and rounded corners.
+
+The promotional image is much taller than the utility cards.
+Spacing
+The screenshot uses relatively tight spacing because it is an information-heavy report.
+
+For a code implementation, a reasonable starting point is:
+Element	Suggested spacing
+Page outer padding	8–12px
+Gap between summary cards	6–8px
+Gap between major sections	8–12px
+Card inner padding	10–14px
+Gap between sidebar cards	8–10px
+Table cell padding	5–7px
+Heading-to-content gap	8–10px
+
+These are implementation estimates based on the screenshot, not exact measured design specifications.
+
+12. Typography and icon system
+Typography
+The interface uses a compact, modern sans-serif typeface.
+
+A suitable implementation would use Inter, Manrope, or a similar clean sans-serif.
+
+The text hierarchy is:
+Element	Approximate size	Weight
+Main toolbar metadata	9–11px	Medium
+Main metric headings	11–13px	Medium
+Metric values	22–27px	Bold
+Main section headings	13–15px	Semibold
+Summary paragraphs	10–12px	Regular
+Table headings	9–10px	Semibold
+Table values	9–10px	Regular
+Collapsible section headings	11–12px	Medium
+Sidebar headings	11–13px	Semibold
+Sidebar text	9–11px	Regular
+Technical metadata	9–10px	Regular
+
+The exact screenshot is relatively compressed, but a real responsive implementation should not preserve tiny text at the expense of readability. Increase the typography as necessary for larger screens.
+Icon system
+The interface is highly icon-oriented.
+
+Icons are used to make sections identifiable before the user reads their headings.
+
+The icon families include:
+- Leaf – farm health and vegetation.
+- Heart – evidence coverage.
+- Shield – confidence.
+- Field/grid – assessed fields.
+- Warning triangle – risks.
+- Check circle – positive conditions.
+- Water drop – water conditions.
+- Weather symbol – climate exposure.
+- Plant symbol – crop and rotation.
+- Lightbulb – recommendations.
+- Clock – scheduling and timestamps.
+- Printer – printing.
+- Download – exporting.
+- Database – data sources.
+- Clipboard – audit.
+- Timeline – evidence history.
+- Bar chart – seasonal review.
+Icons should use consistent stroke weight and visual proportions.
+
+13. Colour system
+The visual identity is based on deep green surfaces with controlled bright accents.
+
+The following are practical approximate implementation colours inspired by the screenshot:
+Purpose	Suggested colour
+Main page background	#06170F
+Secondary background	#092016
+Card background	#0D261B
+Raised card background	#112F22
+Card border	#28543B
+Primary text	#EDF5EC
+Secondary text	#B6C8B8
+Muted text	#879B8D
+Positive green	#4DCE79
+Bright green	#77D88C
+Cyan	#55C7DB
+Blue	#58A9ED
+Amber	#E8B84E
+Warning orange	#ED8951
+Critical red	#F06A68
+
+The colours should have consistent meaning.
+
+For example, green should not randomly indicate both risk and success.
+
+The interface should preserve the semantic meaning of the colours throughout the entire report.
+
+14. Interaction and functional behaviour
+Although the screenshot is static, the design implies several interactive behaviours.
+
+These are the behaviours that should be implemented to make the page function like a real report.
+Element	Expected interaction
+Export Report	Exports the current report
+Print	Opens print-friendly report
+Run New Analysis	Starts a new analysis
+Top Next Action – View Details	Opens the corresponding recommendation
+Field row – View	Opens the selected field assessment
+View All Findings	Opens the complete findings list
+Collapsible diagnostic rows	Expand and collapse
+See technical details	Opens methods and provenance
+View Full Log	Opens the analysis execution log
+View Seasonal Trends	Opens detailed seasonal trends
+Schedule Automation	Opens the automation scheduler
+View Farm Map	Opens the farm map
+Crop Rotation Plan	Opens rotation planner
+Weather Forecast	Opens weather page
+
+Expandable sections
+The numbered rows 6–15 should be accordion-style components.
+
+When clicked:
+- The row expands vertically.
+- Its chevron rotates.
+- The expanded content appears below the heading.
+- Other sections can remain open or close according to the chosen accordion behaviour.
+- The row's summary remains visible.
+The expanded content should use the same visual language as the rest of the report.
+
+It should not open an entirely unrelated-looking page.
+Report navigation
+The report is long, so a real implementation should make it easy to navigate.
+
+Useful behaviour includes:
+- Smooth scrolling to report sections.
+- A compact section navigation menu.
+- Clear active-section highlighting.
+- A way to return to the top.
+- Preserving the user's scroll position when opening a field detail and returning.
+
+15. Important implementation details that should not be lost
+There are several important distinctions behind the visual design.
+
+1. Farm condition is not the same as evidence coverage.
+
+A farm can be in good condition while having incomplete data. Similarly, high evidence coverage does not automatically mean the farm is healthy.
+
+2. Confidence is not the same as evidence coverage.
+
+Confidence should describe the strength of the conclusions supported by the available evidence.
+
+3. The field-level assessment must remain visible.
+
+A positive whole-farm summary must not conceal a serious problem affecting one particular field.
+
+4. Missing data must be represented honestly.
+
+If soil, rainfall, irrigation, or satellite data are unavailable, the interface must not fabricate a value. It should display an explicit unavailable or incomplete state.
+
+5. Historical comparisons need compatible reports.
+
+The What Changed section should compare equivalent periods, fields, metrics, and inputs wherever possible. If reports are not comparable, the interface should explain why.
+
+6. Recommendations need supporting evidence.
+
+The farmer should be able to understand why an action was suggested and which field it applies to.
+
+7. The report should preserve its original snapshot.
+
+A report should represent the data and farm information used when it was generated. Later changes to the farm profile should not silently rewrite old reports.
+
+8. Partial reports must remain visibly partial.
+
+The amber PARTIAL REPORT badge is important. It should not be replaced with a green completed state just because some analysis sections succeeded.
+
+16. Complete section inventory
+For implementation, this is the full hierarchy visible in the screenshot, in its exact order.
+Order	Section	Main purpose
+—	Report Control Bar	Date, status, export, print, run analysis
+—	Summary Metric Cards	Farm condition, evidence coverage, confidence, fields assessed
+1	Overall Farm Picture	General farm summary and top action
+2	Field-by-Field Assessment	Individual field results
+3	Priority Findings and Risks	Important problems and warnings
+4	Strengths and Favourable Conditions	Positive observations
+5	Water Conditions	Soil moisture, rainfall, irrigation and water metrics
+6	Soil and Land	Soil and land characteristics
+7	Weather and Climate Exposure	Weather and climate conditions
+8	Vegetation and Field Change	Vegetation measurements and changes
+9	Crop and Rotation Implications	Crop and rotation observations
+10	Management Practices Used	Recorded or reported management practices
+11	Recommended Actions	Suggested farm actions
+12	What Changed Since Previous Report	Historical comparison
+13	Data Gaps and Data Gap Coach	Missing information and improvement guidance
+14	Data Coverage and Source Register	Source availability and coverage
+15	Methods, Formulas and Provenance	Calculation transparency
+16	Run Summary and Audit	Analysis execution details
+17	Field Evidence Timeline	Chronological evidence and activity
+18	Seasonal Review	Planned versus actual seasonal activity
+
+The right sidebar contains:
+Component	Contents
+Key Insights	Three important farm observations
+Report Actions	Export, print, schedule
+Quick Links	Farm map, rotation planner, weather
+Brand Visual	“Smarter Decisions. Healthier Farms.” with agricultural imagery
+
+
+17. The most important design principle
+The report should feel like a professional agricultural intelligence document presented inside an interactive dashboard.
+
+The farmer should be able to understand the situation in three levels:
+1. In seconds: Look at the four summary cards, the overall farm picture, and the key insights.
+2. In a minute: Review the field table, priority risks, strengths, and water conditions.
+3. In detail: Expand the diagnostic sections, inspect evidence, read recommendations, compare previous reports, and review the methodology.
+The hierarchy is deliberate:
+- The top tells the farmer how the farm is doing.
+- The middle identifies exactly where things are happening and why.
+- The lower sections explain the underlying agricultural conditions, evidence, and recommended actions.
+- The bottom provides traceability and historical context.
+- The sidebar keeps important navigation and report actions accessible.
+The most important thing when recreating this design is to preserve the distinction between the report's summary, its evidence, its field-level findings, and its supporting technical information. They should feel like parts of one coherent report, rather than unrelated dashboard widgets.

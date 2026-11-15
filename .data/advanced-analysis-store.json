@@ -1,0 +1,3127 @@
+{
+  "reports": [
+    {
+      "id": "rep-run-1794770471430-zapq",
+      "farmId": "farm-green-valley",
+      "farmName": "Green Valley Farm",
+      "fieldIds": [
+        "field-gv-1",
+        "field-gv-2",
+        "field-gv-3"
+      ],
+      "scope": {
+        "type": "all_fields",
+        "farmId": "farm-green-valley",
+        "fieldIds": [],
+        "label": "All Fields"
+      },
+      "runType": "manual",
+      "triggerReason": "Live End-to-End Verification Run",
+      "dateRange": {
+        "from": "2026-10-25",
+        "to": "2026-11-15",
+        "timezone": "America/Los_Angeles"
+      },
+      "createdAt": "2026-11-15T19:21:11.430Z",
+      "completedAt": "2026-11-15T19:21:22.132Z",
+      "status": "complete",
+      "inputSnapshotId": "snapin-6a1e4b7acbb67aa3",
+      "geometryVersionIds": {
+        "field-gv-1": "gv-f1-v1",
+        "field-gv-2": "gv-f2-v1",
+        "field-gv-3": "gv-f3-v1"
+      },
+      "profileVersionIds": {
+        "field-gv-1": "2026-10-18T14:20:00.000Z",
+        "field-gv-2": "2026-10-18T14:20:00.000Z",
+        "field-gv-3": "2026-10-18T14:20:00.000Z"
+      },
+      "dataObservationIds": [
+        "obs-om-fc-c1b5dec3-50d",
+        "obs-power-702f59e5-e78",
+        "obs-dem-c55ae45f-8d9",
+        "obs-usda-626a6b12-245",
+        "obs-era5sm-1287aa37-378",
+        "obs-eonet-d8e8f1c1-941",
+        "obs-s2-S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124-field-gv-1",
+        "obs-s2-S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124-field-gv-2",
+        "obs-s2-S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124-field-gv-3"
+      ],
+      "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+      "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+      "ruleSetVersion": "risk-rules-v1.1.0",
+      "reportHash": "474fb7a3f95c89aa",
+      "previousComparableReportId": null,
+      "overallSummary": {
+        "conditionLabel": "Alert",
+        "healthScore": 86,
+        "healthModelNote": "fieldshift-health-v2.0.0: Non-masking field-weighted aggregation (Health Score separated from 100% Coverage & 96% Confidence).",
+        "coveragePct": 100,
+        "confidencePct": 96,
+        "fieldsAssessedCount": 3,
+        "fieldsNeedingAttentionCount": 0,
+        "fieldsAlertCount": 1,
+        "fieldsInsufficientCount": 0,
+        "fieldsGoodCount": 2,
+        "plainLanguageSummary": "Green Valley Farm overall condition is Alert (86% calibrated health score) with 100% data coverage and 96% evidence confidence. Priority focus: East Creek Block 2 — Frost / Cold Threshold Exposure (2 day(s) ≤ 2 °C).",
+        "strengths": [
+          "2 of 3 field(s) currently rate Good under active thresholds.",
+          "Laboratory soil pH recorded on 3 block(s).",
+          "Cloud-masked Sentinel-2 NDVI retrieved for 3 block(s)."
+        ],
+        "concerns": [
+          "East Creek Block 2: Frost / Cold Threshold Exposure (2 day(s) ≤ 2 °C)"
+        ],
+        "priorityNextAction": "Continue routine scouting cadence and log confirmed irrigation volumes."
+      },
+      "fieldAssessments": [
+        {
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "areaHa": 28.616,
+          "geometryVersionId": "gv-f1-v1",
+          "centroid": {
+            "lat": 42.03445,
+            "lon": -93.639
+          },
+          "cropName": "Wheat",
+          "cropConfirmed": true,
+          "cropStage": "Initial",
+          "conditionLabel": "Good",
+          "healthScore": 92,
+          "coveragePct": 100,
+          "confidencePct": 96,
+          "leadingFinding": "No risk thresholds exceeded",
+          "recommendedNextAction": "Maintain standard scouting & irrigation logs",
+          "lastUpdatedAt": "2026-11-15T19:21:14.729Z",
+          "waterSummary": {
+            "et0MeanMmDay": 0.8,
+            "et0Method": "FAO-56 Penman-Monteith",
+            "kcApplied": 0.3,
+            "etcPeriodMm": 5.1,
+            "observedPrecipMm": 35.8,
+            "effectiveRainMm": 29,
+            "forecastRain7dMm": 27.1,
+            "confirmedIrrigationMm": 0.4,
+            "savedRoutineLabel": null,
+            "netBalanceMm": 24.3,
+            "tawMm": 142.5,
+            "rawMm": 78.4,
+            "latestDepletionMm": 0,
+            "tawUnavailableReason": null,
+            "surfaceMoisturePct": 34,
+            "surfaceMoistureSource": "Farmer measured: TDR Probe",
+            "rootZoneMoisturePct": 22.7,
+            "rootZoneMoistureSource": "Open-Meteo ERA5-Land Soil Water Grid (Modelled Reanalysis)",
+            "dailyRows": [
+              {
+                "date": "2026-10-30",
+                "dataKind": "historical",
+                "et0Mm": 0.85,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.26,
+                "precipitationMm": 2.23,
+                "effectiveRainMm": 1.9,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.33,
+                "deepPercolationMm": 1.64,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-10-31",
+                "dataKind": "historical",
+                "et0Mm": 0.84,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.25,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.25,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-01",
+                "dataKind": "historical",
+                "et0Mm": 0.73,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 0.03,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.03,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.47,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-02",
+                "dataKind": "historical",
+                "et0Mm": 0.68,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.2,
+                "precipitationMm": 0.02,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.02,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.67,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-03",
+                "dataKind": "historical",
+                "et0Mm": 1.04,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.31,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.98,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-04",
+                "dataKind": "historical",
+                "et0Mm": 0.75,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 3.01,
+                "effectiveRainMm": 2.56,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.45,
+                "deepPercolationMm": 1.36,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-05",
+                "dataKind": "historical",
+                "et0Mm": 0.85,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.26,
+                "precipitationMm": 0.43,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.43,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.26,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-06",
+                "dataKind": "historical",
+                "et0Mm": 0.77,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.23,
+                "precipitationMm": 7.5,
+                "effectiveRainMm": 6.38,
+                "confirmedIrrigationMm": 0.39,
+                "runoffMm": 1.12,
+                "deepPercolationMm": 6.28,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-07",
+                "dataKind": "historical",
+                "et0Mm": 0.94,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.28,
+                "precipitationMm": 5.64,
+                "effectiveRainMm": 4.79,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.85,
+                "deepPercolationMm": 4.51,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-08",
+                "dataKind": "historical",
+                "et0Mm": 0.8,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.24,
+                "precipitationMm": 1.15,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.15,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.24,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-09",
+                "dataKind": "historical",
+                "et0Mm": 0.49,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.15,
+                "precipitationMm": 12.64,
+                "effectiveRainMm": 10.74,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.9,
+                "deepPercolationMm": 10.35,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-10",
+                "dataKind": "historical",
+                "et0Mm": 0.65,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.2,
+                "precipitationMm": 3.1,
+                "effectiveRainMm": 2.63,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.47,
+                "deepPercolationMm": 2.43,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-11",
+                "dataKind": "historical",
+                "et0Mm": 1.38,
+                "et0Method": "Hargreaves-Samani Approx",
+                "kc": 0.3,
+                "etcMm": 0.41,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.41,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-12",
+                "dataKind": "historical",
+                "et0Mm": 1.24,
+                "et0Method": "Hargreaves-Samani Approx",
+                "kc": 0.3,
+                "etcMm": 0.37,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.78,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-15",
+                "dataKind": "forecast",
+                "et0Mm": 1.05,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.32,
+                "precipitationMm": 7.7,
+                "effectiveRainMm": 6.54,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.16,
+                "deepPercolationMm": 5.44,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-16",
+                "dataKind": "forecast",
+                "et0Mm": 0.9,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.27,
+                "precipitationMm": 1.4,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.4,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.27,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-17",
+                "dataKind": "forecast",
+                "et0Mm": 0.74,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 0.1,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.1,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.49,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-18",
+                "dataKind": "forecast",
+                "et0Mm": 0.49,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.15,
+                "precipitationMm": 0.8,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.8,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.64,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-19",
+                "dataKind": "forecast",
+                "et0Mm": 0.7,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.21,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.85,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-20",
+                "dataKind": "forecast",
+                "et0Mm": 0.72,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 1.1,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.1,
+                "deepPercolationMm": 0,
+                "depletionMm": 1.07,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-21",
+                "dataKind": "forecast",
+                "et0Mm": 0.23,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.07,
+                "precipitationMm": 16,
+                "effectiveRainMm": 13.6,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 2.4,
+                "deepPercolationMm": 12.46,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              }
+            ]
+          },
+          "soilSummary": {
+            "labValues": [
+              {
+                "property": "Soil pH",
+                "depthInterval": "0–20 cm composite",
+                "valueDisplay": "6.6",
+                "unit": "pH",
+                "sourceType": "farmer_lab",
+                "providerLabel": "Farmer Laboratory Sample",
+                "dateLabel": "2026-10-28",
+                "uncertaintyNote": "Direct farm test (highest authority for this field).",
+                "evidenceId": "ev-soil-field-gv-1"
+              },
+              {
+                "property": "Topsoil Moisture",
+                "depthInterval": "0–20 cm probe zone",
+                "valueDisplay": "34%",
+                "unit": "% VWC",
+                "sourceType": "farmer_lab",
+                "providerLabel": "TDR Probe",
+                "dateLabel": "2026-11-09",
+                "uncertaintyNote": "Measured volumetric moisture at field probe depth.",
+                "evidenceId": "ev-water-field-gv-1"
+              },
+              {
+                "property": "Organic Matter",
+                "depthInterval": "0–20 cm",
+                "valueDisplay": "3.8%",
+                "unit": "% SOM",
+                "sourceType": "farmer_lab",
+                "providerLabel": "Farmer Soil Assay",
+                "dateLabel": "2026-10-28",
+                "uncertaintyNote": "Laboratory loss-on-ignition / wet oxidation organic matter.",
+                "evidenceId": "ev-soil-field-gv-1"
+              }
+            ],
+            "mappedEstimates": [
+              {
+                "property": "Soil pH (Mapped)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "6.1",
+                "unit": "pH",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+                "evidenceId": "ev-soil-field-gv-1"
+              },
+              {
+                "property": "Organic Matter (Derived/Survey)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "3%",
+                "unit": "% SOM",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing.",
+                "evidenceId": "ev-soil-field-gv-1"
+              },
+              {
+                "property": "Particle Fractions (Sand/Silt/Clay)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "67.7/21.3/11%",
+                "unit": "%",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA Texture: Sandy loam",
+                "evidenceId": "ev-soil-field-gv-1"
+              },
+              {
+                "property": "Cation Exchange Capacity (CEC)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "20",
+                "unit": "cmol(c)/kg",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+                "evidenceId": "ev-soil-field-gv-1"
+              }
+            ],
+            "textureClass": "Silt loam",
+            "textureSource": "Farmer soil record",
+            "elevationM": 68,
+            "slopePct": 2.4,
+            "terrainSource": "Farmer profile + DEM",
+            "labVsMapDiscrepancyNote": null
+          },
+          "vegetationSummary": {
+            "fieldId": "field-gv-1",
+            "fieldName": "North Ridge Block 1",
+            "status": "valid",
+            "productId": "Sentinel-2 Level-2A BOA Reflectance",
+            "providerName": "Microsoft Planetary Computer STAC / Copernicus Sentinel-2 L2A",
+            "sceneId": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+            "sceneDate": "2026-11-14",
+            "pixelSizeM": 10,
+            "bandsUsed": [
+              "B04 (Red 10 m)",
+              "B08 (NIR 10 m)",
+              "SCL (20 m Scene Classification)"
+            ],
+            "sclBreakdown": {
+              "vegetationPixels": 298,
+              "bareSoilPixels": 458,
+              "waterPixels": 0,
+              "cloudShadowPixels": 0,
+              "cloudPixels": 0,
+              "snowPixels": 0,
+              "nodataPixels": 0,
+              "totalPixels": 756,
+              "cloudFreePct": 100
+            },
+            "validPixelCount": 2880,
+            "validCoveragePct": 100,
+            "ndviMean": 0.248,
+            "ndviMedian": 0.247,
+            "ndviStd": 0.118,
+            "ndviMin": -0.074,
+            "ndviMax": 0.579,
+            "baselineNdviMean": null,
+            "baselineSceneDate": null,
+            "ndviDeltaFromBaseline": null,
+            "spatialFit": "field_scale",
+            "note": "SCL polygon check confirmed 100% clear pixels (2880 pixels at 10 m) over North Ridge Block 1.",
+            "evidenceId": "ev-veg-field-gv-1"
+          },
+          "weatherSummary": {
+            "currentTempC": 12.2,
+            "forecastHighLow7d": "12.9° / 1.2°",
+            "periodMeanTempC": 10.6,
+            "periodPrecipTotalMm": 35.8,
+            "drySpellDays": 4,
+            "rainfallAnomalyMm": -57.6,
+            "rainfallAnomalyPct": -62,
+            "gddAccumulated": 93.9,
+            "gddConfig": {
+              "baseTempC": 4,
+              "upperTempC": 26,
+              "method": "single_sine",
+              "sourceId": "FAO Irrigation & Drainage Paper 56 (Tables 11, 12, 22)",
+              "version": "gdd-crop-v1.0.0"
+            },
+            "gddNote": "Computed over 14 valid daily observations using single_sine (Tbase=4°C, Tupper=26°C).",
+            "heatStressDays": 0,
+            "frostDays": 0,
+            "solarRadiationMeanMjM2": 6.24
+          }
+        },
+        {
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "areaHa": 23.721,
+          "geometryVersionId": "gv-f2-v1",
+          "centroid": {
+            "lat": 42.03445,
+            "lon": -93.63165
+          },
+          "cropName": "Maize",
+          "cropConfirmed": true,
+          "cropStage": "Late season",
+          "conditionLabel": "Alert",
+          "healthScore": 74,
+          "coveragePct": 100,
+          "confidencePct": 96,
+          "leadingFinding": "Frost / Cold Threshold Exposure (2 day(s) ≤ 2 °C)",
+          "recommendedNextAction": "Maintain standard scouting & irrigation logs",
+          "lastUpdatedAt": "2026-11-15T19:21:14.729Z",
+          "waterSummary": {
+            "et0MeanMmDay": 0.8,
+            "et0Method": "FAO-56 Penman-Monteith",
+            "kcApplied": 0.35,
+            "etcPeriodMm": 5.9,
+            "observedPrecipMm": 35.8,
+            "effectiveRainMm": 29,
+            "forecastRain7dMm": 27.1,
+            "confirmedIrrigationMm": 0,
+            "savedRoutineLabel": "Weekly drip header check & ~4-hour maintenance flush when rainfall < 10 mm. (Needs reconfirmation)",
+            "netBalanceMm": 23.1,
+            "tawMm": 142.5,
+            "rawMm": 78.4,
+            "latestDepletionMm": 0,
+            "tawUnavailableReason": null,
+            "surfaceMoisturePct": 34,
+            "surfaceMoistureSource": "Farmer measured: TDR Probe",
+            "rootZoneMoisturePct": 22.7,
+            "rootZoneMoistureSource": "Open-Meteo ERA5-Land Soil Water Grid (Modelled Reanalysis)",
+            "dailyRows": [
+              {
+                "date": "2026-10-30",
+                "dataKind": "historical",
+                "et0Mm": 0.85,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.3,
+                "precipitationMm": 2.23,
+                "effectiveRainMm": 1.9,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.33,
+                "deepPercolationMm": 1.6,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-10-31",
+                "dataKind": "historical",
+                "et0Mm": 0.84,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.29,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.29,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-01",
+                "dataKind": "historical",
+                "et0Mm": 0.73,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.26,
+                "precipitationMm": 0.03,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.03,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.55,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-02",
+                "dataKind": "historical",
+                "et0Mm": 0.68,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.24,
+                "precipitationMm": 0.02,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.02,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.79,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-03",
+                "dataKind": "historical",
+                "et0Mm": 1.04,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.36,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 1.15,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-04",
+                "dataKind": "historical",
+                "et0Mm": 0.75,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.26,
+                "precipitationMm": 3.01,
+                "effectiveRainMm": 2.56,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.45,
+                "deepPercolationMm": 1.15,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-05",
+                "dataKind": "historical",
+                "et0Mm": 0.85,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.3,
+                "precipitationMm": 0.43,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.43,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.3,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-06",
+                "dataKind": "historical",
+                "et0Mm": 0.77,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.27,
+                "precipitationMm": 7.5,
+                "effectiveRainMm": 6.38,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.12,
+                "deepPercolationMm": 5.81,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-07",
+                "dataKind": "historical",
+                "et0Mm": 0.94,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.33,
+                "precipitationMm": 5.64,
+                "effectiveRainMm": 4.79,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.85,
+                "deepPercolationMm": 4.46,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-08",
+                "dataKind": "historical",
+                "et0Mm": 0.8,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.28,
+                "precipitationMm": 1.15,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.15,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.28,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-09",
+                "dataKind": "historical",
+                "et0Mm": 0.49,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.17,
+                "precipitationMm": 12.64,
+                "effectiveRainMm": 10.74,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.9,
+                "deepPercolationMm": 10.29,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-10",
+                "dataKind": "historical",
+                "et0Mm": 0.65,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.23,
+                "precipitationMm": 3.1,
+                "effectiveRainMm": 2.63,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.47,
+                "deepPercolationMm": 2.4,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-11",
+                "dataKind": "historical",
+                "et0Mm": 1.38,
+                "et0Method": "Hargreaves-Samani Approx",
+                "kc": 0.35,
+                "etcMm": 0.48,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.48,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-12",
+                "dataKind": "historical",
+                "et0Mm": 1.24,
+                "et0Method": "Hargreaves-Samani Approx",
+                "kc": 0.35,
+                "etcMm": 0.43,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.91,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-15",
+                "dataKind": "forecast",
+                "et0Mm": 1.05,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.37,
+                "precipitationMm": 7.7,
+                "effectiveRainMm": 6.54,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.16,
+                "deepPercolationMm": 5.26,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-16",
+                "dataKind": "forecast",
+                "et0Mm": 0.9,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.32,
+                "precipitationMm": 1.4,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.4,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.32,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-17",
+                "dataKind": "forecast",
+                "et0Mm": 0.74,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.26,
+                "precipitationMm": 0.1,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.1,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.58,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-18",
+                "dataKind": "forecast",
+                "et0Mm": 0.49,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.17,
+                "precipitationMm": 0.8,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.8,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.75,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-19",
+                "dataKind": "forecast",
+                "et0Mm": 0.7,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.24,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.99,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-20",
+                "dataKind": "forecast",
+                "et0Mm": 0.72,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.25,
+                "precipitationMm": 1.1,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.1,
+                "deepPercolationMm": 0,
+                "depletionMm": 1.24,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-21",
+                "dataKind": "forecast",
+                "et0Mm": 0.23,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.35,
+                "etcMm": 0.08,
+                "precipitationMm": 16,
+                "effectiveRainMm": 13.6,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 2.4,
+                "deepPercolationMm": 12.28,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              }
+            ]
+          },
+          "soilSummary": {
+            "labValues": [
+              {
+                "property": "Soil pH",
+                "depthInterval": "0–20 cm composite",
+                "valueDisplay": "6.6",
+                "unit": "pH",
+                "sourceType": "farmer_lab",
+                "providerLabel": "Farmer Laboratory Sample",
+                "dateLabel": "2026-10-28",
+                "uncertaintyNote": "Direct farm test (highest authority for this field).",
+                "evidenceId": "ev-soil-field-gv-2"
+              },
+              {
+                "property": "Topsoil Moisture",
+                "depthInterval": "0–20 cm probe zone",
+                "valueDisplay": "34%",
+                "unit": "% VWC",
+                "sourceType": "farmer_lab",
+                "providerLabel": "TDR Probe",
+                "dateLabel": "2026-11-09",
+                "uncertaintyNote": "Measured volumetric moisture at field probe depth.",
+                "evidenceId": "ev-water-field-gv-2"
+              },
+              {
+                "property": "Organic Matter",
+                "depthInterval": "0–20 cm",
+                "valueDisplay": "3.8%",
+                "unit": "% SOM",
+                "sourceType": "farmer_lab",
+                "providerLabel": "Farmer Soil Assay",
+                "dateLabel": "2026-10-28",
+                "uncertaintyNote": "Laboratory loss-on-ignition / wet oxidation organic matter.",
+                "evidenceId": "ev-soil-field-gv-2"
+              }
+            ],
+            "mappedEstimates": [
+              {
+                "property": "Soil pH (Mapped)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "6.1",
+                "unit": "pH",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+                "evidenceId": "ev-soil-field-gv-2"
+              },
+              {
+                "property": "Organic Matter (Derived/Survey)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "3%",
+                "unit": "% SOM",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing.",
+                "evidenceId": "ev-soil-field-gv-2"
+              },
+              {
+                "property": "Particle Fractions (Sand/Silt/Clay)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "67.7/21.3/11%",
+                "unit": "%",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA Texture: Sandy loam",
+                "evidenceId": "ev-soil-field-gv-2"
+              },
+              {
+                "property": "Cation Exchange Capacity (CEC)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "20",
+                "unit": "cmol(c)/kg",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+                "evidenceId": "ev-soil-field-gv-2"
+              }
+            ],
+            "textureClass": "Silt loam",
+            "textureSource": "Farmer soil record",
+            "elevationM": 68,
+            "slopePct": 2.4,
+            "terrainSource": "Farmer profile + DEM",
+            "labVsMapDiscrepancyNote": null
+          },
+          "vegetationSummary": {
+            "fieldId": "field-gv-2",
+            "fieldName": "East Creek Block 2",
+            "status": "valid",
+            "productId": "Sentinel-2 Level-2A BOA Reflectance",
+            "providerName": "Microsoft Planetary Computer STAC / Copernicus Sentinel-2 L2A",
+            "sceneId": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+            "sceneDate": "2026-11-14",
+            "pixelSizeM": 10,
+            "bandsUsed": [
+              "B04 (Red 10 m)",
+              "B08 (NIR 10 m)",
+              "SCL (20 m Scene Classification)"
+            ],
+            "sclBreakdown": {
+              "vegetationPixels": 150,
+              "bareSoilPixels": 501,
+              "waterPixels": 0,
+              "cloudShadowPixels": 0,
+              "cloudPixels": 0,
+              "snowPixels": 0,
+              "nodataPixels": 0,
+              "totalPixels": 651,
+              "cloudFreePct": 100
+            },
+            "validPixelCount": 2400,
+            "validCoveragePct": 100,
+            "ndviMean": 0.236,
+            "ndviMedian": 0.238,
+            "ndviStd": 0.104,
+            "ndviMin": -0.053,
+            "ndviMax": 0.559,
+            "baselineNdviMean": null,
+            "baselineSceneDate": null,
+            "ndviDeltaFromBaseline": null,
+            "spatialFit": "field_scale",
+            "note": "SCL polygon check confirmed 100% clear pixels (2400 pixels at 10 m) over East Creek Block 2.",
+            "evidenceId": "ev-veg-field-gv-2"
+          },
+          "weatherSummary": {
+            "currentTempC": 12.2,
+            "forecastHighLow7d": "12.9° / 1.2°",
+            "periodMeanTempC": 10.6,
+            "periodPrecipTotalMm": 35.8,
+            "drySpellDays": 4,
+            "rainfallAnomalyMm": -57.6,
+            "rainfallAnomalyPct": -62,
+            "gddAccumulated": 26.1,
+            "gddConfig": {
+              "baseTempC": 10,
+              "upperTempC": 30,
+              "method": "single_sine",
+              "sourceId": "FAO Irrigation & Drainage Paper 56 (Tables 11, 12, 22)",
+              "version": "gdd-crop-v1.0.0"
+            },
+            "gddNote": "Computed over 14 valid daily observations using single_sine (Tbase=10°C, Tupper=30°C).",
+            "heatStressDays": 0,
+            "frostDays": 2,
+            "solarRadiationMeanMjM2": 6.24
+          }
+        },
+        {
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "areaHa": 27.222,
+          "geometryVersionId": "gv-f3-v1",
+          "centroid": {
+            "lat": 42.03015,
+            "lon": -93.639
+          },
+          "cropName": "Peas",
+          "cropConfirmed": true,
+          "cropStage": "Late season",
+          "conditionLabel": "Good",
+          "healthScore": 92,
+          "coveragePct": 100,
+          "confidencePct": 96,
+          "leadingFinding": "No risk thresholds exceeded",
+          "recommendedNextAction": "Maintain standard scouting & irrigation logs",
+          "lastUpdatedAt": "2026-11-15T19:21:14.729Z",
+          "waterSummary": {
+            "et0MeanMmDay": 0.8,
+            "et0Method": "FAO-56 Penman-Monteith",
+            "kcApplied": 0.3,
+            "etcPeriodMm": 5.1,
+            "observedPrecipMm": 35.8,
+            "effectiveRainMm": 29,
+            "forecastRain7dMm": 27.1,
+            "confirmedIrrigationMm": 0,
+            "savedRoutineLabel": null,
+            "netBalanceMm": 23.9,
+            "tawMm": 95,
+            "rawMm": 33.3,
+            "latestDepletionMm": 0,
+            "tawUnavailableReason": null,
+            "surfaceMoisturePct": 34,
+            "surfaceMoistureSource": "Farmer measured: TDR Probe",
+            "rootZoneMoisturePct": 22.7,
+            "rootZoneMoistureSource": "Open-Meteo ERA5-Land Soil Water Grid (Modelled Reanalysis)",
+            "dailyRows": [
+              {
+                "date": "2026-10-30",
+                "dataKind": "historical",
+                "et0Mm": 0.85,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.26,
+                "precipitationMm": 2.23,
+                "effectiveRainMm": 1.9,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.33,
+                "deepPercolationMm": 1.64,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-10-31",
+                "dataKind": "historical",
+                "et0Mm": 0.84,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.25,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.25,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-01",
+                "dataKind": "historical",
+                "et0Mm": 0.73,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 0.03,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.03,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.47,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-02",
+                "dataKind": "historical",
+                "et0Mm": 0.69,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.21,
+                "precipitationMm": 0.02,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.02,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.68,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-03",
+                "dataKind": "historical",
+                "et0Mm": 1.04,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.31,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.99,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-04",
+                "dataKind": "historical",
+                "et0Mm": 0.75,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 3.01,
+                "effectiveRainMm": 2.56,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.45,
+                "deepPercolationMm": 1.35,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-05",
+                "dataKind": "historical",
+                "et0Mm": 0.85,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.26,
+                "precipitationMm": 0.43,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.43,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.26,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-06",
+                "dataKind": "historical",
+                "et0Mm": 0.77,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.23,
+                "precipitationMm": 7.5,
+                "effectiveRainMm": 6.38,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.12,
+                "deepPercolationMm": 5.89,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-07",
+                "dataKind": "historical",
+                "et0Mm": 0.94,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.28,
+                "precipitationMm": 5.64,
+                "effectiveRainMm": 4.79,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.85,
+                "deepPercolationMm": 4.51,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-08",
+                "dataKind": "historical",
+                "et0Mm": 0.8,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.24,
+                "precipitationMm": 1.15,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.15,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.24,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-09",
+                "dataKind": "historical",
+                "et0Mm": 0.49,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.15,
+                "precipitationMm": 12.64,
+                "effectiveRainMm": 10.74,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.9,
+                "deepPercolationMm": 10.35,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-10",
+                "dataKind": "historical",
+                "et0Mm": 0.65,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.2,
+                "precipitationMm": 3.1,
+                "effectiveRainMm": 2.63,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.47,
+                "deepPercolationMm": 2.43,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-11",
+                "dataKind": "historical",
+                "et0Mm": 1.38,
+                "et0Method": "Hargreaves-Samani Approx",
+                "kc": 0.3,
+                "etcMm": 0.41,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.41,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-12",
+                "dataKind": "historical",
+                "et0Mm": 1.24,
+                "et0Method": "Hargreaves-Samani Approx",
+                "kc": 0.3,
+                "etcMm": 0.37,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.78,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-15",
+                "dataKind": "forecast",
+                "et0Mm": 1.05,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.32,
+                "precipitationMm": 7.7,
+                "effectiveRainMm": 6.54,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.16,
+                "deepPercolationMm": 5.44,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-16",
+                "dataKind": "forecast",
+                "et0Mm": 0.9,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.27,
+                "precipitationMm": 1.4,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.4,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.27,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-17",
+                "dataKind": "forecast",
+                "et0Mm": 0.74,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 0.1,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.1,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.49,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-18",
+                "dataKind": "forecast",
+                "et0Mm": 0.49,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.15,
+                "precipitationMm": 0.8,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0.8,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.64,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-19",
+                "dataKind": "forecast",
+                "et0Mm": 0.7,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.21,
+                "precipitationMm": 0,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 0,
+                "deepPercolationMm": 0,
+                "depletionMm": 0.85,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-20",
+                "dataKind": "forecast",
+                "et0Mm": 0.72,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.22,
+                "precipitationMm": 1.1,
+                "effectiveRainMm": 0,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 1.1,
+                "deepPercolationMm": 0,
+                "depletionMm": 1.07,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              },
+              {
+                "date": "2026-11-21",
+                "dataKind": "forecast",
+                "et0Mm": 0.23,
+                "et0Method": "FAO-56 Penman-Monteith",
+                "kc": 0.3,
+                "etcMm": 0.07,
+                "precipitationMm": 16,
+                "effectiveRainMm": 13.6,
+                "confirmedIrrigationMm": 0,
+                "runoffMm": 2.4,
+                "deepPercolationMm": 12.46,
+                "depletionMm": 0,
+                "rootZoneStatus": "optimal",
+                "sourceStatus": "valid"
+              }
+            ]
+          },
+          "soilSummary": {
+            "labValues": [
+              {
+                "property": "Soil pH",
+                "depthInterval": "0–20 cm composite",
+                "valueDisplay": "6.6",
+                "unit": "pH",
+                "sourceType": "farmer_lab",
+                "providerLabel": "Farmer Laboratory Sample",
+                "dateLabel": "2026-10-28",
+                "uncertaintyNote": "Direct farm test (highest authority for this field).",
+                "evidenceId": "ev-soil-field-gv-3"
+              },
+              {
+                "property": "Topsoil Moisture",
+                "depthInterval": "0–20 cm probe zone",
+                "valueDisplay": "34%",
+                "unit": "% VWC",
+                "sourceType": "farmer_lab",
+                "providerLabel": "TDR Probe",
+                "dateLabel": "2026-11-09",
+                "uncertaintyNote": "Measured volumetric moisture at field probe depth.",
+                "evidenceId": "ev-water-field-gv-3"
+              },
+              {
+                "property": "Organic Matter",
+                "depthInterval": "0–20 cm",
+                "valueDisplay": "3.8%",
+                "unit": "% SOM",
+                "sourceType": "farmer_lab",
+                "providerLabel": "Farmer Soil Assay",
+                "dateLabel": "2026-10-28",
+                "uncertaintyNote": "Laboratory loss-on-ignition / wet oxidation organic matter.",
+                "evidenceId": "ev-soil-field-gv-3"
+              }
+            ],
+            "mappedEstimates": [
+              {
+                "property": "Soil pH (Mapped)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "6.1",
+                "unit": "pH",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+                "evidenceId": "ev-soil-field-gv-3"
+              },
+              {
+                "property": "Organic Matter (Derived/Survey)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "3%",
+                "unit": "% SOM",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing.",
+                "evidenceId": "ev-soil-field-gv-3"
+              },
+              {
+                "property": "Particle Fractions (Sand/Silt/Clay)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "67.7/21.3/11%",
+                "unit": "%",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA Texture: Sandy loam",
+                "evidenceId": "ev-soil-field-gv-3"
+              },
+              {
+                "property": "Cation Exchange Capacity (CEC)",
+                "depthInterval": "0–20 cm surface horizon",
+                "valueDisplay": "20",
+                "unit": "cmol(c)/kg",
+                "sourceType": "national_survey",
+                "providerLabel": "USDA NRCS Soil Data Access (SSURGO)",
+                "dateLabel": "2026-11-15",
+                "uncertaintyNote": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+                "evidenceId": "ev-soil-field-gv-3"
+              }
+            ],
+            "textureClass": "Silt loam",
+            "textureSource": "Farmer soil record",
+            "elevationM": 68,
+            "slopePct": 2.4,
+            "terrainSource": "Farmer profile + DEM",
+            "labVsMapDiscrepancyNote": null
+          },
+          "vegetationSummary": {
+            "fieldId": "field-gv-3",
+            "fieldName": "South Terrace Legumes",
+            "status": "valid",
+            "productId": "Sentinel-2 Level-2A BOA Reflectance",
+            "providerName": "Microsoft Planetary Computer STAC / Copernicus Sentinel-2 L2A",
+            "sceneId": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+            "sceneDate": "2026-11-14",
+            "pixelSizeM": 10,
+            "bandsUsed": [
+              "B04 (Red 10 m)",
+              "B08 (NIR 10 m)",
+              "SCL (20 m Scene Classification)"
+            ],
+            "sclBreakdown": {
+              "vegetationPixels": 125,
+              "bareSoilPixels": 559,
+              "waterPixels": 0,
+              "cloudShadowPixels": 0,
+              "cloudPixels": 0,
+              "snowPixels": 0,
+              "nodataPixels": 0,
+              "totalPixels": 684,
+              "cloudFreePct": 100
+            },
+            "validPixelCount": 2664,
+            "validCoveragePct": 100,
+            "ndviMean": 0.184,
+            "ndviMedian": 0.16,
+            "ndviStd": 0.125,
+            "ndviMin": -0.088,
+            "ndviMax": 0.573,
+            "baselineNdviMean": null,
+            "baselineSceneDate": null,
+            "ndviDeltaFromBaseline": null,
+            "spatialFit": "field_scale",
+            "note": "SCL polygon check confirmed 100% clear pixels (2664 pixels at 10 m) over South Terrace Legumes.",
+            "evidenceId": "ev-veg-field-gv-3"
+          },
+          "weatherSummary": {
+            "currentTempC": 12.2,
+            "forecastHighLow7d": "12.9° / 1.2°",
+            "periodMeanTempC": 10.6,
+            "periodPrecipTotalMm": 35.8,
+            "drySpellDays": 4,
+            "rainfallAnomalyMm": -57.6,
+            "rainfallAnomalyPct": -62,
+            "gddAccumulated": 93.9,
+            "gddConfig": {
+              "baseTempC": 4,
+              "upperTempC": 25,
+              "method": "single_sine",
+              "sourceId": "FAO Irrigation & Drainage Paper 56 (Tables 11, 12, 22)",
+              "version": "gdd-crop-v1.0.0"
+            },
+            "gddNote": "Computed over 14 valid daily observations using single_sine (Tbase=4°C, Tupper=25°C).",
+            "heatStressDays": 0,
+            "frostDays": 0,
+            "solarRadiationMeanMjM2": 6.24
+          }
+        }
+      ],
+      "findings": [
+        {
+          "id": "find-field-gv-2-frost",
+          "title": "Frost / Cold Threshold Exposure (2 day(s) ≤ 2 °C)",
+          "isWatchPoint": false,
+          "severity": "high",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "cropName": "Maize",
+          "cropStage": "Late season",
+          "ruleId": "RULE_FROST_COLD_EXPOSURE",
+          "ruleVersion": "1.0.0",
+          "evidenceIds": [
+            "ev-weather-field-gv-2"
+          ],
+          "triggerMetricSummary": "2 day(s) with Tmin ≤ 2 °C",
+          "sourceQualityStatus": "Gridded minimum temperature + crop frost tolerance threshold",
+          "baselineOrThreshold": "Threshold: Tmin ≤ 2 °C (Maize)",
+          "possibleMechanism": "Radiative or advective cooling below crop freezing tolerance damages emerging tissue or sensitive floral organs.",
+          "alternativeExplanations": [
+            "Low-lying cold-air pockets may be colder than grid mean; sloped benches may stay slightly warmer."
+          ],
+          "confidencePct": 74,
+          "missingEvidence": [
+            "Field-level min/max thermometer verification"
+          ],
+          "confirmationCheck": "Check emerging growing point / stem node discoloration after thaw.",
+          "mitigationOptions": [
+            "Delay sensitive foliar sprays or mechanical pass until freeze risk clears."
+          ]
+        }
+      ],
+      "watchPoints": [],
+      "recommendations": [],
+      "sourceOutcomes": [
+        {
+          "providerId": "open_meteo_forecast",
+          "providerName": "Open-Meteo NWP Forecast (Non-commercial endpoint)",
+          "productId": "IFS / GFS / ICON Seamless",
+          "category": "weather_forecast",
+          "status": "complete",
+          "resolutionLabel": "~9–13 km NWP grid (not field weather station)",
+          "spatialFit": "coarse_context",
+          "retrievedAt": "2026-11-15T19:21:11.555Z",
+          "observationWindow": "2026-11-15 to 2026-11-24",
+          "note": "Live daily/hourly NWP forecast synchronized.",
+          "fallbackUsed": null,
+          "errorMessage": null
+        },
+        {
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)",
+          "productId": "POWER Daily Point AG v2",
+          "category": "historical_climate",
+          "status": "complete",
+          "resolutionLabel": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "spatialFit": "coarse_context",
+          "retrievedAt": "2026-11-15T19:21:12.098Z",
+          "observationWindow": "2026-10-25 to 2026-11-12",
+          "note": "Daily agroclimatology + 20-year seasonal baseline loaded.",
+          "fallbackUsed": null,
+          "errorMessage": null
+        },
+        {
+          "providerId": "usda_nrcs_sda",
+          "providerName": "USDA NRCS Soil Data Access (SSURGO)",
+          "productId": "SSURGO MapUnit 64141",
+          "category": "soil_properties",
+          "status": "complete",
+          "resolutionLabel": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+          "spatialFit": "field_scale",
+          "retrievedAt": "2026-11-15T19:21:12.381Z",
+          "observationWindow": "Static soil horizon (0–20 cm)",
+          "note": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing.",
+          "fallbackUsed": null,
+          "errorMessage": null
+        },
+        {
+          "providerId": "open_meteo_era5_soil",
+          "providerName": "Open-Meteo ERA5-Land Soil Water Grid (Modelled Reanalysis)",
+          "productId": "ERA5-Land Volumetric Soil Water",
+          "category": "soil_moisture",
+          "status": "fallback",
+          "resolutionLabel": "~9–11 km ERA5-Land grid cell (regional context; cannot separate adjacent small fields)",
+          "spatialFit": "coarse_context",
+          "retrievedAt": "2026-11-15T19:21:12.546Z",
+          "observationWindow": "2026-11-10",
+          "note": "NASA SMAP L4 (9 km) requires Earthdata credentials; using Open-Meteo ERA5-Land (~9–11 km) volumetric water content (clearly distinct from SMAP L4).",
+          "fallbackUsed": "NASA SMAP L4 (9 km) requires Earthdata credentials; using Open-Meteo ERA5-Land (~9–11 km) volumetric water content (clearly distinct from SMAP L4).",
+          "errorMessage": null
+        },
+        {
+          "providerId": "open_meteo_dem",
+          "providerName": "Open-Meteo Elevation (Copernicus DEM GLO-90)",
+          "productId": "Copernicus DEM 90m",
+          "category": "terrain",
+          "status": "complete",
+          "resolutionLabel": "90 m DEM (WGS84 / EGM2008 orthometric height)",
+          "spatialFit": "field_scale",
+          "retrievedAt": "2026-11-15T19:21:11.537Z",
+          "observationWindow": "Static elevation baseline",
+          "note": "Finite-difference 5-point slope (7%).",
+          "fallbackUsed": null,
+          "errorMessage": null
+        },
+        {
+          "providerId": "nasa_eonet_v3",
+          "providerName": "NASA EONET v3 Open Events Feed",
+          "productId": "Open Events (300 km buffer)",
+          "category": "hazards",
+          "status": "complete",
+          "resolutionLabel": "300 km radial buffer",
+          "spatialFit": "coarse_context",
+          "retrievedAt": "2026-11-15T19:21:12.533Z",
+          "observationWindow": "Last 30 days open events",
+          "note": "0 nearby hazard event(s) detected.",
+          "errorMessage": null
+        },
+        {
+          "providerId": "sentinel2_pc_stac",
+          "providerName": "Sentinel-2 Level-2A (Microsoft Planetary Computer)",
+          "productId": "B04/B08 NDVI + SCL Cloud Mask",
+          "category": "vegetation",
+          "status": "complete",
+          "resolutionLabel": "10 m optical pixels (20 m SCL mask)",
+          "spatialFit": "field_scale",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "observationWindow": "Latest 90 days clear overpass",
+          "note": "Cloud-masked field polygon NDVI statistics computed from B04/B08 pixels."
+        }
+      ],
+      "observations": [
+        {
+          "observationId": "obs-om-fc-c1b5dec3-50d",
+          "providerId": "open_meteo_forecast",
+          "productId": "open-meteo-v1-forecast",
+          "variable": "daily_forecast_bundle",
+          "value": 10,
+          "unit": "days",
+          "evidenceType": "forecast",
+          "validFrom": "2026-11-15",
+          "validTo": "2026-11-24",
+          "retrievedAt": "2026-11-15T19:21:11.555Z",
+          "spatialResolution": 11000,
+          "temporalResolution": "daily",
+          "qualityFlags": [
+            "nwp_forecast_not_observed"
+          ],
+          "sourceUrl": "https://api.open-meteo.com/v1/forecast?latitude=44.8605&longitude=-123.1476&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,shortwave_radiation_sum,et0_fao_evapotranspiration&hourly=relative_humidity_2m&wind_speed_unit=ms&forecast_days=10&timezone=auto",
+          "rawRecordRef": "om:c1b5dec3-50d",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-power-702f59e5-e78",
+          "providerId": "nasa_power_daily",
+          "productId": "power-daily-ag",
+          "variable": "daily_agroclimatology",
+          "value": 19,
+          "unit": "days",
+          "evidenceType": "reanalysis",
+          "validFrom": "2026-10-25",
+          "validTo": "2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:12.098Z",
+          "spatialResolution": 55000,
+          "temporalResolution": "daily",
+          "qualityFlags": [
+            "coarse_climate_grid"
+          ],
+          "sourceUrl": "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M,T2M_MAX,T2M_MIN,PRECTOTCORR,ALLSKY_SFC_SW_DWN,RH2M,WS2M,GWETTOP,GWETROOT&community=AG&longitude=-123.1476&latitude=44.8605&start=20261025&end=20261113&format=JSON",
+          "rawRecordRef": "power:702f59e5-e78",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-dem-c55ae45f-8d9",
+          "providerId": "open_meteo_dem",
+          "productId": "copernicus-dem-90",
+          "variable": "elevation_slope",
+          "value": 7,
+          "unit": "% slope",
+          "evidenceType": "satellite_derived",
+          "observedAt": "Static DEM Baseline",
+          "retrievedAt": "2026-11-15T19:21:11.537Z",
+          "spatialResolution": 90,
+          "qualityFlags": [
+            "finite_difference_5pt"
+          ],
+          "sourceUrl": "https://api.open-meteo.com/v1/elevation?latitude=44.86050,44.86135,44.85965,44.86050,44.86050&longitude=-123.14756,-123.14756,-123.14756,-123.14636,-123.14876",
+          "rawRecordRef": "dem:c55ae45f-8d9",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-usda-626a6b12-245",
+          "providerId": "usda_nrcs_sda",
+          "productId": "ssurgo-tabular",
+          "variable": "soil_survey_horizon",
+          "value": 6.1,
+          "unit": "pH / % fractions",
+          "evidenceType": "modelled",
+          "retrievedAt": "2026-11-15T19:21:12.381Z",
+          "spatialResolution": 30,
+          "qualityFlags": [
+            "national_soil_survey",
+            "horizon_0_20cm"
+          ],
+          "sourceUrl": "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest",
+          "rawRecordRef": "sda:626a6b12-245",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-era5sm-1287aa37-378",
+          "providerId": "open_meteo_era5_soil",
+          "productId": "era5-land-soil-moisture",
+          "variable": "soil_water_vwc_profile",
+          "value": 22.7,
+          "unit": "% volumetric",
+          "evidenceType": "reanalysis",
+          "observedAt": "2026-11-10",
+          "retrievedAt": "2026-11-15T19:21:12.546Z",
+          "spatialResolution": 11000,
+          "qualityFlags": [
+            "coarse_context",
+            "smap_l4_fallback"
+          ],
+          "sourceUrl": "https://archive-api.open-meteo.com/v1/archive?latitude=44.8605&longitude=-123.1476&start_date=2026-11-03&end_date=2026-11-10&hourly=soil_moisture_0_to_7cm,soil_moisture_7_to_28cm,soil_moisture_28_to_100cm&timezone=UTC",
+          "rawRecordRef": "era5sm:1287aa37-378",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-eonet-d8e8f1c1-941",
+          "providerId": "nasa_eonet_v3",
+          "productId": "eonet-v3-open",
+          "variable": "nearby_hazards_count",
+          "value": 0,
+          "unit": "events",
+          "evidenceType": "observed",
+          "observedAt": "2026-11-15",
+          "retrievedAt": "2026-11-15T19:21:12.533Z",
+          "spatialResolution": 300000,
+          "qualityFlags": [
+            "radius_300km"
+          ],
+          "sourceUrl": "https://eonet.gsfc.nasa.gov/api/v3/events?status=open&days=30&limit=120",
+          "rawRecordRef": "eonet:d8e8f1c1-941",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-s2-S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124-field-gv-1",
+          "providerId": "sentinel2_pc_stac",
+          "productId": "sentinel-2-l2a",
+          "variable": "ndvi_polygon_mean",
+          "value": 0.248,
+          "unit": "NDVI (-1 to +1)",
+          "evidenceType": "satellite_derived",
+          "observedAt": "2026-11-14",
+          "retrievedAt": "2026-11-15T19:21:14.727Z",
+          "spatialResolution": 10,
+          "geometryId": "gv-f1-v1",
+          "pixelCount": 2880,
+          "validCoveragePct": 100,
+          "qualityFlags": [
+            "scl_cloud_masked",
+            "field_scale"
+          ],
+          "sourceUrl": "https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a",
+          "sourceVersion": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "rawRecordRef": "s2:S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-s2-S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124-field-gv-2",
+          "providerId": "sentinel2_pc_stac",
+          "productId": "sentinel-2-l2a",
+          "variable": "ndvi_polygon_mean",
+          "value": 0.236,
+          "unit": "NDVI (-1 to +1)",
+          "evidenceType": "satellite_derived",
+          "observedAt": "2026-11-14",
+          "retrievedAt": "2026-11-15T19:21:14.610Z",
+          "spatialResolution": 10,
+          "geometryId": "gv-f2-v1",
+          "pixelCount": 2400,
+          "validCoveragePct": 100,
+          "qualityFlags": [
+            "scl_cloud_masked",
+            "field_scale"
+          ],
+          "sourceUrl": "https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a",
+          "sourceVersion": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "rawRecordRef": "s2:S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "status": "valid"
+        },
+        {
+          "observationId": "obs-s2-S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124-field-gv-3",
+          "providerId": "sentinel2_pc_stac",
+          "productId": "sentinel-2-l2a",
+          "variable": "ndvi_polygon_mean",
+          "value": 0.184,
+          "unit": "NDVI (-1 to +1)",
+          "evidenceType": "satellite_derived",
+          "observedAt": "2026-11-14",
+          "retrievedAt": "2026-11-15T19:21:14.476Z",
+          "spatialResolution": 10,
+          "geometryId": "gv-f3-v1",
+          "pixelCount": 2664,
+          "validCoveragePct": 100,
+          "qualityFlags": [
+            "scl_cloud_masked",
+            "field_scale"
+          ],
+          "sourceUrl": "https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a",
+          "sourceVersion": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "rawRecordRef": "s2:S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "status": "valid"
+        }
+      ],
+      "evidenceById": {
+        "ev-water-field-gv-1": {
+          "evidenceId": "ev-water-field-gv-1",
+          "metricName": "Root-Zone Water Balance & Moisture Deficit",
+          "valueDisplay": "+24.3 mm",
+          "unit": "mm water depth",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "geometryVersionId": "gv-f1-v1",
+          "observationPeriod": "2026-10-30 to 2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES) + Open-Meteo NWP Forecast (Non-commercial endpoint)",
+          "productId": "FAO-56 Penman-Monteith + USDA SCS + FAO-56 Dr(i)",
+          "sourceUrl": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+          "sourceType": "calculated",
+          "spatialResolution": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "qualityFlags": [
+            "FAO-56 Penman-Monteith",
+            "routines_kept_separate_from_confirmed_logs"
+          ],
+          "missingValueHandling": "Missing hydraulic inputs leave TAW/Dr unavailable rather than 0.",
+          "formulaDisplay": "FAO-56 Penman-Monteith ET₀ -> ETc = Kc × ET₀ -> Peff (USDA SCS) -> Dr(i) = Dr(i-1) - Peff - I_confirmed + ETc",
+          "formulaVersion": "fao56-wb-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Mean Daily ET₀",
+              "value": "0.8 mm/d",
+              "source": "FAO-56 Penman-Monteith"
+            },
+            {
+              "name": "Crop Coefficient (Kc)",
+              "value": "0.3",
+              "source": "FAO Irrigation & Drainage Paper 56 (Tables 11, 12, 22) (Wheat, Initial)"
+            },
+            {
+              "name": "Effective Rainfall / Confirmed Irrigation",
+              "value": "29 mm / 0.4 mm",
+              "source": "USDA SCS Peff + Field Shift irrigationLogs"
+            },
+            {
+              "name": "TAW / RAW",
+              "value": "142.5 mm / 78.4 mm",
+              "source": "Texture-class hydraulic estimate (FAO-56 Table 19 / Saxton-Rawls baseline for Silt loam, OM-adjusted)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 96,
+          "confidenceLabel": "High",
+          "limitations": "Gridded meteorology (~9–55 km) does not capture local micro-sprinkler drift or unlogged irrigation passes."
+        },
+        "ev-soil-field-gv-1": {
+          "evidenceId": "ev-soil-field-gv-1",
+          "metricName": "Soil Reaction (pH), Texture & Survey Profile",
+          "valueDisplay": "Lab pH 6.6 (Silt loam)",
+          "unit": "pH / USDA Texture",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "geometryVersionId": "gv-f1-v1",
+          "observationPeriod": "2026-10-28",
+          "retrievedAt": "2026-11-15T19:21:12.381Z",
+          "providerId": "usda_nrcs_sda",
+          "providerName": "Farmer Lab Assay + Mapped Survey Reference",
+          "productId": "SSURGO MapUnit 64141",
+          "sourceUrl": "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest",
+          "sourceType": "farmer_reported",
+          "spatialResolution": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+          "qualityFlags": [
+            "farmer_lab_prioritized",
+            "consistent"
+          ],
+          "missingValueHandling": "Farmer lab unknowns remain Untested; ISRIC REST timeout bypassed cleanly to USDA SDA / SoilGrids WCS.",
+          "formulaDisplay": "USDA Soil Texture Triangle (sand+silt+clay within 97–103%); SOM = SOC × 1.724 (Van Bemmelen)",
+          "formulaVersion": "usda-soil-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Lab Soil pH",
+              "value": "6.6",
+              "source": "Farmer Profile"
+            },
+            {
+              "name": "Survey / WCS pH",
+              "value": "6.1",
+              "source": "USDA NRCS Soil Data Access (SSURGO)"
+            },
+            {
+              "name": "Texture Class",
+              "value": "Silt loam",
+              "source": "Farmer soil record"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 88,
+          "confidenceLabel": "High",
+          "limitations": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing."
+        },
+        "ev-weather-field-gv-1": {
+          "evidenceId": "ev-weather-field-gv-1",
+          "metricName": "Growing Degree Days (GDD), Dry Spell & Rainfall Anomaly",
+          "valueDisplay": "93.9 °C·d",
+          "unit": "GDD (°C·days)",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "geometryVersionId": "gv-f1-v1",
+          "observationPeriod": "2026-10-30 to 2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:12.098Z",
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)",
+          "productId": "POWER Daily Point AG v2",
+          "sourceUrl": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+          "sourceType": "reanalysis",
+          "spatialResolution": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "qualityFlags": [
+            "gdd_single_sine",
+            "cross_check_ok"
+          ],
+          "missingValueHandling": "Fill values (-999) stripped prior to summation; days missing Tmin/Tmax excluded.",
+          "formulaDisplay": "Single-Sine GDD (Baskerville-Emin 1969), Tbase=4°C, Tupper=26°C",
+          "formulaVersion": "gdd-crop-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Period Mean Temp",
+              "value": "10.6 °C",
+              "source": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)"
+            },
+            {
+              "name": "Period Precipitation",
+              "value": "35.8 mm",
+              "source": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)"
+            },
+            {
+              "name": "Cross-Check Total",
+              "value": "87.2 mm",
+              "source": "Open-Meteo ERA5-Land (~9–11 km)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 78,
+          "confidenceLabel": "Moderate",
+          "limitations": "0.5° (~55 km) climate grid cannot resolve isolated local thunderstorms."
+        },
+        "ev-veg-field-gv-1": {
+          "evidenceId": "ev-veg-field-gv-1",
+          "metricName": "Satellite Canopy Reflectance (Sentinel-2 L2A NDVI)",
+          "valueDisplay": "0.248 NDVI",
+          "unit": "NDVI (-1 to +1)",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "geometryVersionId": "gv-f1-v1",
+          "observationPeriod": "2026-11-14",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "providerId": "sentinel2_pc_stac",
+          "providerName": "Microsoft Planetary Computer STAC / Copernicus Sentinel-2 L2A",
+          "productId": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "sourceUrl": "https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a",
+          "sourceType": "satellite_derived",
+          "spatialResolution": "10 m Red/NIR (B04/B08), 20 m SCL cloud mask",
+          "spatialCoverage": {
+            "fieldAreaM2": 286160,
+            "sourcePixelSizeM": 10,
+            "intersectingPixelCount": 756,
+            "validPixelCount": 2880,
+            "validAreaM2": 288000,
+            "validCoveragePct": 100,
+            "aggregation": "area_weighted_mean",
+            "spatialFit": "field_scale",
+            "geometryVersionId": "gv-f1-v1"
+          },
+          "qualityFlags": [
+            "scl_valid_100pct",
+            "valid"
+          ],
+          "missingValueHandling": "Cloud, cirrus, cloud shadow & nodata pixels masked via Sentinel-2 SCL; scenes <45% valid pixels marked cloudy/insufficient.",
+          "formulaDisplay": "NDVI = (B08 - B04) / (B08 + B04) masked to SCL classes {4 Vegetation, 5 Bare Soil, 6 Water}",
+          "formulaVersion": "s2-l2a-scl-v1.0",
+          "inputsUsed": [
+            {
+              "name": "NDVI Mean / Median",
+              "value": "0.248 / 0.247",
+              "source": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124"
+            },
+            {
+              "name": "Baseline Scene NDVI",
+              "value": "None < 90d",
+              "source": "Planetary Computer STAC"
+            },
+            {
+              "name": "Valid Clear Pixels",
+              "value": "2880 (100%)",
+              "source": "SCL Polygon Mask"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 84,
+          "confidenceLabel": "High",
+          "limitations": "Optical NDVI measures green canopy reflectance only and cannot diagnose specific pests, nutrient deficiency, or harvest vs stress without scouting."
+        },
+        "ev-terrain-field-gv-1": {
+          "evidenceId": "ev-terrain-field-gv-1",
+          "metricName": "Terrain Elevation & Slope Gradient",
+          "valueDisplay": "68 m (2.4% slope)",
+          "unit": "m / % slope",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "geometryVersionId": "gv-f1-v1",
+          "observationPeriod": "Static DEM Baseline",
+          "retrievedAt": "2026-11-15T19:21:11.537Z",
+          "providerId": "open_meteo_dem",
+          "providerName": "Open-Meteo Elevation (Copernicus DEM GLO-90)",
+          "productId": "Copernicus DEM 90m",
+          "sourceUrl": "https://open-meteo.com/en/docs/elevation-api",
+          "sourceType": "satellite_derived",
+          "spatialResolution": "90 m DEM",
+          "qualityFlags": [
+            "5_point_finite_difference"
+          ],
+          "missingValueHandling": "Retains farm-entered elevation/slope if DEM unreachable.",
+          "formulaDisplay": "Central finite difference: slope% = 100 × √((ΔZ_NS/2d)² + (ΔZ_EW/2d)²)",
+          "formulaVersion": "dem-fd-v1.0",
+          "inputsUsed": [
+            {
+              "name": "Center Elevation",
+              "value": "68 m",
+              "source": "Farm profile"
+            },
+            {
+              "name": "Slope Gradient",
+              "value": "2.4%",
+              "source": "W (279°)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 86,
+          "confidenceLabel": "High",
+          "limitations": "90 m DEM smooths micro-berms or laser-leveled ditches under ~45 m scale."
+        },
+        "ev-eonet-field-gv-1": {
+          "evidenceId": "ev-eonet-field-gv-1",
+          "metricName": "Regional Natural Hazard Scan (NASA EONET v3)",
+          "valueDisplay": "0 event(s) within 300 km",
+          "unit": "open events",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-1",
+          "fieldName": "North Ridge Block 1",
+          "geometryVersionId": "gv-f1-v1",
+          "observationPeriod": "Active / Last 30 days",
+          "retrievedAt": "2026-11-15T19:21:12.533Z",
+          "providerId": "nasa_eonet_v3",
+          "providerName": "NASA EONET v3",
+          "productId": "Open Natural Events",
+          "sourceUrl": "https://eonet.gsfc.nasa.gov/docs/v3",
+          "sourceType": "observed",
+          "spatialResolution": "300 km haversine buffer around field centroid",
+          "qualityFlags": [
+            "live_checked"
+          ],
+          "missingValueHandling": "Returns empty list on unavailable feed with explicit warning.",
+          "formulaDisplay": "Great-circle Haversine distance ≤ 300 km from field centroid",
+          "formulaVersion": "eonet-v3",
+          "inputsUsed": [
+            {
+              "name": "Nearest Hazard",
+              "value": "None within 300 km",
+              "source": "NASA EONET v3"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 85,
+          "confidenceLabel": "High",
+          "limitations": "Regional satellite hazard points do not substitute for county emergency advisories."
+        },
+        "ev-water-field-gv-2": {
+          "evidenceId": "ev-water-field-gv-2",
+          "metricName": "Root-Zone Water Balance & Moisture Deficit",
+          "valueDisplay": "+23.1 mm",
+          "unit": "mm water depth",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "geometryVersionId": "gv-f2-v1",
+          "observationPeriod": "2026-10-30 to 2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES) + Open-Meteo NWP Forecast (Non-commercial endpoint)",
+          "productId": "FAO-56 Penman-Monteith + USDA SCS + FAO-56 Dr(i)",
+          "sourceUrl": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+          "sourceType": "calculated",
+          "spatialResolution": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "qualityFlags": [
+            "FAO-56 Penman-Monteith",
+            "routines_kept_separate_from_confirmed_logs"
+          ],
+          "missingValueHandling": "Missing hydraulic inputs leave TAW/Dr unavailable rather than 0.",
+          "formulaDisplay": "FAO-56 Penman-Monteith ET₀ -> ETc = Kc × ET₀ -> Peff (USDA SCS) -> Dr(i) = Dr(i-1) - Peff - I_confirmed + ETc",
+          "formulaVersion": "fao56-wb-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Mean Daily ET₀",
+              "value": "0.8 mm/d",
+              "source": "FAO-56 Penman-Monteith"
+            },
+            {
+              "name": "Crop Coefficient (Kc)",
+              "value": "0.35",
+              "source": "FAO Irrigation & Drainage Paper 56 (Tables 11, 12, 22) (Maize, Late season)"
+            },
+            {
+              "name": "Effective Rainfall / Confirmed Irrigation",
+              "value": "29 mm / 0 mm",
+              "source": "USDA SCS Peff + Field Shift irrigationLogs"
+            },
+            {
+              "name": "TAW / RAW",
+              "value": "142.5 mm / 78.4 mm",
+              "source": "Texture-class hydraulic estimate (FAO-56 Table 19 / Saxton-Rawls baseline for Silt loam, OM-adjusted)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 96,
+          "confidenceLabel": "High",
+          "limitations": "Gridded meteorology (~9–55 km) does not capture local micro-sprinkler drift or unlogged irrigation passes."
+        },
+        "ev-soil-field-gv-2": {
+          "evidenceId": "ev-soil-field-gv-2",
+          "metricName": "Soil Reaction (pH), Texture & Survey Profile",
+          "valueDisplay": "Lab pH 6.6 (Silt loam)",
+          "unit": "pH / USDA Texture",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "geometryVersionId": "gv-f2-v1",
+          "observationPeriod": "2026-10-28",
+          "retrievedAt": "2026-11-15T19:21:12.381Z",
+          "providerId": "usda_nrcs_sda",
+          "providerName": "Farmer Lab Assay + Mapped Survey Reference",
+          "productId": "SSURGO MapUnit 64141",
+          "sourceUrl": "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest",
+          "sourceType": "farmer_reported",
+          "spatialResolution": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+          "qualityFlags": [
+            "farmer_lab_prioritized",
+            "consistent"
+          ],
+          "missingValueHandling": "Farmer lab unknowns remain Untested; ISRIC REST timeout bypassed cleanly to USDA SDA / SoilGrids WCS.",
+          "formulaDisplay": "USDA Soil Texture Triangle (sand+silt+clay within 97–103%); SOM = SOC × 1.724 (Van Bemmelen)",
+          "formulaVersion": "usda-soil-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Lab Soil pH",
+              "value": "6.6",
+              "source": "Farmer Profile"
+            },
+            {
+              "name": "Survey / WCS pH",
+              "value": "6.1",
+              "source": "USDA NRCS Soil Data Access (SSURGO)"
+            },
+            {
+              "name": "Texture Class",
+              "value": "Silt loam",
+              "source": "Farmer soil record"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 88,
+          "confidenceLabel": "High",
+          "limitations": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing."
+        },
+        "ev-weather-field-gv-2": {
+          "evidenceId": "ev-weather-field-gv-2",
+          "metricName": "Growing Degree Days (GDD), Dry Spell & Rainfall Anomaly",
+          "valueDisplay": "26.1 °C·d",
+          "unit": "GDD (°C·days)",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "geometryVersionId": "gv-f2-v1",
+          "observationPeriod": "2026-10-30 to 2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:12.098Z",
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)",
+          "productId": "POWER Daily Point AG v2",
+          "sourceUrl": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+          "sourceType": "reanalysis",
+          "spatialResolution": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "qualityFlags": [
+            "gdd_single_sine",
+            "cross_check_ok"
+          ],
+          "missingValueHandling": "Fill values (-999) stripped prior to summation; days missing Tmin/Tmax excluded.",
+          "formulaDisplay": "Single-Sine GDD (Baskerville-Emin 1969), Tbase=10°C, Tupper=30°C",
+          "formulaVersion": "gdd-crop-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Period Mean Temp",
+              "value": "10.6 °C",
+              "source": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)"
+            },
+            {
+              "name": "Period Precipitation",
+              "value": "35.8 mm",
+              "source": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)"
+            },
+            {
+              "name": "Cross-Check Total",
+              "value": "87.2 mm",
+              "source": "Open-Meteo ERA5-Land (~9–11 km)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 78,
+          "confidenceLabel": "Moderate",
+          "limitations": "0.5° (~55 km) climate grid cannot resolve isolated local thunderstorms."
+        },
+        "ev-veg-field-gv-2": {
+          "evidenceId": "ev-veg-field-gv-2",
+          "metricName": "Satellite Canopy Reflectance (Sentinel-2 L2A NDVI)",
+          "valueDisplay": "0.236 NDVI",
+          "unit": "NDVI (-1 to +1)",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "geometryVersionId": "gv-f2-v1",
+          "observationPeriod": "2026-11-14",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "providerId": "sentinel2_pc_stac",
+          "providerName": "Microsoft Planetary Computer STAC / Copernicus Sentinel-2 L2A",
+          "productId": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "sourceUrl": "https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a",
+          "sourceType": "satellite_derived",
+          "spatialResolution": "10 m Red/NIR (B04/B08), 20 m SCL cloud mask",
+          "spatialCoverage": {
+            "fieldAreaM2": 237210,
+            "sourcePixelSizeM": 10,
+            "intersectingPixelCount": 651,
+            "validPixelCount": 2400,
+            "validAreaM2": 240000,
+            "validCoveragePct": 100,
+            "aggregation": "area_weighted_mean",
+            "spatialFit": "field_scale",
+            "geometryVersionId": "gv-f2-v1"
+          },
+          "qualityFlags": [
+            "scl_valid_100pct",
+            "valid"
+          ],
+          "missingValueHandling": "Cloud, cirrus, cloud shadow & nodata pixels masked via Sentinel-2 SCL; scenes <45% valid pixels marked cloudy/insufficient.",
+          "formulaDisplay": "NDVI = (B08 - B04) / (B08 + B04) masked to SCL classes {4 Vegetation, 5 Bare Soil, 6 Water}",
+          "formulaVersion": "s2-l2a-scl-v1.0",
+          "inputsUsed": [
+            {
+              "name": "NDVI Mean / Median",
+              "value": "0.236 / 0.238",
+              "source": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124"
+            },
+            {
+              "name": "Baseline Scene NDVI",
+              "value": "None < 90d",
+              "source": "Planetary Computer STAC"
+            },
+            {
+              "name": "Valid Clear Pixels",
+              "value": "2400 (100%)",
+              "source": "SCL Polygon Mask"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 84,
+          "confidenceLabel": "High",
+          "limitations": "Optical NDVI measures green canopy reflectance only and cannot diagnose specific pests, nutrient deficiency, or harvest vs stress without scouting."
+        },
+        "ev-terrain-field-gv-2": {
+          "evidenceId": "ev-terrain-field-gv-2",
+          "metricName": "Terrain Elevation & Slope Gradient",
+          "valueDisplay": "68 m (2.4% slope)",
+          "unit": "m / % slope",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "geometryVersionId": "gv-f2-v1",
+          "observationPeriod": "Static DEM Baseline",
+          "retrievedAt": "2026-11-15T19:21:11.537Z",
+          "providerId": "open_meteo_dem",
+          "providerName": "Open-Meteo Elevation (Copernicus DEM GLO-90)",
+          "productId": "Copernicus DEM 90m",
+          "sourceUrl": "https://open-meteo.com/en/docs/elevation-api",
+          "sourceType": "satellite_derived",
+          "spatialResolution": "90 m DEM",
+          "qualityFlags": [
+            "5_point_finite_difference"
+          ],
+          "missingValueHandling": "Retains farm-entered elevation/slope if DEM unreachable.",
+          "formulaDisplay": "Central finite difference: slope% = 100 × √((ΔZ_NS/2d)² + (ΔZ_EW/2d)²)",
+          "formulaVersion": "dem-fd-v1.0",
+          "inputsUsed": [
+            {
+              "name": "Center Elevation",
+              "value": "68 m",
+              "source": "Farm profile"
+            },
+            {
+              "name": "Slope Gradient",
+              "value": "2.4%",
+              "source": "W (279°)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 86,
+          "confidenceLabel": "High",
+          "limitations": "90 m DEM smooths micro-berms or laser-leveled ditches under ~45 m scale."
+        },
+        "ev-eonet-field-gv-2": {
+          "evidenceId": "ev-eonet-field-gv-2",
+          "metricName": "Regional Natural Hazard Scan (NASA EONET v3)",
+          "valueDisplay": "0 event(s) within 300 km",
+          "unit": "open events",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-2",
+          "fieldName": "East Creek Block 2",
+          "geometryVersionId": "gv-f2-v1",
+          "observationPeriod": "Active / Last 30 days",
+          "retrievedAt": "2026-11-15T19:21:12.533Z",
+          "providerId": "nasa_eonet_v3",
+          "providerName": "NASA EONET v3",
+          "productId": "Open Natural Events",
+          "sourceUrl": "https://eonet.gsfc.nasa.gov/docs/v3",
+          "sourceType": "observed",
+          "spatialResolution": "300 km haversine buffer around field centroid",
+          "qualityFlags": [
+            "live_checked"
+          ],
+          "missingValueHandling": "Returns empty list on unavailable feed with explicit warning.",
+          "formulaDisplay": "Great-circle Haversine distance ≤ 300 km from field centroid",
+          "formulaVersion": "eonet-v3",
+          "inputsUsed": [
+            {
+              "name": "Nearest Hazard",
+              "value": "None within 300 km",
+              "source": "NASA EONET v3"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 85,
+          "confidenceLabel": "High",
+          "limitations": "Regional satellite hazard points do not substitute for county emergency advisories."
+        },
+        "ev-water-field-gv-3": {
+          "evidenceId": "ev-water-field-gv-3",
+          "metricName": "Root-Zone Water Balance & Moisture Deficit",
+          "valueDisplay": "+23.9 mm",
+          "unit": "mm water depth",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "geometryVersionId": "gv-f3-v1",
+          "observationPeriod": "2026-10-30 to 2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES) + Open-Meteo NWP Forecast (Non-commercial endpoint)",
+          "productId": "FAO-56 Penman-Monteith + USDA SCS + FAO-56 Dr(i)",
+          "sourceUrl": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+          "sourceType": "calculated",
+          "spatialResolution": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "qualityFlags": [
+            "FAO-56 Penman-Monteith",
+            "routines_kept_separate_from_confirmed_logs"
+          ],
+          "missingValueHandling": "Missing hydraulic inputs leave TAW/Dr unavailable rather than 0.",
+          "formulaDisplay": "FAO-56 Penman-Monteith ET₀ -> ETc = Kc × ET₀ -> Peff (USDA SCS) -> Dr(i) = Dr(i-1) - Peff - I_confirmed + ETc",
+          "formulaVersion": "fao56-wb-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Mean Daily ET₀",
+              "value": "0.8 mm/d",
+              "source": "FAO-56 Penman-Monteith"
+            },
+            {
+              "name": "Crop Coefficient (Kc)",
+              "value": "0.3",
+              "source": "FAO Irrigation & Drainage Paper 56 (Tables 11, 12, 22) (Peas, Late season)"
+            },
+            {
+              "name": "Effective Rainfall / Confirmed Irrigation",
+              "value": "29 mm / 0 mm",
+              "source": "USDA SCS Peff + Field Shift irrigationLogs"
+            },
+            {
+              "name": "TAW / RAW",
+              "value": "95 mm / 33.3 mm",
+              "source": "Texture-class hydraulic estimate (FAO-56 Table 19 / Saxton-Rawls baseline for Silt loam, OM-adjusted)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 96,
+          "confidenceLabel": "High",
+          "limitations": "Gridded meteorology (~9–55 km) does not capture local micro-sprinkler drift or unlogged irrigation passes."
+        },
+        "ev-soil-field-gv-3": {
+          "evidenceId": "ev-soil-field-gv-3",
+          "metricName": "Soil Reaction (pH), Texture & Survey Profile",
+          "valueDisplay": "Lab pH 6.6 (Silt loam)",
+          "unit": "pH / USDA Texture",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "geometryVersionId": "gv-f3-v1",
+          "observationPeriod": "2026-10-28",
+          "retrievedAt": "2026-11-15T19:21:12.381Z",
+          "providerId": "usda_nrcs_sda",
+          "providerName": "Farmer Lab Assay + Mapped Survey Reference",
+          "productId": "SSURGO MapUnit 64141",
+          "sourceUrl": "https://sdmdataaccess.sc.egov.usda.gov/Tabular/post.rest",
+          "sourceType": "farmer_reported",
+          "spatialResolution": "USDA SSURGO detailed soil survey polygon (~10–30 m map unit scale; lab cores still recommended per block)",
+          "qualityFlags": [
+            "farmer_lab_prioritized",
+            "consistent"
+          ],
+          "missingValueHandling": "Farmer lab unknowns remain Untested; ISRIC REST timeout bypassed cleanly to USDA SDA / SoilGrids WCS.",
+          "formulaDisplay": "USDA Soil Texture Triangle (sand+silt+clay within 97–103%); SOM = SOC × 1.724 (Van Bemmelen)",
+          "formulaVersion": "usda-soil-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Lab Soil pH",
+              "value": "6.6",
+              "source": "Farmer Profile"
+            },
+            {
+              "name": "Survey / WCS pH",
+              "value": "6.1",
+              "source": "USDA NRCS Soil Data Access (SSURGO)"
+            },
+            {
+              "name": "Texture Class",
+              "value": "Silt loam",
+              "source": "Farmer soil record"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 88,
+          "confidenceLabel": "High",
+          "limitations": "Official USDA NRCS Soil Survey (SSURGO) dominant component horizon; spatially representative at parcel map-unit scale, not a substitute for recent agronomic NPK/pH testing."
+        },
+        "ev-weather-field-gv-3": {
+          "evidenceId": "ev-weather-field-gv-3",
+          "metricName": "Growing Degree Days (GDD), Dry Spell & Rainfall Anomaly",
+          "valueDisplay": "93.9 °C·d",
+          "unit": "GDD (°C·days)",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "geometryVersionId": "gv-f3-v1",
+          "observationPeriod": "2026-10-30 to 2026-11-12",
+          "retrievedAt": "2026-11-15T19:21:12.098Z",
+          "providerId": "nasa_power_daily",
+          "providerName": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)",
+          "productId": "POWER Daily Point AG v2",
+          "sourceUrl": "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
+          "sourceType": "reanalysis",
+          "spatialResolution": "0.5° × 0.5° global grid (~55 km — regional climate grid, not field station)",
+          "qualityFlags": [
+            "gdd_single_sine",
+            "cross_check_ok"
+          ],
+          "missingValueHandling": "Fill values (-999) stripped prior to summation; days missing Tmin/Tmax excluded.",
+          "formulaDisplay": "Single-Sine GDD (Baskerville-Emin 1969), Tbase=4°C, Tupper=25°C",
+          "formulaVersion": "gdd-crop-v1.0.0",
+          "inputsUsed": [
+            {
+              "name": "Period Mean Temp",
+              "value": "10.6 °C",
+              "source": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)"
+            },
+            {
+              "name": "Period Precipitation",
+              "value": "35.8 mm",
+              "source": "NASA POWER Daily Agroclimatology (MERRA-2 / CERES)"
+            },
+            {
+              "name": "Cross-Check Total",
+              "value": "87.2 mm",
+              "source": "Open-Meteo ERA5-Land (~9–11 km)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 78,
+          "confidenceLabel": "Moderate",
+          "limitations": "0.5° (~55 km) climate grid cannot resolve isolated local thunderstorms."
+        },
+        "ev-veg-field-gv-3": {
+          "evidenceId": "ev-veg-field-gv-3",
+          "metricName": "Satellite Canopy Reflectance (Sentinel-2 L2A NDVI)",
+          "valueDisplay": "0.184 NDVI",
+          "unit": "NDVI (-1 to +1)",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "geometryVersionId": "gv-f3-v1",
+          "observationPeriod": "2026-11-14",
+          "retrievedAt": "2026-11-15T19:21:14.729Z",
+          "providerId": "sentinel2_pc_stac",
+          "providerName": "Microsoft Planetary Computer STAC / Copernicus Sentinel-2 L2A",
+          "productId": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124",
+          "sourceUrl": "https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a",
+          "sourceType": "satellite_derived",
+          "spatialResolution": "10 m Red/NIR (B04/B08), 20 m SCL cloud mask",
+          "spatialCoverage": {
+            "fieldAreaM2": 272220,
+            "sourcePixelSizeM": 10,
+            "intersectingPixelCount": 684,
+            "validPixelCount": 2664,
+            "validAreaM2": 266400,
+            "validCoveragePct": 100,
+            "aggregation": "area_weighted_mean",
+            "spatialFit": "field_scale",
+            "geometryVersionId": "gv-f3-v1"
+          },
+          "qualityFlags": [
+            "scl_valid_100pct",
+            "valid"
+          ],
+          "missingValueHandling": "Cloud, cirrus, cloud shadow & nodata pixels masked via Sentinel-2 SCL; scenes <45% valid pixels marked cloudy/insufficient.",
+          "formulaDisplay": "NDVI = (B08 - B04) / (B08 + B04) masked to SCL classes {4 Vegetation, 5 Bare Soil, 6 Water}",
+          "formulaVersion": "s2-l2a-scl-v1.0",
+          "inputsUsed": [
+            {
+              "name": "NDVI Mean / Median",
+              "value": "0.184 / 0.16",
+              "source": "S2B_MSIL2A_20261114T171559_R112_T15TVG_20261114T210124"
+            },
+            {
+              "name": "Baseline Scene NDVI",
+              "value": "None < 90d",
+              "source": "Planetary Computer STAC"
+            },
+            {
+              "name": "Valid Clear Pixels",
+              "value": "2664 (100%)",
+              "source": "SCL Polygon Mask"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 84,
+          "confidenceLabel": "High",
+          "limitations": "Optical NDVI measures green canopy reflectance only and cannot diagnose specific pests, nutrient deficiency, or harvest vs stress without scouting."
+        },
+        "ev-terrain-field-gv-3": {
+          "evidenceId": "ev-terrain-field-gv-3",
+          "metricName": "Terrain Elevation & Slope Gradient",
+          "valueDisplay": "68 m (2.4% slope)",
+          "unit": "m / % slope",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "geometryVersionId": "gv-f3-v1",
+          "observationPeriod": "Static DEM Baseline",
+          "retrievedAt": "2026-11-15T19:21:11.537Z",
+          "providerId": "open_meteo_dem",
+          "providerName": "Open-Meteo Elevation (Copernicus DEM GLO-90)",
+          "productId": "Copernicus DEM 90m",
+          "sourceUrl": "https://open-meteo.com/en/docs/elevation-api",
+          "sourceType": "satellite_derived",
+          "spatialResolution": "90 m DEM",
+          "qualityFlags": [
+            "5_point_finite_difference"
+          ],
+          "missingValueHandling": "Retains farm-entered elevation/slope if DEM unreachable.",
+          "formulaDisplay": "Central finite difference: slope% = 100 × √((ΔZ_NS/2d)² + (ΔZ_EW/2d)²)",
+          "formulaVersion": "dem-fd-v1.0",
+          "inputsUsed": [
+            {
+              "name": "Center Elevation",
+              "value": "68 m",
+              "source": "Farm profile"
+            },
+            {
+              "name": "Slope Gradient",
+              "value": "2.4%",
+              "source": "W (279°)"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 86,
+          "confidenceLabel": "High",
+          "limitations": "90 m DEM smooths micro-berms or laser-leveled ditches under ~45 m scale."
+        },
+        "ev-eonet-field-gv-3": {
+          "evidenceId": "ev-eonet-field-gv-3",
+          "metricName": "Regional Natural Hazard Scan (NASA EONET v3)",
+          "valueDisplay": "0 event(s) within 300 km",
+          "unit": "open events",
+          "farmId": "farm-green-valley",
+          "fieldId": "field-gv-3",
+          "fieldName": "South Terrace Legumes",
+          "geometryVersionId": "gv-f3-v1",
+          "observationPeriod": "Active / Last 30 days",
+          "retrievedAt": "2026-11-15T19:21:12.533Z",
+          "providerId": "nasa_eonet_v3",
+          "providerName": "NASA EONET v3",
+          "productId": "Open Natural Events",
+          "sourceUrl": "https://eonet.gsfc.nasa.gov/docs/v3",
+          "sourceType": "observed",
+          "spatialResolution": "300 km haversine buffer around field centroid",
+          "qualityFlags": [
+            "live_checked"
+          ],
+          "missingValueHandling": "Returns empty list on unavailable feed with explicit warning.",
+          "formulaDisplay": "Great-circle Haversine distance ≤ 300 km from field centroid",
+          "formulaVersion": "eonet-v3",
+          "inputsUsed": [
+            {
+              "name": "Nearest Hazard",
+              "value": "None within 300 km",
+              "source": "NASA EONET v3"
+            }
+          ],
+          "modelVersions": {
+            "engineVersion": "fao56-pm-v1.0.0+fao56-wb-v1.0.0+fieldshift-health-v2.0.0",
+            "cropKnowledgeVersion": "fao56-crops-v1.3.0",
+            "ruleSetVersion": "risk-rules-v1.1.0"
+          },
+          "confidencePct": 85,
+          "confidenceLabel": "High",
+          "limitations": "Regional satellite hazard points do not substitute for county emergency advisories."
+        }
+      },
+      "warnings": [
+        "Open-Meteo ERA5-Land Soil Water Grid (Modelled Reanalysis): NASA SMAP L4 (9 km) requires Earthdata credentials; using Open-Meteo ERA5-Land (~9–11 km) volumetric water content (clearly distinct from SMAP L4)."
+      ],
+      "aiExplanation": {
+        "available": true,
+        "modelUsed": "gemini-4-hydrogen",
+        "simpleSummary": "Green Valley Farm is currently under an Alert condition with a health score of 86 across all fields from October 25 to November 15, 2026. The main issue is high-severity frost and cold exposure in East Creek Block 2, where minimum temperatures dropped to 2 °C or lower for 2 days. Data coverage is 100% with 96% confidence, and no specific actions or watch points are listed.",
+        "advancedSummary": "For the 2026-10-25 to 2026-11-15 window, Green Valley Farm (All Fields) is rated Alert with a health score of 86, supported by 100% data coverage and 96% confidence. The primary driver is a high-severity Frost / Cold Threshold Exposure finding in East Creek Block 2, recording 2 days with Tmin ≤ 2 °C. This occurs via radiative or advective cooling below crop freezing tolerance, which damages emerging tissue or sensitive floral organs. No watch points or top actions are currently flagged.",
+        "keyDrivers": [
+          "East Creek Block 2 experienced 2 days with minimum temperatures ≤ 2 °C (high severity).",
+          "Farm-wide condition is Alert with a health score of 86.",
+          "Analysis is backed by 100% coverage and 96% confidence."
+        ],
+        "generatedAt": "2026-11-15T19:21:22.131Z"
+      },
+      "comparisonWithPrevious": null
+    }
+  ],
+  "jobs": [
+    {
+      "id": "run-1794770471430-zapq",
+      "farmId": "farm-green-valley",
+      "scope": {
+        "type": "all_fields",
+        "farmId": "farm-green-valley",
+        "fieldIds": [],
+        "label": "All Fields"
+      },
+      "runType": "manual",
+      "triggerReason": "Live End-to-End Verification Run",
+      "dateRange": {
+        "from": "2026-10-25",
+        "to": "2026-11-15",
+        "timezone": "America/Los_Angeles"
+      },
+      "requestedAt": "2026-11-15T19:21:11.430Z",
+      "status": "complete",
+      "currentStage": "COMPLETE",
+      "stages": [
+        {
+          "stage": "REQUESTED",
+          "label": "Run requested & validated",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:11.430Z",
+          "finishedAt": "2026-11-15T19:21:11.430Z"
+        },
+        {
+          "stage": "VALIDATING_SCOPE",
+          "label": "Validating farm & field scope",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:11.456Z",
+          "finishedAt": "2026-11-15T19:21:11.458Z",
+          "detail": "3 parcel(s) in scope"
+        },
+        {
+          "stage": "SNAPSHOTTING_INPUTS",
+          "label": "Locking immutable input & geometry versions",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:11.458Z",
+          "finishedAt": "2026-11-15T19:21:11.459Z",
+          "detail": "Snapshot snapin-6a1e4b7acbb67aa3"
+        },
+        {
+          "stage": "FETCHING_DATA",
+          "label": "Fetching multi-provider climate, soil, satellite & hazards",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:11.459Z",
+          "detail": "All external providers queried",
+          "finishedAt": "2026-11-15T19:21:14.728Z"
+        },
+        {
+          "stage": "VALIDATING_AND_NORMALISING",
+          "label": "Validating schemas, units & fill values",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.728Z",
+          "finishedAt": "2026-11-15T19:21:14.730Z"
+        },
+        {
+          "stage": "SPATIAL_AGGREGATION",
+          "label": "Resolving pixel geometry & spatial fit",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.730Z",
+          "finishedAt": "2026-11-15T19:21:14.730Z",
+          "detail": "Aggregated 7/7 feeds"
+        },
+        {
+          "stage": "CALCULATING_INDICATORS",
+          "label": "Computing FAO-56 ET₀, water balance & GDD",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.730Z",
+          "finishedAt": "2026-11-15T19:21:14.737Z"
+        },
+        {
+          "stage": "EVALUATING_FIELD_RULES",
+          "label": "Evaluating documented risk rules & watch points",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.737Z",
+          "finishedAt": "2026-11-15T19:21:14.737Z",
+          "detail": "1 finding(s), 0 watch point(s)"
+        },
+        {
+          "stage": "BUILDING_FIELD_ASSESSMENTS",
+          "label": "Building field-by-field assessment profiles",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.737Z",
+          "finishedAt": "2026-11-15T19:21:14.737Z"
+        },
+        {
+          "stage": "BUILDING_FARM_SUMMARY",
+          "label": "Aggregating non-masking farm summary",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.739Z",
+          "finishedAt": "2026-11-15T19:21:14.739Z",
+          "detail": "Alert"
+        },
+        {
+          "stage": "COMPARING_PREVIOUS_REPORT",
+          "label": "Comparing against prior comparable report",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.739Z",
+          "finishedAt": "2026-11-15T19:21:14.739Z"
+        },
+        {
+          "stage": "GENERATING_EXPLANATIONS",
+          "label": "Generating bounded AI summary (Simple & Advanced)",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:14.740Z",
+          "finishedAt": "2026-11-15T19:21:22.131Z"
+        },
+        {
+          "stage": "VALIDATING_REPORT",
+          "label": "Running scientific integrity validation checks",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:22.131Z",
+          "finishedAt": "2026-11-15T19:21:22.132Z",
+          "detail": "Scientific checks passed"
+        },
+        {
+          "stage": "PERSISTING_REPORT",
+          "label": "Saving immutable Deep Analysis report",
+          "status": "complete",
+          "startedAt": "2026-11-15T19:21:22.132Z",
+          "finishedAt": "2026-11-15T19:21:22.139Z",
+          "detail": "Report rep-run-1794770471430-zapq saved"
+        }
+      ],
+      "attempt": 1,
+      "idempotencyKey": "run-1794770471430-zapq",
+      "cancellationRequested": false,
+      "startedAt": "2026-11-15T19:21:11.456Z",
+      "finishedAt": "2026-11-15T19:21:22.132Z",
+      "reportId": "rep-run-1794770471430-zapq"
+    }
+  ],
+  "schedules": [
+    {
+      "id": "sched-gv-default",
+      "farmId": "farm-green-valley",
+      "name": "Weekly Deep Farm Monitor",
+      "enabled": true,
+      "status": "active",
+      "scope": {
+        "type": "all_fields",
+        "farmId": "farm-green-valley",
+        "fieldIds": [],
+        "label": "All Fields"
+      },
+      "frequency": "weekly",
+      "preferredTime": "09:00",
+      "timezone": "America/Los_Angeles",
+      "refreshProviders": [
+        "all"
+      ],
+      "useSavedRoutines": true,
+      "routineReconfirmDays": 14,
+      "notifyOnImportantChanges": true,
+      "quietHours": {
+        "start": "21:00",
+        "end": "06:00"
+      },
+      "consent": {
+        "allowRemoteProviderRequests": true,
+        "allowRemoteJobProcessing": true,
+        "consentedAt": "2026-11-01T09:00:00.000Z",
+        "disclosedProviders": [
+          "Open-Meteo Forecast & ERA5-Land",
+          "NASA POWER & EONET v3",
+          "USDA NRCS SSURGO / ISRIC SoilGrids WCS",
+          "Sentinel-2 L2A (Planetary Computer)"
+        ]
+      },
+      "nextRunAt": "2026-11-22T17:00:00.000Z",
+      "lastRunAt": "2026-11-15T09:00:00.000Z",
+      "lastJobId": null,
+      "lastJobStatus": null,
+      "createdAt": "2026-10-25T09:00:00.000Z",
+      "updatedAt": "2026-11-15T19:21:11.401Z"
+    }
+  ],
+  "routines": [
+    {
+      "id": "rtn-gv-drip-weekly",
+      "farmId": "farm-green-valley",
+      "fieldId": "field-gv-2",
+      "fieldName": "East Creek Block 2",
+      "category": "irrigation_routine",
+      "description": "Weekly drip header check & ~4-hour maintenance flush when rainfall < 10 mm.",
+      "cadenceLabel": "Weekly (Sunday morning)",
+      "assumedMethod": "Drip irrigation",
+      "assumedVolumePerEventM3": null,
+      "lastConfirmedAt": "2026-10-22T08:00:00.000Z",
+      "needsReconfirmation": true,
+      "userConfirmed": true,
+      "createdAt": "2026-10-22T08:00:00.000Z"
+    }
+  ],
+  "parsedDrafts": [],
+  "notifications": [
+    {
+      "farmId": "farm-green-valley",
+      "scheduleId": null,
+      "jobId": "run-1794770471430-zapq",
+      "reportId": "rep-run-1794770471430-zapq",
+      "kind": "new_high_finding",
+      "severity": "warning",
+      "title": "Green Valley Farm: Frost / Cold Threshold Exposure (2 day(s) ≤ 2 °C)",
+      "message": "East Creek Block 2 — 2 day(s) with Tmin ≤ 2 °C. Next step: Continue routine scouting cadence and log confirmed irrigation volumes.",
+      "dedupeKey": "finding:farm-green-valley:RULE_FROST_COLD_EXPOSURE:field-gv-2",
+      "id": "notif-1794770482133-v98",
+      "createdAt": "2026-11-15T19:21:22.133Z",
+      "read": false
+    }
+  ],
+  "auditEvents": [
+    {
+      "id": "aud-1794770482133-v84k",
+      "farmId": "farm-green-valley",
+      "eventType": "DEEP_ANALYSIS_COMPLETED",
+      "actor": "Farm Manager",
+      "detail": "Report rep-run-1794770471430-zapq persisted (complete, Alert)",
+      "occurredAt": "2026-11-15T19:21:22.133Z"
+    },
+    {
+      "id": "aud-1794770471430-87dh",
+      "farmId": "farm-green-valley",
+      "eventType": "ANALYSIS_RUN_QUEUED",
+      "actor": "Farm Manager",
+      "detail": "Queued manual analysis (All Fields)",
+      "occurredAt": "2026-11-15T19:21:11.430Z"
+    }
+  ],
+  "idempotencyKeys": {}
+}

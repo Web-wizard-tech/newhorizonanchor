@@ -1,0 +1,2428 @@
+# MASTER IMPLEMENTATION PROMPT — FIELD SHIFT
+## PAGE 10: CALENDAR & ACTIONS
+### Complete backend engineering, agricultural intelligence integration, synchronization and frontend connectivity specification
+
+---
+
+# 1. YOUR ROLE AND OVERALL OBJECTIVE
+
+You are the lead backend architect, full-stack developer, database engineer and agricultural software integration engineer responsible for implementing the Calendar & Actions page of FIELD SHIFT.
+
+Your task is to build the complete working backend behind the existing Calendar & Actions frontend.
+
+This is NOT a request to create a visually convincing calendar with dummy information.
+
+Every date, event, activity, crop stage, recommended operation, task, reminder and upcoming action must be connected to actual farm data, existing application services, verified agricultural calculations or farmer-confirmed information.
+
+The calendar must become the central operational timeline of FIELD SHIFT.
+
+It must automatically collect and organize relevant information from the rest of the website, while allowing farmers to create and manage their own activities.
+
+## 1.1 Mandatory project inspection
+
+Before writing code:
+
+1. Inspect the entire existing project.
+2. Identify the programming language, frontend framework, backend framework and database.
+3. Identify all existing database tables, models, API endpoints, services and shared state stores.
+4. Inspect the existing Farm Data page and understand how farms, fields, soil records, crop records and locations are stored.
+5. Inspect the Rotation Planner and identify how rotations, crop sequences, planting dates, harvest dates and transition periods are calculated.
+6. Inspect irrigation functionality and identify how irrigation schedules, recommendations and completed irrigation records are represented.
+7. Inspect soil testing, scouting, fertilizer and analysis functionality.
+8. Inspect Deep Analysis and Reports to identify scheduled or pending analytical operations.
+9. Identify existing weather and location integrations.
+10. Identify all existing task, notification, recommendation and audit-history systems.
+
+Also load and follow the project's `00_GLOBAL_FOUNDATION_AND_BUILD_RULES.md` if available. The supplied page specification makes that document mandatory project context.
+
+Do not assume that an existing feature is implemented correctly simply because an endpoint or frontend component exists.
+
+Verify its actual functionality.
+
+### Scope restrictions
+
+Only implement the Calendar & Actions page and strictly necessary integration adapters or backward-compatible service changes.
+
+Do not:
+- Redesign other website pages.
+- Replace the existing backend architecture.
+- Introduce another database for calendar records.
+- Create duplicate farm, field, crop, rotation or task models.
+- Reimplement agricultural calculations already available elsewhere.
+- Replace functioning integrations with simulated responses.
+- Delete or overwrite historical farm records.
+- Invent activities to populate empty calendar dates.
+
+If a required service does not exist, implement a clearly separated compatible service or mark that dependency as blocked. Never fabricate its response.
+
+Before editing, produce a list of the exact files expected to change and why. At completion, report the actual files changed and explain how the implementation integrates with the existing website.
+
+---
+
+# 2. FUNDAMENTAL BACKEND ARCHITECTURE
+
+The calendar must use a unified event-projection architecture.
+
+This is the most important architectural requirement.
+
+Do not create a separate calendar event database that independently stores copies of every irrigation recommendation, crop stage, rotation transition, soil test or task.
+
+Instead, the calendar must retrieve information from the canonical entities already maintained by the rest of the website.
+
+## 2.1 The difference between a source record and a calendar event
+
+For example:
+
+The Rotation Planner contains a crop rotation plan for Field 02.
+
+The plan specifies:
+- Current crop.
+- Next crop.
+- Planned planting date.
+- Estimated harvest period.
+- Crop sequence.
+- Transition preparation.
+- Associated calculations.
+
+The Calendar must read the plan and project its relevant milestones into calendar events.
+
+It must NOT create another independent rotation plan or another independent crop record.
+
+Likewise:
+
+The irrigation system recommends watering Field 02 on a particular date.
+
+The calendar reads that recommendation and displays it as an actionable event.
+
+The irrigation system remains responsible for the irrigation recommendation.
+
+The calendar remains responsible for displaying, organizing and providing access to that recommendation.
+
+## 2.2 Canonical source entities
+
+Use existing domain entities wherever possible.
+
+The following entities are the logical sources of calendar information:
+
+| Source entity | Calendar information |
+|---|---|
+| Farm | Farm identity, location, timezone |
+| Field | Field identity, boundaries, area |
+| Crop occurrence | Crop planted in a specific field and season |
+| Rotation plan | Crop sequence and transitions |
+| Rotation stage | Preparation, planting, harvest milestones |
+| Crop-stage estimate | Predicted growth stage and dates |
+| Irrigation recommendation | Recommended irrigation date and reason |
+| Irrigation record | Actual irrigation performed |
+| Soil test | Test due dates and recorded results |
+| Scouting record | Pest and disease inspections |
+| Fertilizer recommendation | Proposed application dates |
+| Deep Analysis job | Scheduled or pending analysis |
+| Finding or alert | Relevant review and action dates |
+| Farmer observation | Actual field observations |
+| Task | User-created or formally assigned work |
+| Reminder | Notification scheduling information |
+
+Do not assume every entity already exists under these exact names. Map the architecture to the project's actual domain models.
+
+## 2.3 Calendar projection service
+
+Create a dedicated Calendar Projection Service.
+
+Its responsibility is to collect and normalize calendar-relevant records from the canonical services.
+
+Conceptually:
+
+```python
+class CalendarProjectionService:
+
+    def get_calendar(self, filters):
+        sources = [
+            crop_stage_service,
+            rotation_service,
+            irrigation_service,
+            soil_service,
+            scouting_service,
+            fertilizer_service,
+            analysis_service,
+            alert_service,
+            task_service,
+            observation_service
+        ]
+
+        events = []
+
+        for source in sources:
+            records = source.get_calendar_records(filters)
+            events.extend(
+                normalize_calendar_records(records)
+            )
+
+        return build_calendar_response(events)
+```
+
+This is illustrative pseudocode. Adapt it to the actual project architecture and do not introduce dependencies that duplicate existing services.
+
+The projection service must:
+
+- Retrieve records using canonical IDs.
+- Respect farm and field filters.
+- Convert source records into a common read-only calendar representation.
+- Preserve the source entity type.
+- Preserve the source entity ID.
+- Preserve the original record's status.
+- Preserve the original source and evidence.
+- Preserve the date basis.
+- Preserve the relevant timezone.
+- Handle overlapping events.
+- Sort events consistently.
+- Identify duplicate projections.
+- Support pagination or date-range loading where necessary.
+
+The calendar projection is not the owner of the underlying records.
+
+Mutations must go through the appropriate canonical service.
+
+---
+
+# 3. HOW THE CALENDAR CONNECTS TO EVERY OTHER WEBSITE PAGE
+
+Build the calendar as an integration point for the existing FIELD SHIFT ecosystem.
+
+The following connections must be implemented.
+
+## 3.1 Farm Data integration
+
+Farm Data is the foundation of the calendar.
+
+The calendar must retrieve the selected farm and all relevant field records.
+
+### Information to retrieve
+
+Farm:
+- Farm ID.
+- Farm name.
+- Geographic location.
+- Latitude and longitude, if available.
+- Farm timezone.
+- Farm area.
+- Registered fields.
+- Farm-level preferences.
+
+Field:
+- Field ID.
+- Field name.
+- Field area.
+- Field boundaries or coordinates.
+- Current crop.
+- Soil characteristics.
+- Irrigation method.
+- Field-specific records.
+
+### Behaviour
+
+When a farmer selects Green Valley Farm:
+
+The calendar must load only events associated with that farm.
+
+If the farmer changes to another farm, the calendar must refresh its event projection.
+
+It must not display events belonging to the previous farm.
+
+If the farmer selects All Farms, it must retrieve the authorized farms belonging to that user and display their activities together.
+
+Same-day events from different farms must remain separate and identifiable.
+
+Never merge two records merely because they concern the same crop.
+
+### Field selection
+
+The calendar must support:
+- All Fields.
+- Individual Field 01.
+- Individual Field 02.
+- Individual Field 03.
+- Any other registered field.
+
+The field selector must use actual field IDs rather than names as identifiers.
+
+Changing the selected field must update:
+- Calendar events.
+- Crop-stage milestones.
+- Today's Activities.
+- Next 7 Days.
+- Workload information.
+
+The selected farm and field must remain consistent across all calendar views.
+
+---
+
+## 3.2 Rotation Planner integration
+
+This is one of the most important connections.
+
+The Rotation Planner is the authoritative source for planned crop sequences and rotation transitions.
+
+The calendar must automatically project rotation information.
+
+### Information to retrieve
+
+For each active rotation plan:
+
+- Rotation plan ID.
+- Plan version.
+- Farm ID.
+- Field ID.
+- Current crop.
+- Previous crop.
+- Next crop.
+- Crop sequence.
+- Planned planting date.
+- Predicted planting window.
+- Planned harvest date.
+- Predicted harvest window.
+- Preparation period.
+- Transition period.
+- Relevant soil or crop constraints.
+- Plan approval status.
+- Last calculation timestamp.
+
+### Events generated from rotation data
+
+The calendar may display:
+
+1. Planting windows.
+2. Expected harvest windows.
+3. Crop-stage milestones.
+4. Rotation preparation.
+5. Rotation transition.
+6. Field preparation.
+7. Reassessment dates.
+8. Relevant plan-review dates.
+
+Only generate events supported by actual plans and valid calculations.
+
+Do not create generic rotation preparation events for every field.
+
+### Automatic synchronization example
+
+Suppose Field 02 has:
+
+- Current crop: Wheat.
+- Planned harvest: December 12.
+- Next crop: Legumes.
+- Preparation period: December 13–20.
+- Expected planting window: December 21–28.
+
+The calendar should display those relevant milestones.
+
+Now suppose the farmer changes the planting window in Rotation Planner.
+
+The calendar must automatically reflect the revised window.
+
+The old planned window must no longer appear as if it were still the current recommendation.
+
+However, preserve the previous version in history.
+
+### Important rule: distinguish planned and actual
+
+Suppose the rotation plan predicts planting on December 21.
+
+The farmer actually plants on December 24.
+
+The system must store both:
+
+```text
+planned_planting_date = December 21
+actual_planting_date = December 24
+```
+
+Do not overwrite the planned date with the actual date.
+
+The actual operation must be displayed as farmer-recorded actual information.
+
+The revised downstream predictions must be calculated using the actual planting date where the relevant model supports it.
+
+The Rotation Planner remains responsible for recalculating the rotation sequence.
+
+The calendar simply receives and displays the updated version.
+
+### Cross-page synchronization
+
+When a rotation plan changes:
+
+1. Save the new plan version.
+2. Record the change in plan history.
+3. Invalidate dependent planned calendar projections.
+4. Recalculate affected crop-stage dates through the existing crop-stage service.
+5. Recalculate relevant downstream rotation milestones.
+6. Mark affected analysis results stale where applicable.
+7. Publish an internal domain event.
+8. Notify the calendar projection service.
+9. Refresh the affected calendar date range.
+10. Preserve completed and actual historical operations.
+
+Never silently edit a farmer-confirmed plan.
+
+If a change materially alters a confirmed schedule, show the old window, revised window, reason for change and whether farmer approval is required.
+
+---
+
+## 3.3 Weather and location integration
+
+The calendar must use the weather and location information already available through FIELD SHIFT's farm data and weather integration.
+
+Do not use the user's computer IP location as a substitute for the selected farm's actual location.
+
+### Location data
+
+Retrieve:
+- Farm latitude.
+- Farm longitude.
+- Farm timezone.
+- Field coordinates, if available.
+- Farm elevation, if supported by the existing data source.
+
+If the farm has no valid location, weather-dependent calculations must be marked unavailable.
+
+Never pretend a weather forecast exists.
+
+### Weather information
+
+Retrieve the weather information required by the existing agricultural models, such as:
+
+- Current temperature.
+- Daily minimum temperature.
+- Daily maximum temperature.
+- Precipitation.
+- Forecast rainfall.
+- Relative humidity.
+- Wind speed.
+- Solar radiation.
+- Evapotranspiration.
+- Historical weather where available.
+
+Only consume variables supported by the connected weather provider and relevant agricultural calculations.
+
+Store source metadata and retrieval timestamps.
+
+### Weather-driven calendar updates
+
+Weather should influence calendar recommendations only through the appropriate agricultural service or validated scheduling rule.
+
+Examples:
+
+**Example A — rainfall**
+
+A scheduled irrigation recommendation may need reassessment if sufficient forecast rainfall is expected.
+
+The irrigation system should recalculate the recommendation.
+
+The calendar receives the updated recommendation and displays the new scheduling information.
+
+**Example B — extreme heat**
+
+A crop-stage or irrigation model may determine that an operation needs earlier review.
+
+The responsible model generates the updated recommendation.
+
+The calendar displays it as a revised recommendation, not a confirmed farmer task.
+
+**Example C — unsuitable spraying conditions**
+
+If the fertilizer or crop-protection subsystem has a validated weather rule, the corresponding application window can be marked unsuitable.
+
+Do not invent chemical application thresholds.
+
+Use only approved rules already present in the application or validated agricultural references.
+
+### Weather update workflow
+
+```text
+Weather provider
+      |
+      v
+Weather ingestion service
+      |
+      v
+Farm-specific weather records
+      |
+      v
+Agricultural calculation services
+      |
+      v
+Updated recommendations
+      |
+      v
+Calendar projection refresh
+      |
+      v
+Updated calendar and activity panel
+```
+
+Do not make the calendar independently calculate irrigation requirements using raw weather data.
+
+---
+
+## 3.4 Irrigation integration
+
+The calendar must connect directly to the irrigation subsystem.
+
+### Information to retrieve
+
+For each field:
+
+- Irrigation recommendation ID.
+- Farm ID.
+- Field ID.
+- Crop occurrence ID.
+- Recommended date.
+- Recommended time window.
+- Irrigation status.
+- Reason for recommendation.
+- Soil moisture information, if available.
+- Rainfall context.
+- Water requirement or irrigation volume, if supported.
+- Source model.
+- Recommendation confidence or uncertainty, if available.
+
+### Display logic
+
+If the irrigation service recommends watering today:
+
+Display an irrigation event in today's date cell.
+
+The right panel should contain:
+
+```text
+Irrigation - Field 02
+Recommended Now
+[Start]
+```
+
+The Start button must connect to the real irrigation workflow.
+
+It must not simply change the calendar task's status.
+
+### When Start is clicked
+
+1. Resolve the exact irrigation recommendation ID.
+2. Verify that the user is authorized to access the farm and field.
+3. Retrieve the latest recommendation status.
+4. Check whether it is still valid.
+5. Open the irrigation execution workflow.
+6. Collect the required actual execution details.
+7. Save the actual irrigation record through the irrigation service.
+8. Record execution time and timezone.
+9. Update the irrigation record's status.
+10. Publish the relevant internal event.
+11. Refresh the calendar projection.
+12. Update any dependent recommendations if the irrigation subsystem requires recalculation.
+
+If the recommendation has expired or been superseded, display the latest status and do not execute the outdated action.
+
+### Completion
+
+An irrigation recommendation being displayed does not mean irrigation has occurred.
+
+Only a saved execution record can represent an actual irrigation operation.
+
+The calendar must distinguish:
+- Recommended irrigation.
+- Scheduled irrigation.
+- In-progress irrigation, if supported.
+- Completed irrigation.
+- Deferred irrigation.
+- Cancelled irrigation.
+
+---
+
+## 3.5 Soil testing integration
+
+The calendar must retrieve soil testing schedules from the soil management subsystem.
+
+Potential events include:
+- Planned soil sampling.
+- Scheduled laboratory testing.
+- Soil reassessment.
+- Follow-up testing.
+- Soil condition reviews.
+
+Each event must preserve:
+
+- Soil test ID.
+- Farm ID.
+- Field ID.
+- Test date or date window.
+- Test status.
+- Test type.
+- Associated sampling information.
+- Source recommendation.
+- Relevant soil report ID.
+
+If a soil report recommends reassessment, the soil subsystem must create or update the appropriate follow-up record.
+
+The calendar displays it.
+
+Do not create a new soil recommendation inside the calendar.
+
+### When a soil test is completed
+
+The farmer records that sampling or testing occurred.
+
+The relevant soil service saves the actual record.
+
+The calendar updates its status and links to the resulting soil report when available.
+
+The historical record must remain accessible.
+
+---
+
+## 3.6 Scouting integration
+
+Connect the calendar to field scouting and observation records.
+
+Events can include:
+- Scheduled scouting.
+- Pest inspections.
+- Disease inspections.
+- Weed monitoring.
+- Follow-up observations.
+- Risk reassessment.
+
+Retrieve the exact:
+- Scouting record ID.
+- Field ID.
+- Crop occurrence ID.
+- Scheduled inspection window.
+- Observation status.
+- Relevant finding IDs.
+- Severity, where supported.
+- Source recommendation.
+
+### Example
+
+The scouting subsystem determines that Field 01 requires a pest inspection.
+
+The calendar displays:
+
+```text
+Scouting - Field 01
+Check for pests
+High Priority
+```
+
+Clicking the item must open the actual scouting workflow.
+
+When the farmer completes scouting:
+
+- Save the observation.
+- Preserve photographs and evidence.
+- Record observation time.
+- Link the observation to the exact field and crop occurrence.
+- Update the original scouting task or recommendation through the correct service.
+- Trigger relevant reassessment if the scouting service requires it.
+
+A completed inspection does not automatically mean that a pest or disease problem has been resolved.
+
+---
+
+## 3.7 Fertilizer integration
+
+The calendar must project valid fertilizer recommendations and farmer-confirmed applications.
+
+Information includes:
+- Fertilizer recommendation ID.
+- Field ID.
+- Crop occurrence ID.
+- Recommended application date/window.
+- Application type.
+- Relevant nutrient information.
+- Recommendation basis.
+- Status.
+- Evidence and source links.
+
+Only show application events if a valid recommendation or user-confirmed operation exists.
+
+If weather or crop stage alters the recommendation, the fertilizer subsystem must produce a revised window.
+
+The calendar must display the revised recommendation without rewriting an actual application record.
+
+Actual applications must remain historical facts.
+
+---
+
+## 3.8 Deep Analysis integration
+
+Deep Analysis must be connected to the calendar so that relevant analysis and reassessment dates can appear in the schedule.
+
+Examples:
+- Scheduled crop reassessment.
+- Pending soil analysis.
+- Follow-up after a field observation.
+- Review of a rotation plan.
+- Scheduled analysis generated by a valid workflow.
+
+Retrieve:
+- Analysis job ID.
+- Report ID, if available.
+- Farm ID.
+- Field ID.
+- Related crop or plan ID.
+- Scheduled date.
+- Job status.
+- Source.
+- Analysis type.
+
+### Important distinction
+
+Do not create a calendar event every time someone opens Deep Analysis.
+
+Only create a projection when there is an actual scheduled job, due review or relevant actionable recommendation.
+
+When an analysis job finishes:
+
+- Update its existing job record.
+- Link the resulting report.
+- Update the calendar projection.
+- Preserve the original scheduled time.
+- Display its completion state.
+
+If an upstream change makes an analysis obsolete, mark it stale using the actual analysis service.
+
+Do not delete the analysis history.
+
+---
+
+## 3.9 Reports integration
+
+Every relevant calendar operation should be capable of linking to its source report.
+
+For example:
+
+- Soil testing event → Soil report.
+- Crop reassessment → Deep Analysis report.
+- Rotation transition → Rotation plan.
+- Irrigation recommendation → Irrigation calculation or record.
+- Scouting → Scouting observation report.
+
+The calendar should not generate duplicate reports.
+
+It should preserve the existing report ID and use the existing report route.
+
+When a farmer clicks an event's evidence or report link, open the correct report using its canonical ID.
+
+---
+
+# 4. CANONICAL TASK SYSTEM
+
+Tasks are different from calendar events.
+
+A task is an actual actionable record.
+
+A calendar event can be a projection of a task, but not every calendar event must be a task.
+
+For example:
+
+- A predicted crop-stage milestone is an event.
+- A weather-driven recommended irrigation window is an event or recommendation projection.
+- A farmer-created reminder is a task.
+- A confirmed soil sampling operation may be a task linked to a soil-testing workflow.
+
+Do not create a task for every displayed calendar event.
+
+## 4.1 Task ownership
+
+All task creation and mutation must use one canonical Task entity.
+
+If the project already has a task model, extend or adapt it rather than introducing a second independent task system.
+
+### Recommended task fields
+
+```text
+Task
+----
+id
+farm_id
+field_id
+created_by
+assigned_to
+title
+description
+task_type
+priority
+status
+
+scheduled_start
+scheduled_end
+due_date
+timezone
+
+source_type
+source_id
+
+linked_rotation_plan_id
+linked_analysis_id
+linked_report_id
+linked_recommendation_id
+linked_observation_id
+
+reminder_at
+reminder_status
+
+created_at
+updated_at
+completed_at
+completed_by
+
+deferred_until
+cancelled_at
+
+version
+```
+
+Use nullable relationships for genuinely optional links.
+
+Use actual foreign keys and validation where the database supports them.
+
+Store the task's timezone explicitly.
+
+Do not use the event title as a unique identifier.
+
+## 4.2 Task types
+
+Support the relevant task types:
+
+- Planting.
+- Harvesting.
+- Irrigation.
+- Soil testing.
+- Scouting.
+- Fertilizer.
+- Rotation preparation.
+- Crop review.
+- Deep Analysis review.
+- Farmer-defined task.
+- General reminder.
+
+The type list must remain compatible with the existing domain model.
+
+## 4.3 Task status
+
+Use a controlled status system:
+
+```text
+open
+scheduled
+in_progress
+completed
+deferred
+cancelled
+```
+
+Not every task type needs every status.
+
+Do not invent status transitions that the existing workflow cannot support.
+
+## 4.4 Task state transitions
+
+Valid examples:
+
+```text
+open -> in_progress
+open -> completed
+open -> deferred
+open -> cancelled
+
+scheduled -> in_progress
+scheduled -> completed
+scheduled -> deferred
+scheduled -> cancelled
+
+in_progress -> completed
+in_progress -> deferred
+```
+
+Rescheduling changes the scheduled date or due window without erasing history.
+
+A completed task must not become open just because a model recalculates a future recommendation.
+
+Reopening a task, if supported, must be an explicit audited action.
+
+---
+
+# 5. ADD TASK POPUP — COMPLETE BACKEND CONNECTION
+
+The frontend contains a prominent Add Task button.
+
+Clicking it opens the existing glassmorphic Add New Task modal.
+
+The modal should remain simple.
+
+The farmer should first be asked:
+
+1. When does this task need to happen?
+2. What needs to be done?
+
+Optional additional details can be expanded.
+
+## 5.1 Date input
+
+The selected date must be validated against the farm's timezone and scheduling rules.
+
+The frontend can provide:
+- Date picker.
+- Today shortcut.
+- Tomorrow shortcut.
+- +1 Week shortcut.
+
+The backend must receive an actual date or date/time value with the correct timezone context.
+
+Do not trust the browser's displayed date as a substitute for server-side validation.
+
+## 5.2 Task description
+
+The main text input accepts natural-language task descriptions.
+
+Examples:
+
+```text
+Irrigate Field 02
+Check wheat for pests
+Collect soil samples from Field 04
+Prepare Field 03 for planting
+Review the crop rotation plan
+```
+
+The backend should preserve the farmer's original text.
+
+It may optionally use a task-classification service to identify:
+
+- Likely task category.
+- Mentioned field.
+- Mentioned crop.
+- Suggested priority.
+- Potential connection to an existing recommendation.
+
+However, classification must never silently change the farmer's intended task.
+
+If the system cannot identify the field confidently, ask the farmer to select it.
+
+Do not guess.
+
+## 5.3 Additional details
+
+The expandable section may contain:
+
+- Farm.
+- Field.
+- Priority.
+- Reminder.
+- Start time.
+- Due time.
+- Notes.
+- Related rotation plan.
+- Related report.
+- Assignment, if the project supports multiple users.
+
+The farmer should not be forced to fill in every optional field.
+
+## 5.4 Backend task creation workflow
+
+When the farmer clicks Add Task:
+
+```text
+Frontend form submission
+        |
+        v
+POST /api/tasks
+        |
+        v
+Authentication
+        |
+        v
+Farm/field authorization
+        |
+        v
+Input validation
+        |
+        v
+Date and timezone validation
+        |
+        v
+Optional conflict detection
+        |
+        v
+Create canonical Task
+        |
+        v
+Create audit record
+        |
+        v
+Schedule optional reminder
+        |
+        v
+Publish TaskCreated event
+        |
+        v
+Refresh calendar projection
+        |
+        v
+Return saved task
+```
+
+The task must be saved to the database before the frontend displays it as successfully created.
+
+If the save fails, show an error and preserve the farmer's form inputs.
+
+Never show a fake success message.
+
+## 5.5 Duplicate prevention
+
+Prevent accidental duplicate task creation.
+
+Use an idempotency key for creation requests.
+
+A repeated request with the same idempotency key must not create multiple tasks.
+
+Also prevent automatic recommendation projection from creating duplicate user tasks.
+
+---
+
+# 6. AUTOMATIC CALENDAR SYNCHRONIZATION
+
+This is the central integration mechanism.
+
+The calendar must update automatically when information changes elsewhere in the website.
+
+It must not depend on the farmer manually refreshing the page.
+
+## 6.1 Event-driven synchronization
+
+Implement an internal domain-event mechanism using the project's existing architecture.
+
+If a message broker or event system already exists, reuse it.
+
+Otherwise, a transactional database outbox pattern is appropriate.
+
+Examples of internal domain events:
+
+```text
+FarmUpdated
+FieldUpdated
+
+RotationPlanCreated
+RotationPlanUpdated
+RotationPlanApproved
+
+CropStageRecalculated
+PlantingDateChanged
+HarvestDateChanged
+
+IrrigationRecommendationCreated
+IrrigationRecommendationUpdated
+IrrigationCompleted
+
+SoilTestScheduled
+SoilTestCompleted
+
+ScoutingScheduled
+ScoutingCompleted
+
+FertilizerRecommendationUpdated
+
+AnalysisScheduled
+AnalysisCompleted
+AnalysisMarkedStale
+
+TaskCreated
+TaskUpdated
+TaskCompleted
+TaskDeferred
+TaskRescheduled
+TaskCancelled
+
+ObservationRecorded
+AlertCreated
+AlertUpdated
+```
+
+These are event names for the integration contract, not instructions to duplicate existing domain models.
+
+## 6.2 Synchronization workflow
+
+Example: the farmer changes a planting date in the Rotation Planner.
+
+1. Rotation Planner submits its update.
+2. Backend validates the change.
+3. Rotation service saves a new plan version.
+4. Database transaction commits.
+5. A domain event is recorded in the transactional outbox.
+6. The event publisher delivers it.
+7. Calendar projection dependencies are invalidated.
+8. Affected planned events are regenerated.
+9. Relevant crop-stage and rotation calculations are requested through their owning services.
+10. Affected Deep Analysis records are marked stale where appropriate.
+11. The calendar's affected date range is refreshed.
+12. Connected browser sessions receive a synchronization notification.
+13. The farmer sees the updated calendar.
+
+The original plan must not be modified by the calendar.
+
+## 6.3 Outbox pattern
+
+Avoid publishing a domain event before the associated database transaction has successfully committed.
+
+Otherwise, the calendar could receive an update for a change that was never saved.
+
+Recommended structure:
+
+```text
+Database transaction
+    |
+    +-- Update canonical record
+    |
+    +-- Insert outbox event
+    |
+    +-- Commit
+           |
+           v
+    Background event publisher
+           |
+           v
+    Calendar projection invalidation
+```
+
+The publisher must retry failed deliveries.
+
+Consumers must be idempotent.
+
+Record event IDs and processing status to prevent repeated processing.
+
+## 6.4 Real-time frontend updates
+
+If the project supports WebSockets or Server-Sent Events, use the existing real-time mechanism.
+
+Otherwise, implement an appropriate lightweight refresh mechanism.
+
+When a relevant update arrives:
+
+- Determine the affected farm.
+- Determine the affected field.
+- Determine the affected date range.
+- Refresh only the affected calendar data.
+- Preserve the selected date.
+- Preserve the selected month.
+- Preserve unrelated filters.
+- Update Today's Activities if its contents changed.
+- Update Next 7 Days if a relevant event changed.
+
+Do not reload the entire website after every event.
+
+## 6.5 Fallback synchronization
+
+Real-time delivery is not guaranteed.
+
+Implement:
+- Refresh on browser focus.
+- Refresh after relevant frontend mutations.
+- Periodic lightweight synchronization when necessary.
+- Version or updated-at checks.
+- Recovery after temporary network disconnection.
+
+The page must always be able to retrieve a fresh calendar from the canonical backend.
+
+---
+
+# 7. CALENDAR EVENT DATA MODEL
+
+The calendar needs a unified representation for reading events from different services.
+
+This is a projection model, not an instruction to create duplicate canonical source records.
+
+Recommended structure:
+
+```json
+{
+  "event_id": "projection-source-identifier",
+  "source_type": "rotation_stage",
+  "source_id": "canonical-source-id",
+
+  "farm_id": "farm-id",
+  "farm_name": "Green Valley Farm",
+
+  "field_id": "field-02",
+  "field_name": "Field 02",
+
+  "crop_occurrence_id": "crop-occurrence-id",
+  "crop_name": "Wheat",
+
+  "title": "Wheat - Field 02",
+  "description": "Expected crop-stage milestone",
+
+  "event_type": "crop_stage",
+
+  "start_at": "2026-11-15T00:00:00",
+  "end_at": "2026-11-15T23:59:59",
+
+  "timezone": "Asia/Dubai",
+
+  "date_basis": "modelled",
+  "status": "scheduled",
+
+  "priority": null,
+
+  "evidence": [],
+  "links": {
+    "rotation_plan_id": "plan-id",
+    "report_id": null
+  },
+
+  "source_version": 3,
+  "generated_at": "2026-11-15T10:00:00Z"
+}
+```
+
+Adapt date serialization and identifiers to the existing API conventions.
+
+The projection must support:
+
+- Planned dates.
+- Scheduled dates.
+- Modelled windows.
+- Actual recorded dates.
+- Completed actions.
+- Farmer observations.
+- Alerts.
+- Review dates.
+
+## 7.1 Provenance
+
+Every event must indicate how its date was obtained.
+
+Use explicit provenance labels:
+
+| Basis | Meaning |
+|---|---|
+| Planned | Part of an approved or saved plan |
+| Scheduled | Explicitly scheduled by a farmer or workflow |
+| Modelled | Calculated estimate or prediction |
+| Observed | Recorded actual observation |
+| Completed | Reported completed operation |
+
+Do not display a modelled date as a confirmed event.
+
+Do not display a planned operation as something that has already occurred.
+
+## 7.2 Date windows
+
+Agricultural recommendations are often date windows rather than exact dates.
+
+For example:
+
+```text
+Recommended planting window:
+November 18–24
+```
+
+Do not reduce this to an invented exact date.
+
+Represent the start and end separately.
+
+The calendar may show the range visually across relevant dates.
+
+The right-side activity panel should communicate the full date window.
+
+---
+
+# 8. CALENDAR API ARCHITECTURE
+
+Use the existing API structure and naming conventions.
+
+The following are recommended endpoint contracts, not permission to introduce a competing API layer.
+
+## 8.1 Calendar month retrieval
+
+```http
+GET /api/calendar
+```
+
+Query parameters:
+
+```text
+farm_id
+field_id
+start_date
+end_date
+timezone
+event_types
+statuses
+view
+```
+
+The endpoint must:
+
+1. Authenticate the user.
+2. Resolve authorized farms.
+3. Validate the requested field.
+4. Resolve the relevant date range.
+5. Retrieve canonical source records.
+6. Normalize their projections.
+7. Apply filters.
+8. Return grouped events.
+9. Include freshness/version information.
+
+Example response:
+
+```json
+{
+  "farm_id": "farm-001",
+  "timezone": "Asia/Dubai",
+  "range": {
+    "start": "2026-11-01",
+    "end": "2026-11-30"
+  },
+  "events": [],
+  "generated_at": "2026-11-15T14:00:00Z",
+  "data_version": 42,
+  "partial_sources": []
+}
+```
+
+A partial source failure must not silently be represented as a fully successful response.
+
+Return which source was unavailable and communicate the limitation to the frontend.
+
+## 8.2 Selected-date retrieval
+
+```http
+GET /api/calendar/day?date=2026-11-15&farm_id=farm-001
+```
+
+Return:
+
+- Crops and stages.
+- Planned work.
+- Tasks due.
+- Observations.
+- Alerts.
+- All relevant event details.
+- Source IDs.
+- Date provenance.
+- Available actions.
+
+The response must be ordered chronologically, with a consistent severity/type tie-breaker.
+
+## 8.3 Upcoming activities
+
+```http
+GET /api/calendar/upcoming
+```
+
+Parameters:
+
+```text
+farm_id
+field_id
+start_date
+days=7
+timezone
+```
+
+Return upcoming events and tasks without creating new records.
+
+## 8.4 Event details
+
+```http
+GET /api/calendar/events/{event_id}
+```
+
+Resolve the projection to its original canonical source entity.
+
+Return the detailed information from the owning service.
+
+Do not use a crop name or task title as the identity of the record.
+
+## 8.5 Task creation
+
+```http
+POST /api/tasks
+```
+
+## 8.6 Task editing
+
+```http
+PATCH /api/tasks/{task_id}
+```
+
+## 8.7 Task commands
+
+```http
+POST /api/tasks/{task_id}/commands
+```
+
+Supported commands:
+
+```json
+{
+  "command": "complete",
+  "reason": "Irrigation completed",
+  "actual_at": "2026-11-15T08:30:00+04:00"
+}
+```
+
+Other commands:
+
+```text
+complete
+defer
+reschedule
+cancel
+```
+
+Use command-specific validation.
+
+## 8.8 Calendar refresh
+
+```http
+GET /api/calendar/changes?since_version=42
+```
+
+This endpoint can support incremental synchronization if compatible with the project's existing architecture.
+
+## 8.9 ICS export
+
+```http
+GET /api/calendar/export.ics
+```
+
+Support:
+- Farm scope.
+- Field scope.
+- Date range.
+- Supported event types.
+
+ICS records must have:
+- Stable UID.
+- Correct timezone.
+- Sequence/version.
+- Correct start/end.
+- Cancellation/update handling where supported.
+
+Do not expose calendar entries from unauthorized farms.
+
+---
+
+# 9. CROP-DATE AND AGRICULTURAL CALCULATION DEPENDENCIES
+
+The calendar must never become a second agricultural calculation engine.
+
+Its responsibility is to display calculated dates and explain their source.
+
+The calculation services remain responsible for the actual science.
+
+## 9.1 Crop-stage dates
+
+Crop stages may depend on:
+
+- Actual planting date.
+- Crop species and variety.
+- Crop-specific development parameters.
+- Temperature.
+- Growing-degree accumulation.
+- Climate data.
+- Existing crop-stage model.
+- Local agricultural constraints.
+
+If the application already implements growing-degree-day calculations, consume those results.
+
+Do not invent a generic fixed number of days for every crop.
+
+Where the existing model supports it, the calendar should display:
+
+- Current growth stage.
+- Expected next stage.
+- Estimated date window.
+- Calculation timestamp.
+- Relevant model version.
+- Confidence or uncertainty.
+
+If insufficient data exists, mark the estimate unavailable rather than fabricating a date.
+
+## 9.2 Growing-degree calculations
+
+Where supported by the existing crop model, the system may use:
+
+\[
+GDD = \frac{T_{\max}+T_{\min}}{2}-T_{\text{base}}
+\]
+
+The actual calculation must follow the crop model's validated temperature caps, base temperature, missing-data rules and accumulated thermal-time conventions.
+
+Do not implement this formula independently in the calendar.
+
+The calendar should consume the authoritative crop-stage service output.
+
+## 9.3 Planting and harvest windows
+
+Display the exact windows returned by the relevant rotation and crop models.
+
+If new weather or actual planting records change these windows:
+
+1. Recalculate through the owning model.
+2. Preserve the old version.
+3. Compare old and new windows.
+4. Record the reason.
+5. Determine whether approval is necessary.
+6. Publish the updated recommendation.
+7. Refresh calendar projections.
+
+## 9.4 Actual operations
+
+If a farmer records actual planting or harvest:
+
+- Save the actual date.
+- Record who entered it.
+- Preserve the original planned date.
+- Record any associated evidence.
+- Trigger relevant downstream recalculations.
+- Keep the historical record.
+
+Never allow the calendar to overwrite biological or operational history.
+
+---
+
+# 10. CONFLICT DETECTION AND WORKLOAD INTELLIGENCE
+
+The calendar should help farmers recognize scheduling conflicts.
+
+However, it must not claim to know farm capacity when the farmer has not supplied it.
+
+## 10.1 Supported conflict types
+
+The system may identify:
+
+- Several planting windows overlapping.
+- Several harvest windows overlapping.
+- Multiple operations due in the same field.
+- A task scheduled outside its permitted crop window.
+- A task conflicting with a confirmed operation.
+- A rotation transition scheduled before required preparation.
+- An outdated recommendation.
+- A task whose prerequisite is incomplete.
+
+These warnings must be based on real records and validated rules.
+
+## 10.2 Equipment and labour constraints
+
+Only calculate machine or labour conflicts if the application has actual resource records.
+
+For example, if the farmer supplies:
+
+- Two tractors.
+- One irrigation pump.
+- Four available workers.
+- Equipment availability periods.
+
+Then resource scheduling can compare the required resources with the available capacity.
+
+Without validated capacity information, the system may say:
+
+"Several field operations overlap this week."
+
+It must not claim:
+
+"Your workers are overloaded by 18 hours."
+
+Do not invent exact labor hours, equipment capacity or operation duration.
+
+## 10.3 Workload density
+
+The compact workload indicator above the calendar may summarize the distribution of supported tasks.
+
+It should be derived from real scheduled workload records.
+
+If reliable workload information is unavailable, omit the indicator rather than inventing a score.
+
+---
+
+# 11. TASK COMMANDS AND AUDIT HISTORY
+
+Every important task change must be recorded.
+
+Do not simply update the task status and discard the previous value.
+
+Create or reuse the existing audit-history mechanism.
+
+Recommended audit record:
+
+```text
+TaskAudit
+---------
+id
+task_id
+actor_id
+command
+previous_values
+new_values
+reason
+occurred_at
+timezone
+request_id
+```
+
+Examples:
+
+```text
+Task created
+Task rescheduled
+Task deferred
+Task completed
+Task cancelled
+Task reopened
+```
+
+## 11.1 Mark complete
+
+When a farmer marks an activity complete:
+
+1. Verify task ownership and authorization.
+2. Retrieve the current task version.
+3. Validate that completion is allowed.
+4. Record the actual completion timestamp.
+5. Record the completing user.
+6. Update the canonical task.
+7. Write an audit entry.
+8. Publish TaskCompleted.
+9. Refresh the calendar.
+10. Update the open-task views elsewhere in the application.
+
+Important: completion means the farmer reports that the operation happened.
+
+It does NOT prove the agronomic outcome was successful.
+
+For example, completing an irrigation task does not automatically prove that soil moisture is adequate.
+
+## 11.2 Defer
+
+Deferring must require a new date or deferral reason where appropriate.
+
+The backend must:
+- Record the old due date.
+- Save the new due date.
+- Record the actor.
+- Record the reason.
+- Create an audit event.
+- Recalculate relevant scheduling conflicts.
+- Refresh the calendar.
+
+## 11.3 Reschedule
+
+Rescheduling changes the task's scheduled date/window.
+
+It must not automatically change the crop's biological stage.
+
+If the rescheduled task is linked to a crop operation, invoke the owning service's validation rules.
+
+## 11.4 Cancel
+
+Cancellation must preserve history.
+
+Do not delete the task.
+
+If the task originated from an active recommendation, cancellation must not automatically cancel the underlying recommendation unless the owning subsystem explicitly supports and authorizes that operation.
+
+---
+
+# 12. RIGHT-HAND TODAY'S ACTIVITIES PANEL — BACKEND LOGIC
+
+The right-hand panel is not a manually populated static list.
+
+It is a filtered, grouped and prioritized projection of the selected date.
+
+It should contain the following sections:
+
+## 12.1 Crops and stages
+
+Retrieve active crop-stage information relevant to the selected date.
+
+Display:
+- Crop.
+- Field.
+- Growth stage.
+- Stage basis.
+- Relevant status.
+- Link to crop/rotation details.
+
+## 12.2 Planned work
+
+Display upcoming operations and recommendations that apply to the selected date.
+
+Examples:
+- Irrigation.
+- Rotation preparation.
+- Fertilizer application.
+- Planting preparation.
+
+Each row must preserve whether it is a planned action or a modelled recommendation.
+
+## 12.3 Tasks due
+
+Retrieve canonical tasks whose due window includes the selected date.
+
+Display:
+- Title.
+- Field.
+- Priority.
+- Status.
+- Due time/window.
+- Action controls.
+
+Completed tasks should not appear as open work.
+
+They may be shown in a separate completed section or historical detail view.
+
+## 12.4 Observations
+
+Retrieve farmer-recorded observations relevant to the selected date.
+
+Examples:
+- Pest observation.
+- Crop condition observation.
+- Soil condition record.
+- Actual field operation.
+
+Do not represent a historical observation as a future task.
+
+## 12.5 Next 7 Days
+
+Calculate the seven-day window using the selected farm's timezone.
+
+Return actual upcoming tasks and relevant projected milestones.
+
+Sort chronologically.
+
+Use a clearly defined start and end boundary.
+
+Do not accidentally include the same event twice if it is already represented through more than one linked source.
+
+## 12.6 Empty date behaviour
+
+If the selected date has no activities:
+
+Display an honest empty state:
+
+"No activities scheduled for this date."
+
+Offer:
+"Add a task"
+
+Do not insert artificial events just to make the panel look populated.
+
+---
+
+# 13. MONTH, AGENDA AND TIMELINE VIEWS
+
+The backend should support the different calendar views through the same event-projection architecture.
+
+## 13.1 Month view
+
+Retrieve events covering the full displayed calendar range.
+
+Include the preceding and following dates needed to render complete weeks.
+
+Respect the selected farm's locale and timezone.
+
+## 13.2 Agenda view
+
+Return upcoming events in chronological order.
+
+Support a one-to-two-week window and allow the user to extend it.
+
+## 13.3 Timeline view
+
+Return supported events across the selected period with:
+- Start date.
+- End date.
+- Farm.
+- Field.
+- Event type.
+- Provenance.
+- Status.
+
+Do not invent start/end durations for events that only have one known date.
+
+## 13.4 Multi-field overlay
+
+Support multiple field events on the same calendar.
+
+Different farms and fields must remain distinguishable even when the crop name and date are identical.
+
+Always display farm/field labels.
+
+---
+
+# 14. TIMEZONE AND DATE HANDLING
+
+This must be implemented carefully.
+
+FIELD SHIFT may support farms in different locations.
+
+A farmer may also operate multiple farms in different timezones.
+
+Never assume that the server timezone, browser timezone and farm timezone are identical.
+
+## 14.1 Canonical rules
+
+- Store actual timestamps as timezone-aware instants.
+- Store date-only agricultural values as dates when they represent calendar dates rather than instants.
+- Preserve the IANA timezone associated with the farm or relevant operation.
+- Convert dates for presentation using the correct farm timezone.
+- Do not parse date-only strings as UTC timestamps.
+- Handle daylight-saving transitions where applicable.
+- Validate that start/end windows are logically ordered.
+
+For Green Valley Farm in the supplied example, use the actual saved farm timezone. Do not hardcode Asia/Dubai merely because the example is shown there.
+
+## 14.2 Today button
+
+The Today button must use the actual current date in the selected farm's timezone.
+
+If the user selects a different farm, the relevant local date may differ.
+
+The Today action must preserve:
+- Selected farm.
+- Selected field.
+- Event-type filters.
+- Other unrelated user preferences.
+
+## 14.3 Testing
+
+Test:
+- Farms in different timezones.
+- Midnight boundaries.
+- Daylight-saving transitions.
+- Date-only events.
+- Timed reminders.
+- Cross-midnight operations.
+- ICS timezone serialization.
+
+---
+
+# 15. DATA FRESHNESS, CACHING AND STALE INFORMATION
+
+The calendar combines multiple changing information sources.
+
+The backend must communicate whether information is current.
+
+## 15.1 Source freshness
+
+For each source, track:
+- Last successful update.
+- Last retrieval time.
+- Source version.
+- Calculation version.
+- Freshness status.
+- Any retrieval error.
+
+## 15.2 Cache design
+
+Cache calendar projections where useful.
+
+Cache keys must include:
+- User authorization scope.
+- Farm ID.
+- Field filter.
+- Date range.
+- Relevant event filters.
+- Projection version.
+
+Never allow one user's cached farm information to be returned to another user.
+
+Invalidate affected cache entries when relevant domain events arrive.
+
+Do not cache sensitive data across authorization boundaries.
+
+## 15.3 Stale information
+
+If weather data is stale:
+
+- Do not label a recommendation as newly updated.
+- Show its calculation timestamp.
+- Communicate that a refresh may be required.
+
+If a Deep Analysis report is stale:
+
+- Keep its historical result accessible.
+- Mark it stale.
+- Do not represent it as current evidence.
+
+If one source fails:
+
+- Show the available sources.
+- Identify the missing source.
+- Allow retry.
+- Avoid silently displaying incomplete information as complete.
+
+---
+
+# 16. FRONTEND-BACKEND DATA FLOW
+
+The frontend must use real API responses.
+
+Do not hardcode the November 2026 events displayed in the design screenshot.
+
+The screenshot is a visual reference only.
+
+## 16.1 Initial page load
+
+```text
+Open Calendar & Actions
+        |
+        v
+Authenticate user
+        |
+        v
+Load farm and field context
+        |
+        v
+Resolve selected farm timezone
+        |
+        v
+Load month calendar
+        |
+        +------> Load selected-date activities
+        |
+        +------> Load upcoming seven days
+        |
+        +------> Load source freshness metadata
+        |
+        v
+Render calendar and right-hand panel
+```
+
+Use parallel requests when safe and appropriate.
+
+Do not block the whole interface while a nonessential source loads.
+
+## 16.2 Month navigation
+
+When the user clicks the previous or next arrow:
+
+1. Update displayed month.
+2. Calculate the required calendar date range.
+3. Request the new range from the backend.
+4. Render returned events.
+5. Preserve the farm and field context.
+6. Handle loading and errors.
+
+Do not fetch the entire historical farm database for every month change.
+
+## 16.3 Date selection
+
+When the user clicks November 15:
+
+1. Update selectedDate.
+2. Preserve the displayed month.
+3. Request or select the relevant daily projection.
+4. Update Today's Activities.
+5. Update Next 7 Days according to the selected date, if the panel is intended to follow the selection.
+6. Highlight the selected calendar cell.
+
+The actual current date indicator must remain independent of the selected date.
+
+## 16.4 Add task
+
+When a task is saved:
+
+1. Submit to the task API.
+2. Wait for backend confirmation.
+3. Insert the returned canonical task projection.
+4. Update the calendar date cell.
+5. Update the selected-date panel if applicable.
+6. Update Next 7 Days if applicable.
+7. Close the modal only after successful persistence.
+8. Display a success notification.
+
+If unsuccessful, retain the form data and show the actual error.
+
+## 16.5 Complete task
+
+When a task is completed:
+
+1. Submit the task command.
+2. Wait for canonical status confirmation.
+3. Update the activity list.
+4. Update the calendar event.
+5. Remove it from the open-task list.
+6. Preserve it in history.
+7. Reflect the change in other pages through the shared task system.
+
+---
+
+# 17. DATABASE AND DATA INTEGRITY REQUIREMENTS
+
+Inspect the existing database before adding tables.
+
+Only add genuinely missing structures.
+
+Potential additional structures include:
+
+- Calendar projection metadata.
+- Task audit records, if no equivalent exists.
+- Domain event outbox, if no equivalent exists.
+- Reminder delivery records, if no equivalent exists.
+- Calendar synchronization cursors, if needed.
+
+Do not create a new copy of:
+- Farms.
+- Fields.
+- Crop records.
+- Rotation plans.
+- Irrigation records.
+- Soil reports.
+- Scouting records.
+- Tasks.
+
+## 17.1 Database constraints
+
+Implement:
+- Foreign keys.
+- Appropriate indexes.
+- Unique idempotency keys.
+- Valid status constraints.
+- Valid date windows.
+- Version control.
+- Authorization checks.
+
+Useful indexes may include:
+
+```text
+(farm_id, start_date)
+(field_id, start_date)
+(task_id, status)
+(source_type, source_id)
+(user_id, idempotency_key)
+```
+
+Adapt the exact indexes to the existing schema and query patterns.
+
+## 17.2 Transactions
+
+Task creation, updates and important state changes should use database transactions.
+
+An audit record must not be missing because an update succeeded while the audit write failed.
+
+For domain-event publication, use the transactional outbox approach where supported.
+
+---
+
+# 18. NOTIFICATIONS AND REMINDERS
+
+The calendar may offer reminders for user-created tasks.
+
+Reminder scheduling must be based on actual task data.
+
+Support:
+- Reminder time.
+- Reminder timezone.
+- Delivery status.
+- Retry state.
+- Delivery timestamp.
+
+Do not show Google Calendar, Outlook or other external synchronization controls unless the integrations actually exist.
+
+Do not claim a reminder was delivered merely because it was scheduled.
+
+Keep notification delivery separate from calendar event creation.
+
+If a task is rescheduled, update its pending reminder.
+
+If it is cancelled or completed, prevent obsolete pending reminders from being delivered where possible.
+
+---
+
+# 19. SECURITY AND PRIVACY
+
+The calendar can expose highly detailed farm operational information.
+
+Every endpoint must enforce authorization.
+
+## 19.1 Farm access
+
+A user may only retrieve farms and fields they are authorized to access.
+
+Never trust a farm ID supplied by the frontend without verifying permissions.
+
+## 19.2 Event access
+
+Resolving an event ID must also verify authorization to the underlying canonical source record.
+
+Do not expose another user's report, observation, field or task through a guessed event identifier.
+
+## 19.3 Sensitive information
+
+Do not expose:
+- Internal credentials.
+- API keys.
+- Database connection strings.
+- Other users' farm records.
+- Unnecessary personal information.
+- Private evidence URLs without access checks.
+
+Weather-provider keys and other secrets must remain server-side.
+
+## 19.4 Auditability
+
+Record who:
+- Created a task.
+- Edited a task.
+- Completed an operation.
+- Deferred an operation.
+- Changed a schedule.
+- Changed an approved plan.
+
+Preserve the original records and meaningful historical changes.
+
+---
+
+# 20. LOADING, ERROR AND EMPTY STATES
+
+The backend and frontend must support realistic operational conditions.
+
+The calendar must not display fabricated content during loading.
+
+Implement the following states.
+
+### Initial loading
+
+Display the existing calendar layout with subtle skeleton placeholders.
+
+The right panel should have skeleton activity rows.
+
+Do not show made-up activities while real data is loading.
+
+### No farm selected
+
+Display a clear prompt to select a farm.
+
+### No activities
+
+Display an honest empty state.
+
+### Partial source failure
+
+Display available records and identify which information source could not be loaded.
+
+### Network failure
+
+Show a retry option and preserve the last valid view with an explicit stale-data indicator if appropriate.
+
+### Outdated recommendation
+
+Display its previous status and explain that the underlying source needs refreshing.
+
+### Permission error
+
+Do not show private event details.
+
+### Invalid task date
+
+Display a field-specific validation message.
+
+### Save failure
+
+Keep the Add Task modal open with the farmer's original entries.
+
+### Successful save
+
+Show a success confirmation only after the backend confirms persistence.
+
+---
+
+# 21. API RESPONSE AND EVENT CONSISTENCY
+
+All backend responses must use a consistent structure.
+
+Recommended error response:
+
+```json
+{
+  "error": {
+    "code": "INVALID_TASK_DATE",
+    "message": "The selected task date is invalid.",
+    "details": {}
+  }
+}
+```
+
+Recommended synchronization notification:
+
+```json
+{
+  "event": "CalendarProjectionUpdated",
+  "farm_id": "farm-001",
+  "affected_fields": ["field-02"],
+  "affected_range": {
+    "start": "2026-11-15",
+    "end": "2026-12-15"
+  },
+  "version": 43
+}
+```
+
+The frontend should use these notifications to refresh affected data.
+
+It should not assume every notification represents a new event. It may simply indicate that a projection needs to be refreshed.
+
+---
+
+# 22. PERFORMANCE REQUIREMENTS
+
+The calendar must remain fast even when a farm has many fields and years of historical records.
+
+Implement:
+
+- Date-range queries.
+- Indexed source lookups.
+- Pagination for large agenda results.
+- Incremental synchronization where appropriate.
+- Projection caching.
+- Batch retrieval from source services.
+- Avoidance of N+1 database queries.
+- Lazy loading of detailed evidence.
+- Efficient event grouping.
+
+Do not load every historical farm event just to render the current month.
+
+The calendar should retrieve the selected month and only the additional data needed for the visible upcoming section.
+
+---
+
+# 23. ACCEPTANCE TESTS
+
+Do not declare the backend finished until these scenarios pass.
+
+## A. Basic calendar
+
+1. Calendar loads using actual farm data.
+2. Correct farm is selected.
+3. Correct timezone is used.
+4. Month arrows retrieve the correct dates.
+5. Month/year picker changes the requested range.
+6. Today returns to the current local farm date.
+7. Date selection updates the right panel.
+8. Events are correctly ordered.
+
+## B. Rotation synchronization
+
+1. Create a rotation plan.
+2. Confirm that relevant milestones appear.
+3. Change the planting window.
+4. Confirm that dependent planned events update.
+5. Confirm that the old version remains auditable.
+6. Record actual planting.
+7. Confirm planned and actual dates remain distinct.
+8. Confirm completed historical operations do not disappear.
+
+## C. Weather synchronization
+
+1. Retrieve valid farm weather.
+2. Trigger an existing weather-dependent calculation.
+3. Confirm that updated recommendations reach the calendar.
+4. Confirm that the old recommendation is no longer shown as current.
+5. Simulate weather-provider failure.
+6. Confirm that missing weather is reported honestly.
+
+## D. Irrigation
+
+1. Create an irrigation recommendation.
+2. Confirm that the calendar displays it.
+3. Click Start.
+4. Execute the actual irrigation workflow.
+5. Save the irrigation record.
+6. Confirm that the calendar updates.
+7. Confirm that a recommendation alone is not treated as completed irrigation.
+
+## E. Soil and scouting
+
+1. Schedule a soil test.
+2. Confirm its appearance.
+3. Complete the soil test.
+4. Confirm that its report is linked.
+5. Schedule scouting.
+6. Record an observation.
+7. Confirm that the observation is displayed as actual information.
+
+## F. Tasks
+
+1. Create a task through Add Task.
+2. Confirm that it appears on the correct date.
+3. Refresh the page.
+4. Confirm that the task persists.
+5. Complete it.
+6. Confirm that it leaves the open queue.
+7. Confirm that its audit history exists.
+8. Defer it.
+9. Confirm the updated date.
+10. Reschedule it.
+11. Confirm that no duplicate task is created.
+12. Cancel it and confirm that history remains.
+
+## G. Multiple farms
+
+1. Select All Farms.
+2. Load two farms with activities on the same date.
+3. Confirm that both appear separately.
+4. Confirm that each retains its own timezone.
+5. Change to one farm.
+6. Confirm that the other farm's events disappear from the view.
+
+## H. Data integrity
+
+1. Simulate repeated event delivery.
+2. Confirm that no duplicate projections are created.
+3. Simulate repeated task submission with one idempotency key.
+4. Confirm that only one task exists.
+5. Simulate a database failure.
+6. Confirm that the event and audit records remain consistent.
+7. Confirm that a failed event delivery is retried.
+
+## I. Calendar export
+
+1. Export a month.
+2. Verify event UIDs.
+3. Verify timezone.
+4. Verify start and end windows.
+5. Update an event.
+6. Verify version handling.
+7. Cancel an event where supported.
+8. Confirm that the export does not include unauthorized records.
+
+## J. Frontend
+
+1. Verify month navigation.
+2. Verify selected-date highlighting.
+3. Verify the Today indicator.
+4. Verify activity-panel refresh.
+5. Verify Add Task modal.
+6. Verify loading states.
+7. Verify empty states.
+8. Verify partial-source failure.
+9. Verify mobile layout.
+10. Verify keyboard navigation and accessible labels.
+
+---
+
+# 24. IMPLEMENTATION PHASES
+
+Build the system in this order.
+
+### Phase 1 — Codebase audit
+
+Inspect the entire application and produce the dependency map.
+
+Identify existing services and canonical entities.
+
+List missing dependencies.
+
+Do not write speculative replacement services.
+
+### Phase 2 — Backend integration layer
+
+Build or adapt the calendar projection service.
+
+Connect the canonical farm, field, rotation, irrigation, soil, scouting, fertilizer, analysis, task and observation sources.
+
+### Phase 3 — Task system
+
+Implement canonical task creation and editing, commands, audit history, validation and reminder integration.
+
+Connect the Add Task modal to the actual backend.
+
+### Phase 4 — Agricultural date projection
+
+Connect crop stages, planting windows, harvest windows and rotation transitions.
+
+Preserve planned versus actual information.
+
+### Phase 5 — Synchronization infrastructure
+
+Implement domain events, outbox processing where needed, projection invalidation and incremental updates.
+
+### Phase 6 — Calendar APIs
+
+Implement month, selected-day, upcoming, detail, mutation and export endpoints using the project's existing API conventions.
+
+### Phase 7 — Frontend integration
+
+Connect the existing calendar design to the real APIs.
+
+Preserve the designed layout and visual hierarchy.
+
+### Phase 8 — Testing
+
+Run the acceptance tests and fix actual defects.
+
+### Phase 9 — Release report
+
+Document:
+- Files changed.
+- Database migrations.
+- New and reused services.
+- API endpoints.
+- Integrations completed.
+- Integrations blocked.
+- Calculations reused.
+- Tests passed.
+- Known limitations.
+
+---
+
+# 25. FINAL NON-NEGOTIABLE RULES
+
+1. The calendar is an integrated projection, not an independent source of agricultural truth.
+2. The Rotation Planner remains responsible for rotation plans and their calculations.
+3. The irrigation subsystem remains responsible for irrigation recommendations and execution records.
+4. Soil testing remains responsible for soil records and reports.
+5. Scouting remains responsible for observations and findings.
+6. Deep Analysis remains responsible for analytical calculations and reports.
+7. Farm Data remains the canonical source for farms and fields.
+8. Tasks use one canonical task entity throughout the website.
+9. All important mutations preserve audit history.
+10. Planned, modelled and actual dates must remain distinguishable.
+11. Modelled date windows must never be presented as guaranteed dates.
+12. Updated weather must not silently overwrite farmer-confirmed operations.
+13. Completed actual operations must not disappear when plans change.
+14. No duplicate tasks should be created by calendar projections.
+15. All date calculations must respect the correct farm timezone.
+16. No unverified labour or equipment capacity may be invented.
+17. No dummy activities or hardcoded screenshot data may appear in production.
+18. All event links must resolve to the exact canonical source record.
+19. Failed integrations must be reported honestly.
+20. The calendar must stay synchronized with the rest of FIELD SHIFT without requiring manual refreshes.
+
+# FINAL DELIVERABLE
+
+Deliver a fully functioning Calendar & Actions page backed by the actual FIELD SHIFT data architecture.
+
+The finished page must:
+
+- Display real crop and rotation milestones.
+- Display valid irrigation and other operational recommendations.
+- Display farmer-created tasks.
+- Display actual completed operations.
+- Display observations and relevant review dates.
+- Automatically reflect changes made elsewhere in the website.
+- Support task creation, completion, deferral, rescheduling and cancellation.
+- Preserve provenance and historical records.
+- Provide reliable selected-day and upcoming activity views.
+- Support farm and field filtering.
+- Maintain accurate timezone behaviour.
+- Remain performant and secure.
+
+The frontend should retain the supplied dark glassmorphic Calendar & Actions design.
+
+The backend should make that design genuinely intelligent, data-driven, synchronized and operational.
+
+**Do not stop when the page looks correct. Stop only when its real data connections, persistence, calculations, state transitions, synchronization and acceptance tests work.**

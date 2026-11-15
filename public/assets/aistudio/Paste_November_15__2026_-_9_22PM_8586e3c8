@@ -1,0 +1,1267 @@
+FIELD SHIFT — Calendar & Actions
+Complete pixel-level UI/UX and frontend implementation specification
+This specification describes the supplied screenshot as a web-development blueprint. The objective is to recreate the interface as closely as possible from scratch, including its positioning, dimensions, spacing, typography, colours, glass effects, borders, shadows, calendar grid, event chips, activity cards, icons, and responsive behaviour.
+
+Important: The top-right profile icon is completely excluded from this specification. Do not implement it or reserve space for it.
+
+1. Overall page composition
+
+
+
+
+
+
+
+
+
+
+The screenshot has a resolution of 1364 × 1126 pixels.
+
+It uses a full-screen, dark agricultural dashboard aesthetic. The overall appearance combines:
+- Dark translucent glassmorphism.
+- A realistic agricultural landscape background.
+- Bright emerald-green interactive elements.
+- Deep blue-green surfaces.
+- Fine cyan-tinted borders.
+- White and light-grey typography.
+- Colour-coded agricultural activity indicators.
+The page is composed of three primary horizontal sections:
+1. Page header: title, subtitle, farm selector and weather information.
+2. Calendar toolbar: month navigation, month/year selector, Today button and Add Task button.
+3. Main workspace: large monthly calendar on the left and Today's Activities panel on the right.
+The most important layout decision is the two-column workspace.
+Workspace proportions
+
+
+
+Calendar · 70.5%
+
+Activities · 29.5%
+
+Approximate content widths: calendar 910px, right panel 383px, gap 22px.
+
+The calendar is the dominant component. The right panel is a secondary information surface that remains visually prominent without competing with the calendar.
+
+2. Background and visual atmosphere
+2.1 Full-page background
+The entire screen uses one continuous agricultural landscape image.
+
+It should be implemented as a fixed background layer rather than an image embedded inside individual cards.
+
+Suggested implementation:
+body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2, 16, 19, 0.82),
+            rgba(2, 22, 25, 0.48) 60%,
+            rgba(2, 15, 20, 0.30)
+        ),
+        linear-gradient(
+            180deg,
+            rgba(2, 14, 19, 0.15),
+            rgba(2, 17, 19, 0.55)
+        ),
+        url("/assets/farm-landscape.jpg");
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+The photograph should contain:
+- A wide agricultural field.
+- Green crops extending across the lower portion.
+- A distant horizon.
+- Agricultural vegetation and trees.
+- A partly cloudy sky.
+- A warm sunset or sunrise on the right.
+- Deep green vegetation and blue-grey atmospheric shadows.
+The sky is most visible behind the upper header, while the farmland becomes more visible through the lower gaps between components.
+2.2 Darkening overlay
+The image must never compete with the interface.
+
+Apply a dark overlay with approximately:
+- 40–55% darkness across the centre.
+- 55–70% darkness around the lower portion.
+- Slightly less darkness near the upper-right sunset.
+This preserves the photographic atmosphere without compromising text readability.
+2.3 Background positioning
+Use:
+background-size: cover;
+background-position: center center;
+
+
+The background should not scroll independently from the page on desktop.
+
+3. Page header
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+Visual reference for the header styling. The actual implementation should follow the supplied screenshot's proportions.
+The header occupies approximately the first 150 pixels of the screenshot.
+
+It is positioned at the top of the main content and stretches across the available width.
+3.1 Header positioning
+Approximate measurements:
+Element	Position
+Left content margin	26px
+Top margin	32px
+Calendar icon	64 × 68px
+Main heading	36–40px
+Subtitle	21px
+Farm selector	235 × 67px
+Weather card	190 × 67px
+
+3.2 Left title group
+The left side contains two elements:
+- A luminous green calendar icon.
+- The heading and subtitle.
+The calendar icon is approximately 64px square.
+
+It should use an outlined calendar glyph with:
+- Bright emerald-green stroke.
+- Rounded corners.
+- Two upper binding rings.
+- A rectangular calendar body.
+- Six small circular date indicators.
+Use Lucide's calendar-days icon, preferably at 64px with a 2.2px stroke.
+
+The heading reads:
+
+Calendar & Actions
+
+Styling:
+.page-title {
+    font-size: 40px;
+    font-weight: 750;
+    color: #F5F8FA;
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+}
+
+
+Directly underneath is the subtitle:
+
+"Plan, track and manage your farm activities"
+
+Styling:
+.page-subtitle {
+    font-size: 20px;
+    color: #D1DCE0;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+
+3.3 Farm selector
+Positioned towards the upper-right.
+
+Approximate dimensions: 235 × 67px.
+
+It is a rounded rectangular glass component.
+
+It contains:
+- Green home/farm icon on the left.
+- Farm name: Green Valley Farm.
+- Downward chevron on the right.
+The component must be interactive.
+
+Clicking it should open a dropdown allowing the farmer to switch between their registered farms.
+
+Styling:
+.farm-selector {
+    height: 67px;
+    padding: 0 20px;
+    border-radius: 23px;
+
+    background: rgba(15, 33, 43, 0.76);
+    border: 1px solid rgba(165, 205, 220, 0.24);
+
+    backdrop-filter: blur(18px);
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+
+3.4 Weather information card
+Directly to the right of the farm selector.
+
+Approximate dimensions: 190 × 67px.
+
+It displays:
+- Large yellow sun icon.
+- 24°C in bold white text.
+- Clear · 18 km/h underneath.
+The weather widget should use live weather information from the selected farm's location, not hardcoded values.
+
+The sun icon is approximately 44px.
+
+The temperature should be approximately 24px bold.
+
+The description should be approximately 13px.
+
+The weather card uses a dark translucent background with a rounded border and subtle backdrop blur.
+
+4. Calendar toolbar
+
+
+
+
+
+
+
+
+dribbble.com
+
+
+This is a separate horizontal glass panel positioned immediately underneath the header.
+4.1 Exact placement
+Approximate screenshot coordinates:
+- Left: 25px
+- Top: 181px
+- Width: 1315px
+- Height: 88px
+The toolbar has a radius of approximately 22px.
+
+It uses a translucent dark blue-green surface.
+.calendar-toolbar {
+    width: 100%;
+    height: 88px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 8px 0 10px;
+    border-radius: 22px;
+
+    background: rgba(12, 31, 38, 0.78);
+    border: 1px solid rgba(140, 190, 205, 0.18);
+
+    backdrop-filter: blur(20px);
+}
+
+
+It contains four logical groups.
+4.2 Previous and next month navigation
+On the far left is a single dark rounded container.
+
+It contains two independent arrow buttons:
+- Left arrow: previous month.
+- Right arrow: next month.
+Approximate combined dimensions: 150 × 65px.
+
+Each button should occupy approximately 65–70px.
+
+The arrow icons are white, approximately 25px.
+
+Use chevron-left and chevron-right.
+
+The buttons must have:
+- Transparent or dark glass backgrounds.
+- Subtle hover highlighting.
+- Rounded corners.
+- A smooth transition.
+When clicked, the displayed month must change while keeping the rest of the page state intact.
+4.3 Month and year selector
+This is one of the most important components.
+
+It appears immediately to the right of the arrow controls.
+
+It contains:
+1. A green calendar icon.
+2. The displayed month and year.
+3. A downward chevron.
+The text reads:
+
+November 2026
+
+Approximate dimensions: 330 × 65px.
+
+The month and year should be treated as one interactive control.
+
+On clicking it, open a dropdown or popover with:
+- Month selection.
+- Year selection.
+- A clearly visible current selection.
+- A convenient way to jump to another month.
+- A way to jump to another year.
+Do not make the farmer click the next-month arrow twelve times to reach another year.
+
+Use a two-part selection layout, with months displayed in a 3 × 4 grid and a year selector.
+4.4 Today button
+Located around the centre-right of the toolbar.
+
+Approximate dimensions: 160 × 64px.
+
+It contains:
+- A white target/crosshair icon.
+- Text: Today.
+Use a dark glass button with a light cyan border.
+
+On click, return to the actual current date in the selected farm's timezone.
+
+Importantly, clicking Today should not reset unrelated farm or field filters.
+4.5 Add Task button
+Primary action
+Located at the far right.
+
+Approximate dimensions: 235 × 64px.
+
+This is the brightest button on the entire page.
+
+It has:
+- Bright emerald-green gradient.
+- Large plus icon.
+- Text: Add Task.
+- Dark green or near-black text.
+- Strong luminous green shadow.
+- Rounded corners around 19px.
+.add-task-button {
+    height: 64px;
+    min-width: 235px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    border: none;
+    border-radius: 19px;
+
+    background: linear-gradient(
+        110deg,
+        #39F5A0,
+        #12D77A
+    );
+
+    color: #032719;
+    font-size: 21px;
+    font-weight: 750;
+
+    box-shadow:
+        0 0 20px rgba(25, 239, 133, 0.32),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+
+On hover, the button should brighten slightly and move upwards by approximately 2px.
+
+On click, it should open the Add New Task modal.
+
+5. Main workspace layout
+This is the most important section of the entire page.
+
+It starts at approximately y = 287px.
+
+The main workspace consists of two adjacent panels.
+Monthly Calendar
+S
+
+
+M
+
+
+T
+
+
+W
+
+
+T
+
+
+F
+
+
+S
+
+
+1
+
+
+2
+
+
+3
+
+
+4
+
+
+5
+
+
+6
+
+
+7
+
+
+8
+
+
+9
+
+
+10
+
+
+11
+
+
+12
+
+
+13
+
+
+14
+
+
+15
+
+
+16
+
+
+17
+
+
+18
+
+
+19
+
+
+20
+
+
+21
+
+
+22
+
+
+23
+
+
+24
+
+
+25
+
+
+26
+
+
+27
+
+
+28
+
+
+
+
+Today's Activities
+
+Wheat · Field 01
+
+
+Irrigation · Field 02
+
+
+Scouting · Field 01
+
+
+Soil Test · Field 04
+
+
+
+Structural illustration of the two-column layout, not a replacement for the screenshot's detailed styling.
+Approximate geometry:
+Component	Width	Height
+Calendar	910px	752px
+Gap	22px	—
+Activity panel	383px	755px
+
+Both cards have matching top alignment and similar corner radii.
+
+The calendar should never be compressed into a small widget.
+
+6. Monthly calendar card
+6.1 Container
+Approximate position:
+- X: 25px
+- Y: 287px
+- Width: 910px
+- Height: 752px
+The card has:
+.calendar-card {
+    border-radius: 23px;
+    overflow: hidden;
+
+    background: rgba(8, 27, 31, 0.80);
+
+    border: 1px solid rgba(136, 184, 194, 0.20);
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+
+The calendar has seven equally sized columns.
+
+The days of the week are displayed in the following order:
+Sunday	Monday	Tuesday	Wednesday	Thursday	Friday	Saturday
+
+This is a Sunday-first calendar.
+6.2 Day header
+The weekday header occupies approximately 67px vertically.
+
+Each weekday has equal width:
+\[
+910 / 7 = 130\text{px}
+\]
+
+The text is centred horizontally and vertically.
+
+Typography:
+- 20px.
+- Semibold.
+- White-grey.
+- Approximately #DCE7EA.
+The header background is slightly darker than the day cells.
+
+A subtle horizontal border separates it from the dates.
+6.3 Calendar grid
+The calendar grid contains five horizontal week rows for November 2026.
+
+November 2026 begins on Sunday and ends on Monday.
+
+The rows are:
+Week	Dates
+1	1–7
+2	8–14
+3	15–21
+4	22–28
+5	29–30
+
+Each cell has an equal width of approximately 130px.
+
+The five rows have heights around 138px.
+
+The grid uses CSS Grid rather than manually positioning each date.
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(138px, 1fr));
+}
+
+
+Each date cell has:
+- A subtle vertical border.
+- A subtle horizontal border.
+- A transparent dark background.
+- Approximately 12–14px internal padding.
+- A date number aligned to the top-left.
+.calendar-day {
+    position: relative;
+    min-width: 0;
+    padding: 12px 12px 8px;
+
+    border-right: 1px solid rgba(116, 163, 173, 0.19);
+    border-bottom: 1px solid rgba(116, 163, 173, 0.19);
+
+    background: rgba(8, 28, 32, 0.30);
+}
+
+
+Avoid bright grid lines.
+
+The boundaries should be visible but understated.
+6.4 Date numbers
+Each date number is positioned approximately 12px from the left and 12px from the top of its cell.
+
+Typography:
+.calendar-date {
+    font-size: 20px;
+    font-weight: 600;
+    color: #EDF3F5;
+}
+
+
+The numbers should not be oversized.
+
+They are secondary to the crop/event chips.
+
+7. Event chips inside the calendar
+This is the most visually informative part of the calendar.
+
+Events appear directly underneath the date number.
+
+They are compact rectangular chips with rounded corners.
+
+Each event contains:
+- An icon.
+- An event title.
+- A field identifier.
+The icon is positioned on the left, with text immediately to the right.
+
+The chip uses a slightly brighter tinted background based on its category.
+7.1 Event category palette
+
+
+Planting / crop growth
+
+Green leaf icon
+
+#35D96D
+
+
+
+Irrigation
+
+Blue water drop
+
+#26B9F4
+
+
+
+Soil testing
+
+Orange flask
+
+#F49A31
+
+
+
+Scouting
+
+Purple binoculars
+
+#B46BFA
+
+
+
+Harvest
+
+Golden wheat
+
+#F4AE24
+
+
+
+Rotation preparation
+
+Green circular arrows
+
+#43D95A
+
+
+7.2 Planting and crop growth
+Example:
+
+Wheat - Field 01
+
+Appearance:
+- Dark forest-green background.
+- Bright green leaf icon.
+- White text.
+- Approximately 135px wide.
+- Approximately 58px tall.
+7.3 Irrigation
+Example:
+
+Irrigation - Field 02
+
+Appearance:
+- Dark blue background.
+- Bright blue water-drop icon.
+- White text.
+- Two-line label.
+7.4 Soil test
+Example:
+
+Soil Test - Field 04
+
+Appearance:
+- Dark brown-orange background.
+- Orange laboratory flask.
+- White text.
+7.5 Scouting
+Example:
+
+Scouting - Field 01
+
+Appearance:
+- Dark purple background.
+- Purple binocular icon.
+- White text.
+7.6 Rotation preparation
+Example:
+
+Rotation Prep - Field 02
+
+Appearance:
+- Dark green background.
+- Bright green circular arrows.
+- White text.
+7.7 Harvest window
+Example:
+
+Harvest Window - Field 03
+
+Appearance:
+- Dark amber-brown background.
+- Yellow wheat icon.
+- White text.
+7.8 Event chip dimensions
+Use approximately:
+.event-chip {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    width: fit-content;
+    max-width: 100%;
+    min-height: 58px;
+
+    padding: 7px 9px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+    line-height: 1.25;
+    font-weight: 500;
+}
+
+
+The icon should be approximately 25–28px.
+
+Text should wrap into two lines when necessary.
+
+Never allow text to escape into an adjacent date cell.
+7.9 Multiple events on the same day
+November 15 contains:
+- Wheat · Field 01
+- Irrigation · Field 02
+- Two additional activities.
+The calendar only displays two events directly.
+
+Below these, show:
+
++2 more
+
+This is an important usability detail.
+
+Do not attempt to squeeze every event into a small date cell.
+
+Clicking +2 more should open the selected date's full activity list.
+
+8. Selected date — November 15
+This is the visually highlighted date.
+
+It is the current day in the screenshot.
+
+The cell has a bright emerald-green outline.
+8.1 Selected cell styling
+.calendar-day.today {
+    border: 2px solid #20F69A;
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 111, 73, 0.48),
+            rgba(5, 53, 49, 0.55)
+        );
+
+    box-shadow:
+        0 0 14px rgba(20, 255, 147, 0.20),
+        inset 0 0 12px rgba(20, 255, 147, 0.08);
+}
+
+
+The outline must be clearly visible.
+8.2 Today label
+A small bright-green pill appears in the upper-right portion of the selected cell.
+
+It reads:
+
+Today
+
+Styling:
+- Approximately 65 × 24px.
+- Emerald background.
+- Dark text.
+- Bold 12px typography.
+- Fully rounded edges.
+8.3 Selected date interaction
+When a user clicks any other date:
+- The selected border moves to that date.
+- The Today indicator remains associated with the actual current date, not the newly selected date.
+- The right-hand panel updates to show the chosen date's activities.
+- The selected date's full events are displayed.
+This distinction between the actual current date and the currently selected date is essential.
+
+9. Today's Activities — right-hand panel
+Key component
+
+
+
+
+
+
+
+
+
+
+The right panel is approximately 383px wide and 755px tall.
+
+Its position is:
+- X: 957px.
+- Y: 287px.
+It has the same glassmorphic styling as the calendar, but with slightly more internal padding.
+.activities-panel {
+    border-radius: 23px;
+    padding: 20px;
+
+    background: rgba(9, 28, 33, 0.86);
+
+    border: 1px solid rgba(139, 190, 202, 0.23);
+
+    backdrop-filter: blur(22px);
+}
+
+
+This panel should remain visually distinct from the calendar.
+
+Its purpose is to provide a detailed, readable overview of what is happening on the selected date.
+9.1 Panel heading
+At the top is a horizontal heading group.
+
+On the left:
+- Green outlined calendar icon.
+- Approximately 45px.
+On the right:
+- Heading: Today's Activities
+- Date underneath: Sun, Nov 15, 2026
+Heading typography:
+- 23px.
+- Bold.
+- White.
+Date typography:
+- 18px.
+- Light grey.
+The heading has a subtle divider underneath.
+9.2 Activity card structure
+There are four main activity entries.
+
+Each entry uses a horizontal layout:
+
+
+
+
+
+
+
+
+
+
+
+Wheat - Field 01
+
+Growth Stage: Tillering
+In Progress
+
+
+
+
+Irrigation - Field 02
+
+Recommended Now
+Start
+
+
+
+The actual implementation should use the same structure for all four entries.
+Entry 1: Wheat
+- Thumbnail: photographic close-up of green wheat.
+- Title: Wheat - Field 01
+- Subtitle: Growth Stage: Tillering
+- Status: In Progress
+- Status pill: green.
+Entry 2: Irrigation
+- Blue square thumbnail.
+- Large blue water-drop icon.
+- Title: Irrigation - Field 02
+- Subtitle: Recommended Now
+- Button: Start
+- Button colour: electric blue.
+The Start button is a direct action.
+
+Clicking it should open the irrigation task or its relevant action flow, rather than simply changing its appearance.
+Entry 3: Scouting
+- Purple square thumbnail.
+- Large binoculars icon.
+- Title: Scouting - Field 01
+- Subtitle: Check for pests
+- Status: High Priority
+- Purple status badge.
+Entry 4: Soil Test
+- Orange square thumbnail.
+- Orange laboratory flask.
+- Title: Soil Test - Field 04
+- Subtitle: Due Today
+- Status: Due Today
+- Amber badge.
+9.3 Thumbnail dimensions
+Each activity image/icon container is approximately:
+- 66px wide.
+- 70px tall.
+- 10px corner radius.
+Use object-fit: cover for photographic thumbnails.
+
+Use professional SVG icons for symbolic categories.
+
+Do not use emojis.
+9.4 Activity separators
+Each activity entry is separated by a thin horizontal line.
+
+Use:
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-height: 105px;
+    padding: 10px 0;
+
+    border-bottom:
+        1px solid rgba(137, 178, 186, 0.16);
+}
+
+
+The cards should not have individual bright borders. They should feel like sections within one larger panel.
+9.5 Click interaction
+The entire activity row should be clickable, except for any independent action button inside it.
+
+Clicking an activity opens a detailed side drawer or modal.
+
+It should show:
+- Activity description.
+- Farm and field.
+- Crop, if applicable.
+- Scheduled or recommended date.
+- Status.
+- Source of recommendation.
+- Relevant evidence.
+- Available actions.
+
+10. Next 7 Days section
+The bottom of the right panel contains a compact upcoming schedule.
+
+It is separated from today's activities by a horizontal divider.
+Heading
+A green upward-trending line icon appears beside:
+
+Next 7 Days
+
+The heading is approximately 19px bold.
+Upcoming item 1
+- Green rotation icon.
+- Title: Rotation Prep
+- Field: Field 02
+- Date aligned to the far right: Tue, Nov 17
+Upcoming item 2
+- Yellow wheat icon.
+- Title: Harvest Window
+- Field: Field 03
+- Date: Thu, Nov 18
+Each item has:
+- Approximately 60–65px vertical height.
+- Icon on the left.
+- Text in the centre.
+- Date on the right.
+The date is smaller and grey-white.
+View Full Schedule button
+At the bottom is a full-width button.
+
+Text:
+
+View Full Schedule
+
+A right arrow appears after the text.
+
+Approximate height: 48px.
+
+It uses a dark translucent glass background, a fine cyan border, and rounded corners.
+
+Clicking this should open the full agenda or timeline, not navigate to a nonexistent page.
+
+11. Exact colour system
+Use these as initial CSS design tokens. They are approximations based on the screenshot and should be tuned against the reference.
+:root {
+    /* Background */
+    --background-dark: #071719;
+    --surface-dark: #0A2024;
+    --surface-glass: rgba(9, 29, 34, 0.84);
+
+    /* Green */
+    --primary-green: #20E98C;
+    --primary-green-bright: #39F5A0;
+    --primary-green-dark: #087B4B;
+
+    /* Text */
+    --text-primary: #F4F8F9;
+    --text-secondary: #CBD8DC;
+    --text-muted: #91A5AA;
+
+    /* Borders */
+    --border-glass: rgba(155, 199, 210, 0.20);
+    --border-selected: #19F39A;
+
+    /* Event colours */
+    --crop-green: #38DC6B;
+    --irrigation-blue: #32BDF7;
+    --soil-orange: #F39A32;
+    --scouting-purple: #B879FF;
+    --harvest-gold: #EAB13C;
+    --rotation-green: #44DD65;
+
+    /* Geometry */
+    --radius-card: 23px;
+    --radius-button: 18px;
+    --radius-event: 10px;
+}
+
+
+
+12. Typography system
+Use a modern sans-serif font.
+
+Recommended: Inter.
+
+Import:
+@import url(
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
+);
+
+
+Typography hierarchy:
+Element	Approx. size	Weight
+Main page title	40px	750
+Main subtitle	20px	400
+Month/year	23px	700
+Weekday labels	20px	600
+Date numbers	20px	600
+Event text	13px	500
+Activity panel heading	23px	700
+Activity title	17px	650
+Activity description	15px	400
+Status badges	13px	600
+Upcoming schedule	15px	500
+
+Ensure that the font sizes scale down on smaller screens.
+
+13. Recommended component architecture
+The frontend should not be one giant HTML component.
+
+Build reusable React components (or equivalent components in the existing framework).
+
+Suggested component tree:
+CalendarActionsPage
+│
+├── PageBackground
+│
+├── CalendarPageHeader
+│   ├── PageTitle
+│   ├── FarmSelector
+│   └── WeatherWidget
+│
+├── CalendarToolbar
+│   ├── MonthNavigation
+│   ├── MonthYearPicker
+│   ├── TodayButton
+│   └── AddTaskButton
+│
+├── CalendarWorkspace
+│   │
+│   ├── MonthlyCalendar
+│   │   ├── WeekdayHeader
+│   │   ├── CalendarGrid
+│   │   │   └── CalendarDay
+│   │   │       ├── DateNumber
+│   │   │       ├── EventChip
+│   │   │       └── MoreEventsButton
+│   │
+│   └── DailyActivitiesPanel
+│       ├── ActivitiesHeader
+│       ├── DailyActivityList
+│       │   └── ActivityItem
+│       ├── UpcomingSevenDays
+│       └── FullScheduleButton
+│
+├── AddTaskModal
+│
+└── ActivityDetailDrawer
+
+
+Each component should receive its data through props or a shared state-management layer.
+
+14. Core interaction and state logic
+The visual appearance must correspond to real application state.
+
+Recommended state:
+const [selectedDate, setSelectedDate] = useState(new Date());
+
+const [displayedMonth, setDisplayedMonth] = useState({
+    month: 10,
+    year: 2026
+});
+
+const [selectedFarmId, setSelectedFarmId] = useState(null);
+
+const [selectedFieldId, setSelectedFieldId] = useState("all");
+
+const [activities, setActivities] = useState([]);
+
+const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
+
+const [activeActivity, setActiveActivity] = useState(null);
+
+
+Interaction requirements
+User action	Expected result
+Previous arrow	Display previous month
+Next arrow	Display next month
+Month/year selector	Open month and year picker
+Today	Select actual current date
+Click calendar date	Update selected date and activities
+Click event chip	Open its detailed information
+Click +N more	Display all events on that date
+Click activity	Open activity detail
+Click Start	Open relevant task/action flow
+Click Add Task	Open task creation modal
+Click View Full Schedule	Open agenda/timeline
+
+
+15. Responsive behaviour
+The screenshot is a desktop-first design.
+
+However, the implementation must also work on tablets and mobile devices.
+
+Desktop — 1200px and above
+- Header stays horizontal.
+- Calendar and activities remain side by side.
+- Calendar takes approximately 70% of the workspace.
+- Activity panel takes approximately 30%.
+Tablet — 768px to 1199px
+- Reduce the calendar's minimum cell dimensions.
+- Keep the activities panel visible if sufficient width exists.
+- Otherwise move it below the calendar.
+- Reduce title and toolbar spacing.
+Mobile — below 768px
+- Header becomes compact.
+- Farm selector and weather widget can move to a secondary row.
+- Toolbar wraps into multiple rows.
+- Calendar should not cause whole-page horizontal overflow.
+- Default to an agenda view with the month grid still accessible.
+- Today's Activities becomes a full-width card underneath.
+Suggested CSS:
+.calendar-workspace {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 2.38fr)
+        minmax(320px, 1fr);
+    gap: 22px;
+}
+
+@media (max-width: 1100px) {
+    .calendar-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .calendar-grid {
+        grid-template-rows: repeat(5, minmax(65px, auto));
+    }
+
+    .event-chip {
+        font-size: 10px;
+        padding: 4px;
+    }
+
+    .calendar-toolbar {
+        height: auto;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px;
+    }
+}
+
+
+
+16. Important visual details that must not be overlooked
+These small details are what make the screenshot feel polished rather than like a generic calendar template.
+1. The background photograph remains visible around the cards.
+2. The cards have a dark, slightly green-tinted glass appearance.
+3. Borders are subtle and cool-toned, not bright white.
+4. The calendar fills most of the available horizontal space.
+5. All seven date columns have precisely equal widths.
+6. The calendar has no excessive empty margins.
+7. Event chips are compact, with readable two-line labels.
+8. Crop and activity categories use consistent colours everywhere.
+9. The selected date has a luminous green outline.
+10. The Today label is a small bright-green pill.
+11. The right-hand activity panel has photographic and icon thumbnails.
+12. The activity rows are separated by subtle dividers.
+13. Status pills use their category's accent colour.
+14. The Next 7 Days section is compact, not another large card.
+15. Add Task is the most prominent interactive button.
+16. The month/year selector is easy to find and operate.
+17. No bottom task table or unnecessary category-filter strip should be added.
+18. Do not add the excluded profile icon.
+
+17. Final implementation priority
+The most important thing is to reproduce the proportions and hierarchy before spending time on decorative details.
+
+I would implement in this order:
+1. Page geometry
+   
+   Get the header, toolbar, 910px calendar and 383px activity panel aligned correctly.
+2. Calendar grid
+   
+   Implement the seven-column, five-week grid, correct date placement and event rendering.
+3. Today's Activities
+   
+   Recreate the activity thumbnails, typography, separators, badges and Next 7 Days section.
+4. Glassmorphism
+   
+   Add the translucent backgrounds, blur, gradients, borders and shadows.
+5. Interactions
+   
+   Connect month navigation, date selection, activity details and Add Task.
+6. Responsive layout
+   
+   Ensure the interface remains usable on tablets and phones.
+The defining design principle: the monthly calendar is the main workspace, while the right-hand panel acts as the farmer's daily operational assistant. The farmer should be able to understand the month's activity at a glance and immediately understand what needs attention today, without navigating away from the page.
